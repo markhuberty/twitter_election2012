@@ -1,0 +1,145 @@
+#!/usr/local/bin/Rscript --verbose
+
+setwd("~/Documents/twitter_election2010/cron_data")
+source("../twitter.R")
+
+## The master data. Only first.time is here
+load("cron.input.data.RData")
+
+## If not the first time, load up the aggregate file
+if(first.time != 1)
+{
+  load("master.cron.file.RData")
+}else{
+  print("First loop")
+}
+
+## Read in the candidates we will query
+candidates <- read.csv("candidates.all.final.twoparty.persistent.csv")
+
+#candidates.pull <- candidates[candidates$state %in% complete.state.primaries$abbrev,]
+
+## Identify those who are going to be queried.
+## This shouldn't be an issue in the final candidate set
+## But is only here for safekeeping
+## candidates.pull <- candidates[!is.na(candidates$last.name) &
+##3                              candidates$last.name != "",]
+
+candidates.pull <- candidates[(candidates$Running != "Not running" &
+                               candidates$last.name != ""&
+                               !is.na(candidates$last.name)),]
+## Write the unicode-encoded query string.
+## %22 here is the code for quotes to make sure
+## that the whole name is mentioned.
+pull.list <- c()
+for(i in 1:dim(candidates.pull)[1])
+  {
+
+      pull.list <- c(pull.list, paste("%22",
+                                      candidates.pull$first.name[i],
+                                      "+",
+                                      candidates.pull$last.name[i],
+                                      "%22",
+                                      sep=""
+                                      )
+                     )
+      
+
+
+  }
+
+if(first.time==1)
+  {
+    file.today <- search.twitter.pages(terms=pull.list,
+                                       rpp=100,
+                                       delay.interval=1,
+                                       write.out=FALSE
+                                       )
+
+  }else{
+    ## If the job has run before, then only get updates
+    ## from yesterday. (Assumes the job runs nightly)
+    yesterday <- Sys.Date() - 1
+    file.today <- search.twitter.pages(terms=pull.list,
+                                       rpp=100,
+                                       since.date=yesterday,
+                                       delay.interval=1,
+                                       write.out=FALSE
+                                       )
+    
+  }
+
+names(file.today) <- pull.list
+
+results.fields.desired <- c("profile_image_url",
+                            "created_at",
+                            "from_user",
+                            "metadata.result_type",
+                            "to_user_id",
+                            "text",
+                            "id",
+                            "from_user_id",
+                            "to_user",
+                            "iso_language_code",
+                            "source"
+                            )
+
+states.districts <- data.frame(candidates.pull$state,
+                               candidates.pull$district)
+cand.names <- data.frame(candidates.pull$first.name,
+                         candidates.pull$last.name
+                         )
+names(states.districts) <- c("state", "district")
+names(cand.names) <- c("first.name", "last.name")
+
+## Parse the file immediately
+file.today.parsed <- parse.json.out(file.today,
+                                    results.fields.desired=results.fields.desired,
+                                    state.district=states.districts,
+                                    cand.names=cand.names,
+                                    num.cores=3
+                                    )
+## Select for only English words
+## Replace URL encoding for quotes and ampersands with the real thing
+file.today.parsed.en <-
+  file.today.parsed[file.today.parsed$iso_language_code=="en"&
+                    !is.na(file.today.parsed$text),]
+
+
+file.today.parsed.en$text <- gsub("&quot;", "", file.today.parsed.en$text)
+file.today.parsed.en$text <- gsub("&amp;", "&", file.today.parsed.en$text)
+
+## Drop any dups that we get by virtue of the moving window problem
+file.today.parsed.en <- file.today.parsed.en[!duplicated(file.today.parsed.en$id),]
+
+## Save the time/date stamped cron file
+save(file.today.parsed.en, file=paste("cron.file.",
+       gsub(" ", "", date()), ".RData", sep="")
+     )
+
+## Write to the master file
+if(first.time==1)
+  {
+
+    master.cron.file <- file.today.parsed.en
+    
+  }else{
+
+    master.cron.file <- rbind(master.cron.file,
+                              file.today.parsed.en
+                              )
+  }
+#since.id <- max(file.today.parsed.en$id)
+
+#save(since.id, "cron.since.id.RData")
+
+
+## Save the output and log the job completion.
+first.time <- 0
+save(master.cron.file, file="master.cron.file.RData")
+save(first.time, file="cron.input.data.RData")
+
+sink(file="cron.job.log", append=TRUE, type="output")
+print(paste("Cron job for ", date(), "completed"))
+print(paste("Size of resulting matrix:", dim(file.today.parsed.en)))
+sink()

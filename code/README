@@ -1,0 +1,59 @@
+## Files here should fire in this order:
+
+
+0. Acquire
+- cron_search_job:
+  Contains the script for the regular search job. This was run via a cron job on
+  linux, scheduled to run each night at midnight. Note the shebang on the first
+  line--this was run as a script directly, not via R CMD BATCH
+
+  You will need to look at the functions in twitter.R to see what's going on with
+  the scraper/json parser here. 
+
+
+1. Clean: build_doc_term_mat.R:
+- Cleans data by doing a variety of (mostly self-explanatory) things to each tweet;
+  then Generates a tm() doc-term matrix of the output
+
+
+2. Aggregate: 
+- build_scaled_sparse_tdm.R:
+  Takes the generic output from build_doc_term_mat.R and generates sparse matrices
+  with some formatting niceness for later use in the train/predict stage.
+
+
+3. Train / Predict:
+- corpus.district.sl.bigrams.*.R
+  Training / testing scripts for training data in the binary outcomes. The * will be
+  blank, quad, sigmoid, linear; and refer to how tweet term frequencies were
+  age-weighted when aggregated to the district level.
+- corpus.district.pctvote.bigrams.*.R
+  Same as the above, except for the pctvote code.  
+
+
+4. Model
+- topicmodel_district_dtm.R: 
+  Provides the code for dynamic topic models (timeseries) of the district-level 
+  twitter feeds
+- topicmodel_lda.R:
+  Provides for snapshot topic modeling of the district-level twitter corpus
+
+
+5. Utility
+- twitter.R
+  Contains utility functions for various stages of the process. Much of this is 
+  pretty messy.
+- build_sparse_functions.R
+  Contains the functions used in build_scaled_sparse_tdm.R. Most 
+  of these are targeted at building the sparse matrix that holds the 
+  term-frequencies. Note that we can't use the generic tm() doc-term matrix file, 
+  since it's not in a form that's compatible with the SuperLearner.
+- get_nytimes_results.R
+  Used for scraping the actual election results off the NYT elections site; may not  
+  work again this time through.
+- opensecrets_script.R
+  Used for scraping the candidate names / states / districts from the opensecrets 
+  website
+
+
+Finally, note that this code uses an older version of the superlearner. The version you will install from CRAN was substantially revised (in good ways--in particular, it can be heavily parallelized for faster training). So the syntax for the SuperLearner will look a bit weird.
