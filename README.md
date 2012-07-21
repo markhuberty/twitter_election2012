@@ -4,8 +4,8 @@ Voting with your tweet: 2012 edition
 This repo holds the prediction algorithms, code, and supporting data
 for real-time prediction of the 2012 Congressional elections using the
 Twitter feed. The project is based on a [working
-paper][http://markhuberty.berkeley.edu/files/twitter_paper.pdf.zip] by
-[Mark Huberty][http://markhuberty.berkeley.edu/],
+paper](http://markhuberty.berkeley.edu/files/twitter_paper.pdf.zip] by
+[Mark Huberty][http://markhuberty.berkeley.edu/),
 entitled "Voting with your tweet: forecasting elections with social
 media data". 
 
