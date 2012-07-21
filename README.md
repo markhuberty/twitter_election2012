@@ -16,7 +16,7 @@ based on the content of election-related messages in the Twitter
 feed. These include papers on the U.S. Presidential Election ([O'Connor
 et al 2010](http://brenocon.com/oconnor_balasubramanyan_routledge_smith.icwsm2010.tweets_to_polls.pdf)), the
 German Bundestag ([Tumasjan et al 2010](https://www.aaai.org/ocs/index.php/ICWSM/ICWSM10/paper/view/1441/1852)), and the British
-Parliament ([Tweetminster 2010](http://www.scribd.com/doc/29154537/Tweetminster-Predicts)). More recently, Daniel Gayo-Avello pointed out various
+Parliament ([Tweetminster 2010](http://www.scribd.com/doc/29154537/Tweetminster-Predicts)). More recently, [Daniel Gayo-Avello](http://arxiv.org/abs/1204.6441v1) pointed out various
 problems with most of these papers. One of the more significant
 problems he identifies is the lack of /a priori/ prediction of future
 elections. This project is an experiment doing just that.
