@@ -4,18 +4,13 @@
 ## concatenating tweets. Cat'ing tweets gives the
 ## problem of bigrams at the junction
 
-if(grepl("mac.binary", .Platform$pkgType, fixed=TRUE))
-  {
-    setwd("~/Documents/Research/Papers/twitter_election2010")
-  }else{
-    setwd("~/Documents/twitter_election2010")
-  }
+setwd("~/Documents/twitter_election2012")
 
 library(tm)
 library(RWeka)
 library(foreach)
 
-source("./code/twitter.R")
+source("./code/util/twitter.R")
 
 load("./data/twitter.data.house.results.RData")
 
@@ -25,9 +20,9 @@ house.data <- twitter.data.house.results[d.r,]
 rm(d.r, twitter.data.house.results)
 
 ## Make sure that all tweets come from before the election
-election.date <- as.Date("2010-11-2", format="%Y-%m-%d")
+election.date <- as.Date("2012-11-6", format="%Y-%m-%d")
 before.date <- house.data$created.at.date < election.date
-house.data <- house.data[before.date,]
+house.data <- house.data[before.date, ]
 
 tweet.age <- round(as.numeric(difftime(election.date,
                                        house.data$created.at.date,
@@ -181,15 +176,30 @@ for(i in 1:max.terms)
                                        weighting=weightTf)
                                      )
 
-    file.name <- paste("./data/generic.tdm.",
-                       i,
-                       ".RData",
-                       sep=""
-                       )
+    ## Generate the date-stamped file
+    today <- Sys.Date()
+    timestamp.file.name <- paste("./data/generic.tdm.",
+                                 i,
+                                 ".",
+                                 today,
+                                 sep=""
+                                 )
+
+    ## Generate the generic file
+    generic.file.name <- paste("./data/generic.tdm.",
+                               i,
+                               ".RData",
+                               sep=""
+                               )
     
-## Save the raw corpus
+    ## Save the raw corpus as both a generic file and a date-stamped
+    ## file for recordkeeping
     save(tdm.corpus,
          house.data,
          file=file.name
+         )
+    save(tdm.corpus,
+         house.data,
+         file=timestamp.file.name
          )
   }
