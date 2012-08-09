@@ -1,4 +1,4 @@
-## 3 October 2011
+## 
 ## Code to build a new version of the DTM
 ## That works by summing the row-counts rather than
 ## concatenating tweets. Cat'ing tweets gives the
@@ -97,12 +97,15 @@ names(house.data) <- c("state",
 corpus <- tolower(house.data$text)
 
 ## Hack out the New Orleans Saints data
-which.nola <- grepl("kicker", corpus) | grepl("orleans", corpus) | grepl("tampa bay",
-      corpus) | grepl("saints", corpus) | grepl("hartley", corpus) |
+which.nola <-
+  grepl("kicker", corpus) | grepl("orleans", corpus) |
+  grepl("tampa bay",corpus) |
+grepl("saints", corpus) |
+grepl("hartley", corpus) |
 grepl("cliff lee", corpus)
 
 corpus <- corpus[!which.nola]
-house.data <- house.data[!which.nola,]
+house.data <- house.data[!which.nola, ]
 
 
 ## First remove all misc cruft
@@ -113,9 +116,9 @@ corpus <- replace.president(corpus)
 corpus <- replace.pol.names(corpus,
                             house.data$state,
                             house.data$district,
-                            "CA",
-                            "NV",
-                            8
+                            st.speaker="OH",
+                            st.leader="NV",
+                            dist.speaker=8
                             )
 
 ## Then replace the candidate names with dummies
@@ -190,5 +193,3 @@ for(i in 1:max.terms)
          file=file.name
          )
   }
-
-## Then aggregate corpus by district

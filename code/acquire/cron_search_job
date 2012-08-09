@@ -1,7 +1,7 @@
 #!/usr/local/bin/Rscript --verbose
 
-setwd("~/Documents/twitter_election2010/cron_data")
-source("../twitter.R")
+setwd("~/Documents/twitter_election2012/cron_data")
+source("../code/util/twitter.R")
 
 ## The master data. Only first.time is here
 load("cron.input.data.RData")
@@ -15,9 +15,7 @@ if(first.time != 1)
 }
 
 ## Read in the candidates we will query
-candidates <- read.csv("candidates.all.final.twoparty.persistent.csv")
-
-#candidates.pull <- candidates[candidates$state %in% complete.state.primaries$abbrev,]
+candidates <- read.csv("../data/candidates.final.2012.csv")
 
 ## Identify those who are going to be queried.
 ## This shouldn't be an issue in the final candidate set
@@ -28,7 +26,8 @@ candidates <- read.csv("candidates.all.final.twoparty.persistent.csv")
 candidates.pull <- candidates[(candidates$Running != "Not running" &
                                candidates$last.name != ""&
                                !is.na(candidates$last.name)),]
-## Write the unicode-encoded query string.
+
+## Write the encoded query string.
 ## %22 here is the code for quotes to make sure
 ## that the whole name is mentioned.
 pull.list <- c()
@@ -99,6 +98,7 @@ file.today.parsed <- parse.json.out(file.today,
                                     cand.names=cand.names,
                                     num.cores=3
                                     )
+
 ## Select for only English words
 ## Replace URL encoding for quotes and ampersands with the real thing
 file.today.parsed.en <-
@@ -141,5 +141,6 @@ save(first.time, file="cron.input.data.RData")
 
 sink(file="cron.job.log", append=TRUE, type="output")
 print(paste("Cron job for ", date(), "completed"))
-print(paste("Size of resulting matrix:", dim(file.today.parsed.en)))
+print(paste("Size of today's matrix:", dim(file.today.parsed.en)))
+print(paste("Size of master file:", dim(master.cron.file)))
 sink()

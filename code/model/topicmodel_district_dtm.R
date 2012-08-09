@@ -50,7 +50,9 @@ idx.zeros <- which(rowSums(corpus.district.tdm.mat) == 0)
 
 corpus.district.tdm.mat <- corpus.district.tdm.mat[-idx.zeros,]
 
-ages <- gsub("^[A-Z0-9.]{5,6}([0-9]{1}$)", "\\1", rownames(corpus.district.tdm.mat))
+ages <- gsub("^[A-Z0-9.]{5,6}([0-9]{1}$)", "\\1",
+             rownames(corpus.district.tdm.mat)
+             )
 ages <- as.integer(ages)
 
 corpus.district.tdm.mat <-

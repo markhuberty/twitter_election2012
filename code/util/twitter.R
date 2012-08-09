@@ -430,9 +430,6 @@ search.manager <- function(terms,
 }
 
 
-## Thoughts: how to handle trending topics by region?
-## Might want to 
-
 ## FUNCTION get.twitter.url()
 ## Takes a search term and a set of query parameters and returns the
 ## twitter search results.
@@ -494,6 +491,7 @@ get.twitter.url <- function(type, term, rpp, page, since.date,
     ## and CURL errors from RCURL
     ## Steadily increments the wait time between re-tries,
     ## as recommended in the twitter API documentation
+    ## This is a hack.
     while(grepl("DOCTYPE HTML PUBLIC", query.out) |
           grepl("whale.png", query.out) |
           grepl("Error in curlPerform", query.out)
@@ -501,9 +499,9 @@ get.twitter.url <- function(type, term, rpp, page, since.date,
       {
         print(query.out)
         error.counter <- error.counter + 1
-        ## Not sure if 5 is enough here
-        ## This now scales the wait
-        Sys.sleep(5 + 5*(error.counter-1))
+
+        ## Scale the wait based on the error response chain
+        Sys.sleep(5 + 5 * (error.counter - 1))
         query.out <- try(getURL(url))
         
       }
@@ -534,9 +532,6 @@ search.twitter.pages <- function(type="json",
                                  since.date="2010-05-27",
                                  lang="en",
                                  showuser="true",
-                                 ## latitude,
-                                 ## longitude,
-                                 ## radius,
                                  result.type="recent",
                                  write.out=TRUE,
                                  out.file=NULL,
@@ -585,7 +580,6 @@ search.twitter.pages <- function(type="json",
           query.all[[page.num]] <- query.out
 
           print(paste("Page num =", page.num))
-          
 
         }
 
@@ -750,24 +744,16 @@ party.dummies <- function(corpus,
                           sep=""
                           )
   
-  
-  out <- sapply(1:length(corpus), function(x){
-
-    corpus.out <- gsub("CandDummy",
-                       party.canddummy[x],
-                       corpus[x],
-                       fixed=TRUE
-                       )
+  corpus.out <- str_replace(corpus,
+                            "CandDummy".
+                            party.canddummy
+                            )
+  corpus.out <- str_replace(corpus.out,
+                            "OppDummy",
+                            party.oppdummy
+                            )
     
-    corpus.out <- gsub("OppDummy",
-                       party.oppdummy[x],
-                       corpus.out,
-                       fixed=TRUE
-                       )
-    return(corpus.out)
-  })
-  
-  return(out)
+  return(corpus.out)
   
 }
 
