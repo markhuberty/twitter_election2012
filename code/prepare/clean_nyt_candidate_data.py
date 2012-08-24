@@ -1,6 +1,7 @@
 import re
 import csv
 import urllib
+import json
 
 ## Get the NYT candidate data
 
@@ -26,9 +27,10 @@ for idx, item in enumerate(nyt_parsed):
                     item['seat_number'],
                     item['office_id'],
                     item['state'],
+                    item['primary_date'],
                     c['name'],
                     c['party'],
-                    c['incumbent']
+                    c['incumbent'],
                     ]
             denorm_list.append(temp)
     else:
@@ -36,6 +38,7 @@ for idx, item in enumerate(nyt_parsed):
                 item['seat_number'],
                 item['office_id'],
                 item['state'],
+                item['primary_date'],
                 'none',
                 'none',
                 'none'
@@ -48,6 +51,7 @@ fieldnames = ['state_id',
               'seat_number',
               'office_id',
               'state',
+              'primary_date',
               'name',
               'party',
               'incumbent'

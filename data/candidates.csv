@@ -1,725 +1,725 @@
-state_id,seat_number,office_id,state,name,party,incumbent
-AK,1,2,Alaska,none,none,none
-AL,1,5,Alabama,Jo Bonner,GOP,True
-AL,2,8,Alabama,Terese Ford,Dem,False
-AL,2,8,Alabama,Martha Roby,GOP,True
-AL,3,9,Alabama,John Harris,Dem,False
-AL,3,9,Alabama,Mike Rogers,GOP,True
-AL,4,6,Alabama,Daniel Boman,Dem,False
-AL,4,6,Alabama,Robert Aderholt,GOP,True
-AL,5,10,Alabama,Charlie Holley,Dem,False
-AL,5,10,Alabama,Mo Brooks,GOP,True
-AL,6,11,Alabama,Penny Bailey,Dem,False
-AL,6,11,Alabama,Spencer Bachus,GOP,True
-AL,7,12,Alabama,Terri Sewell,Dem,True
-AL,7,12,Alabama,Don Chamberlain,GOP,False
-AR,1,15,Arkansas,Scott Ellington,Dem,False
-AR,1,15,Arkansas,Rick Crawford,GOP,True
-AR,2,16,Arkansas,Herb Rule,Dem,False
-AR,2,16,Arkansas,Tim Griffin,GOP,True
-AR,3,19,Arkansas,Ken Aden,Dem,False
-AR,3,19,Arkansas,Steve Womack,GOP,True
-AR,4,17,Arkansas,Gene Jeffress,Dem,False
-AR,4,17,Arkansas,Tom Cotton,GOP,False
-AZ,1,22,Arizona,none,none,none
-AZ,2,23,Arizona,none,none,none
-AZ,3,24,Arizona,none,none,none
-AZ,4,25,Arizona,none,none,none
-AZ,5,26,Arizona,none,none,none
-AZ,6,28,Arizona,none,none,none
-AZ,7,29,Arizona,none,none,none
-AZ,8,30,Arizona,none,none,none
-AZ,9,600,Arizona,none,none,none
-CA,1,83,California,Jim Reed,Dem,False
-CA,1,83,California,Doug LaMalfa,GOP,False
-CA,2,33,California,Jared Huffman,Dem,False
-CA,2,33,California,Dan Roberts,GOP,False
-CA,3,34,California,Kim Vann,GOP,False
-CA,3,34,California,John Garamendi,Dem,True
-CA,4,35,California,Tom McClintock,GOP,True
-CA,4,35,California,Jack Uppal,Dem,False
-CA,5,36,California,Mike Thompson,Dem,True
-CA,5,36,California,Randy Loftin,GOP,False
-CA,6,37,California,Doris Matsui,Dem,True
-CA,6,37,California,Joseph McCray Sr.,GOP,False
-CA,7,38,California,Ami Bera,Dem,False
-CA,7,38,California,Dan Lungren,GOP,True
-CA,8,39,California,Gregg Imus,GOP,False
-CA,8,39,California,Paul Cook,GOP,False
-CA,9,40,California,Jerry McNerney,Dem,True
-CA,9,40,California,Ricky Gill,GOP,False
-CA,10,86,California,Jeff Denham,GOP,True
-CA,10,86,California,Jose Hernandez,Dem,False
-CA,11,41,California,George Miller,Dem,True
-CA,11,41,California,Virginia Fuller,GOP,False
-CA,12,42,California,Nancy Pelosi,Dem,True
-CA,12,42,California,John Dennis,GOP,False
-CA,13,43,California,Barbara Lee,Dem,True
-CA,13,43,California,Marilyn Singleton,NPD,False
-CA,14,44,California,Jackie Speier,Dem,True
-CA,14,44,California,Debbie Bacigalupi,GOP,False
-CA,15,45,California,Pete Stark,Dem,True
-CA,15,45,California,Eric Swalwell,Dem,False
-CA,16,46,California,Jim Costa,Dem,True
-CA,16,46,California,Brian Whelan,GOP,False
-CA,17,47,California,Mike Honda,Dem,True
-CA,17,47,California,Evelyn Li,GOP,False
-CA,18,48,California,Anna Eshoo,Dem,True
-CA,18,48,California,Dave Chapman,GOP,False
-CA,19,49,California,Zoe Lofgren,Dem,True
-CA,19,49,California,Robert Murray,GOP,False
-CA,20,50,California,Sam Farr,Dem,True
-CA,20,50,California,Jeff Taylor,GOP,False
-CA,21,51,California,David Valadao,GOP,False
-CA,21,51,California,John Hernandez,DEM,False
-CA,22,52,California,Devin Nunes,GOP,True
-CA,22,52,California,Otto Lee,Dem,False
-CA,23,53,California,Kevin McCarthy,GOP,True
-CA,23,53,California,Terry Phillips,NPD,False
-CA,24,54,California,Lois Capps,Dem,True
-CA,24,54,California,Abel Maldonado,GOP,False
-CA,25,55,California,Buck McKeon,GOP,True
-CA,25,55,California,Lee Rogers,Dem,False
-CA,26,56,California,Julia Brownley,Dem,False
-CA,26,56,California,Tony Strickland,GOP,False
-CA,27,57,California,Judy Chu,Dem,True
-CA,27,57,California,Jack Orswell,GOP,False
-CA,28,58,California,Adam Schiff,Dem,True
-CA,28,58,California,Phil Jennerjahn,GOP,False
-CA,29,59,California,Tony Cardenas,Dem,False
-CA,29,59,California,David Hernandez,NPD,False
-CA,30,60,California,Howard Berman,Dem,True
-CA,30,60,California,Brad Sherman,Dem,True
-CA,31,61,California,Gary Miller,GOP,True
-CA,31,61,California,Bob Dutton,GOP,False
-CA,32,62,California,Grace Napolitano,Dem,True
-CA,32,62,California,David Miller,GOP,False
-CA,33,63,California,Henry Waxman,Dem,True
-CA,33,63,California,Bill Bloomfield,NPD,False
-CA,34,64,California,Xavier Becerra,Dem,True
-CA,34,64,California,Stephen Smith,GOP,False
-CA,35,65,California,Joe Baca,Dem,True
-CA,35,65,California,Gloria McLeod,Dem,False
-CA,36,66,California,Mary Bono Mack,GOP,True
-CA,36,66,California,Raul Ruiz,Dem,False
-CA,37,67,California,Karen Bass,Dem,True
-CA,38,68,California,Linda Sanchez,Dem,True
-CA,38,68,California,Benjamin Campos,GOP,False
-CA,39,69,California,Jay Chen,Dem,False
-CA,39,69,California,Ed Royce,GOP,True
-CA,40,70,California,Lucille Roybal-Allard,Dem,True
-CA,40,70,California,David Sanchez,Dem,False
-CA,41,71,California,Mark Takano,Dem,False
-CA,41,71,California,John Tavaglione,GOP,False
-CA,42,72,California,Michael Williamson,Dem,False
-CA,42,72,California,Ken Calvert,GOP,True
-CA,43,73,California,Maxine Waters,Dem,True
-CA,43,73,California,Bob Flores,Dem,False
-CA,44,74,California,Janice Hahn,Dem,True
-CA,44,74,California,Laura Richardson,Dem,True
-CA,45,75,California,John Campbell,GOP,True
-CA,45,75,California,Sukhee Kang,Dem,False
-CA,46,76,California,Loretta Sanchez,Dem,True
-CA,46,76,California,Jerry Hayden,GOP,False
-CA,47,77,California,Alan Lowenthal,Dem,False
-CA,47,77,California,Gary Delong,GOP,False
-CA,48,85,California,Dana Rohrabacher,GOP,True
-CA,48,85,California,Ron Varasteh,Dem,False
-CA,49,78,California,Darrell Issa,GOP,True
-CA,49,78,California,Jerry Tetalman,Dem,False
-CA,50,79,California,Duncan D. Hunter,GOP,True
-CA,50,79,California,David Secor,Dem,False
-CA,51,80,California,Juan Vargas,Dem,False
-CA,51,80,California,Michael Crimmins,GOP,False
-CA,52,84,California,Brian Bilbray,GOP,True
-CA,52,84,California,Scott Peters,Dem,False
-CA,53,81,California,Susan Davis,Dem,True
-CA,53,81,California,Nick Popaditch,GOP,False
-CO,1,96,Colorado,Diana DeGette,Dem,True
-CO,1,96,Colorado,Danny Stroud,GOP,False
-CO,2,89,Colorado,Jared Polis,Dem,True
-CO,2,89,Colorado,Kevin Lundberg,GOP,False
-CO,3,90,Colorado,Sal Pace,Dem,False
-CO,3,90,Colorado,Scott Tipton,GOP,True
-CO,4,91,Colorado,Brandon Shaffer,Dem,False
-CO,4,91,Colorado,Cory Gardner,GOP,True
-CO,5,92,Colorado,Doug Lamborn,GOP,True
-CO,6,93,Colorado,Joe Miklosi,Dem,False
-CO,6,93,Colorado,Mike Coffman,GOP,True
-CO,7,95,Colorado,Ed Perlmutter,Dem,True
-CO,7,95,Colorado,Joe Coors,GOP,False
-CT,1,99,Connecticut,none,none,none
-CT,2,100,Connecticut,none,none,none
-CT,3,101,Connecticut,none,none,none
-CT,4,102,Connecticut,none,none,none
-CT,5,103,Connecticut,none,none,none
-DE,1,107,Delaware,none,none,none
-FL,1,133,Florida,none,none,none
-FL,2,111,Florida,none,none,none
-FL,3,112,Florida,none,none,none
-FL,4,113,Florida,none,none,none
-FL,5,114,Florida,none,none,none
-FL,6,115,Florida,none,none,none
-FL,7,116,Florida,none,none,none
-FL,8,117,Florida,none,none,none
-FL,9,118,Florida,none,none,none
-FL,10,119,Florida,none,none,none
-FL,11,120,Florida,none,none,none
-FL,12,121,Florida,none,none,none
-FL,13,122,Florida,none,none,none
-FL,14,123,Florida,none,none,none
-FL,15,124,Florida,none,none,none
-FL,16,125,Florida,none,none,none
-FL,17,126,Florida,none,none,none
-FL,18,127,Florida,none,none,none
-FL,19,136,Florida,none,none,none
-FL,20,132,Florida,none,none,none
-FL,21,129,Florida,none,none,none
-FL,22,130,Florida,none,none,none
-FL,23,131,Florida,none,none,none
-FL,24,134,Florida,none,none,none
-FL,25,135,Florida,none,none,none
-FL,26,601,Florida,none,none,none
-FL,27,602,Florida,none,none,none
-GA,1,139,Georgia,none,none,none
-GA,2,140,Georgia,none,none,none
-GA,3,141,Georgia,none,none,none
-GA,4,142,Georgia,none,none,none
-GA,5,143,Georgia,none,none,none
-GA,6,144,Georgia,none,none,none
-GA,7,145,Georgia,none,none,none
-GA,8,146,Georgia,none,none,none
-GA,9,147,Georgia,none,none,none
-GA,10,148,Georgia,none,none,none
-GA,11,149,Georgia,none,none,none
-GA,12,151,Georgia,none,none,none
-GA,13,152,Georgia,none,none,none
-GA,14,603,Georgia,none,none,none
-HI,1,157,Hawaii,none,none,none
-HI,2,155,Hawaii,none,none,none
-IA,1,160,Iowa,Ben Lange,GOP,False
-IA,1,160,Iowa,Bruce Braley,Dem,True
-IA,2,161,Iowa,John Archer,GOP,False
-IA,2,161,Iowa,Dave Loebsack,Dem,True
-IA,3,162,Iowa,Tom Latham,GOP,True
-IA,3,162,Iowa,Leonard Boswell,Dem,True
-IA,4,163,Iowa,Steve King,GOP,True
-IA,4,163,Iowa,Christie Vilsack,Dem,False
-ID,1,168,Idaho,Jimmy Farris,Dem,False
-ID,1,168,Idaho,Raul Labrador,GOP,True
-ID,2,169,Idaho,Nicole LeFavour,Dem,False
-ID,2,169,Idaho,Mike Simpson,GOP,True
-IL,1,174,Illinois,Bobby Rush,Dem,True
-IL,1,174,Illinois,Donald Peloquin,GOP,False
-IL,2,175,Illinois,Brian Woodworth,GOP,False
-IL,2,175,Illinois,Jesse Jackson Jr.,Dem,True
-IL,3,176,Illinois,Dan Lipinski,Dem,True
-IL,3,176,Illinois,Richard Grabowski,GOP,False
-IL,4,177,Illinois,Luis Gutierrez,Dem,True
-IL,5,178,Illinois,Mike Quigley,Dem,True
-IL,5,178,Illinois,Dan Schmitt,GOP,False
-IL,6,179,Illinois,Leslie Coolidge,Dem,False
-IL,6,179,Illinois,Peter Roskam,GOP,True
-IL,7,180,Illinois,Danny Davis,Dem,True
-IL,8,181,Illinois,Tammy Duckworth,Dem,False
-IL,8,181,Illinois,Joe Walsh,GOP,True
-IL,9,182,Illinois,Jan Schakowsky,Dem,True
-IL,9,182,Illinois,Timothy Wolfe,GOP,False
-IL,10,183,Illinois,Robert Dold,GOP,True
-IL,10,183,Illinois,Brad Schneider,Dem,False
-IL,11,184,Illinois,Bill Foster,Dem,False
-IL,11,184,Illinois,Judy Biggert,GOP,True
-IL,12,185,Illinois,Jason Plummer,GOP,False
-IL,12,185,Illinois,Bill Enyart,Dem,False
-IL,13,186,Illinois,David Gill,Dem,False
-IL,13,186,Illinois,Rodney Davis,GOP,False
-IL,14,187,Illinois,Dennis Anderson,Dem,False
-IL,14,187,Illinois,Randy Hultgren,GOP,True
-IL,15,188,Illinois,Angela Michael,Dem,False
-IL,15,188,Illinois,John Shimkus,GOP,True
-IL,16,189,Illinois,Adam Kinzinger,GOP,True
-IL,17,190,Illinois,Cheri Bustos,Dem,False
-IL,17,190,Illinois,Bobby Schilling,GOP,True
-IL,18,191,Illinois,Steve Waterworth,Dem,False
-IL,18,191,Illinois,Aaron Schock,GOP,True
-IN,1,195,Indiana,Peter Visclosky,Dem,True
-IN,1,195,Indiana,Joel Phelps,GOP,False
-IN,2,196,Indiana,Brendan Mullen,Dem,False
-IN,2,196,Indiana,Jackie Walorski,GOP,False
-IN,3,197,Indiana,Kevin Boyd,Dem,False
-IN,3,197,Indiana,Marlin Stutzman,GOP,True
-IN,4,198,Indiana,Tara Nelson,Dem,False
-IN,4,198,Indiana,Todd Rokita,GOP,True
-IN,5,199,Indiana,Scott Reske,Dem,False
-IN,5,199,Indiana,Susan Brooks,GOP,False
-IN,6,200,Indiana,Bradley Bookout,Dem,False
-IN,6,200,Indiana,Luke Messer,GOP,False
-IN,7,201,Indiana,Andre Carson,Dem,True
-IN,7,201,Indiana,Carlos May,GOP,False
-IN,8,202,Indiana,Dave Crooks,Dem,False
-IN,8,202,Indiana,Larry Bucshon,GOP,True
-IN,9,203,Indiana,Shelli Yoder,Dem,False
-IN,9,203,Indiana,Todd Young,GOP,True
-KS,1,207,Kansas,none,none,none
-KS,2,210,Kansas,none,none,none
-KS,3,208,Kansas,none,none,none
-KS,4,209,Kansas,none,none,none
-KY,1,218,Kentucky,Ed Whitfield,GOP,True
-KY,1,218,Kentucky,Charles Hatchett,Dem,False
-KY,2,219,Kentucky,Brett Guthrie,GOP,True
-KY,2,219,Kentucky,David Williams,Dem,False
-KY,3,214,Kentucky,Brooks Wicker,GOP,False
-KY,3,214,Kentucky,John Yarmuth,Dem,True
-KY,4,215,Kentucky,Thomas Massie,GOP,False
-KY,4,215,Kentucky,William Adkins,Dem,False
-KY,5,216,Kentucky,Hal Rogers,GOP,True
-KY,5,216,Kentucky,Kenneth Stepp,Dem,False
-KY,6,217,Kentucky,Andy Barr,GOP,False
-KY,6,217,Kentucky,Ben Chandler,Dem,True
-LA,1,223,Louisiana,none,none,none
-LA,2,224,Louisiana,none,none,none
-LA,3,225,Louisiana,none,none,none
-LA,4,226,Louisiana,none,none,none
-LA,5,227,Louisiana,none,none,none
-LA,6,228,Louisiana,none,none,none
-MA,1,233,Massachusetts,none,none,none
-MA,2,234,Massachusetts,none,none,none
-MA,3,235,Massachusetts,none,none,none
-MA,4,236,Massachusetts,none,none,none
-MA,5,243,Massachusetts,none,none,none
-MA,6,237,Massachusetts,none,none,none
-MA,7,238,Massachusetts,none,none,none
-MA,8,239,Massachusetts,none,none,none
-MA,9,242,Massachusetts,none,none,none
-MD,1,246,Maryland,Andy Harris,GOP,True
-MD,1,246,Maryland,Wendy Rosen,Dem,False
-MD,2,247,Maryland,Nancy Jacobs,GOP,False
-MD,2,247,Maryland,Dutch Ruppersberger,Dem,True
-MD,3,248,Maryland,Eric Knowles,GOP,False
-MD,3,248,Maryland,John Sarbanes,Dem,True
-MD,4,249,Maryland,Faith Loudon,GOP,False
-MD,4,249,Maryland,Donna Edwards,Dem,True
-MD,5,250,Maryland,Tony O'Donnell,GOP,False
-MD,5,250,Maryland,Steny Hoyer,Dem,True
-MD,6,251,Maryland,Roscoe Bartlett,GOP,True
-MD,6,251,Maryland,John Delaney,Dem,False
-MD,7,252,Maryland,Frank Mirabile,GOP,False
-MD,7,252,Maryland,Elijah Cummings,Dem,True
-MD,8,253,Maryland,Ken Timmerman,GOP,False
-MD,8,253,Maryland,Chris Van Hollen,Dem,True
-ME,1,257,Maine,Chellie Pingree,Dem,True
-ME,1,257,Maine,Jonathan Courtney,GOP,False
-ME,2,258,Maine,Kevin Raye,GOP,False
-ME,2,258,Maine,Mike Michaud,Dem,True
-MI,1,262,Michigan,none,none,none
-MI,2,263,Michigan,none,none,none
-MI,3,264,Michigan,none,none,none
-MI,4,265,Michigan,none,none,none
-MI,5,266,Michigan,none,none,none
-MI,6,267,Michigan,none,none,none
-MI,7,268,Michigan,none,none,none
-MI,8,269,Michigan,none,none,none
-MI,9,270,Michigan,none,none,none
-MI,10,271,Michigan,none,none,none
-MI,11,272,Michigan,none,none,none
-MI,12,273,Michigan,none,none,none
-MI,13,274,Michigan,none,none,none
-MI,14,275,Michigan,none,none,none
-MN,1,280,Minnesota,none,none,none
-MN,2,281,Minnesota,none,none,none
-MN,3,282,Minnesota,none,none,none
-MN,4,283,Minnesota,none,none,none
-MN,5,284,Minnesota,none,none,none
-MN,6,285,Minnesota,none,none,none
-MN,7,286,Minnesota,none,none,none
-MN,8,287,Minnesota,none,none,none
-MO,1,299,Missouri,none,none,none
-MO,2,291,Missouri,none,none,none
-MO,3,292,Missouri,none,none,none
-MO,4,293,Missouri,none,none,none
-MO,5,294,Missouri,none,none,none
-MO,6,295,Missouri,none,none,none
-MO,7,296,Missouri,none,none,none
-MO,8,297,Missouri,none,none,none
-MS,1,304,Mississippi,Alan Nunnelee,GOP,True
-MS,1,304,Mississippi,Brad Morris,Dem,False
-MS,2,303,Mississippi,Bill Marcy,GOP,False
-MS,2,303,Mississippi,Bennie Thompson,Dem,True
-MS,3,305,Mississippi,Gregg Harper,GOP,True
-MS,3,305,Mississippi,Crystal Biggs,Dem,False
-MS,4,306,Mississippi,Steven Palazzo,GOP,True
-MS,4,306,Mississippi,Michael Herrington,Dem,False
-MT,1,310,Montana,Steve Daines,GOP,False
-MT,1,310,Montana,Kim Gillan,Dem,False
-NC,1,318,North Carolina,G.K. Butterfield,Dem,True
-NC,1,318,North Carolina,Pete DiLauro,GOP,False
-NC,2,319,North Carolina,Steve Wilkins,Dem,False
-NC,2,319,North Carolina,Renee Ellmers,GOP,True
-NC,3,314,North Carolina,Erik Anderson,Dem,False
-NC,3,314,North Carolina,Walter Jones,GOP,True
-NC,4,320,North Carolina,David Price,Dem,True
-NC,4,320,North Carolina,Tim D'Annunzio,GOP,False
-NC,5,321,North Carolina,Elisabeth Motsinger,Dem,False
-NC,5,321,North Carolina,Virginia Foxx,GOP,True
-NC,6,322,North Carolina,Tony Foriest,Dem,False
-NC,6,322,North Carolina,Howard Coble,GOP,True
-NC,7,315,North Carolina,Mike McIntyre,Dem,True
-NC,7,315,North Carolina,David Rouzer,GOP,False
-NC,8,323,North Carolina,Larry Kissell,Dem,True
-NC,8,323,North Carolina,Richard Hudson,GOP,False
-NC,9,316,North Carolina,Jennifer Roberts,Dem,False
-NC,9,316,North Carolina,Robert Pittenger,GOP,False
-NC,10,324,North Carolina,Patsy Keever,Dem,False
-NC,10,324,North Carolina,Patrick McHenry,GOP,True
-NC,11,317,North Carolina,Hayden Rogers,Dem,False
-NC,11,317,North Carolina,Mark Meadows,GOP,False
-NC,12,325,North Carolina,Mel Watt,Dem,True
-NC,12,325,North Carolina,Jack Brosch,GOP,False
-NC,13,326,North Carolina,George Holding,GOP,False
-NC,13,326,North Carolina,Charles Malone,Dem,False
-ND,1,330,North Dakota,Pam Gulleson,Dem,False
-ND,1,330,North Dakota,Kevin Cramer,GOP,False
-NE,1,335,Nebraska,Jeff Fortenberry,GOP,True
-NE,1,335,Nebraska,Korey Reiman,Dem,False
-NE,2,337,Nebraska,Lee Terry,GOP,True
-NE,2,337,Nebraska,John Ewing,Dem,False
-NE,3,336,Nebraska,Adrian Smith,GOP,True
-NE,3,336,Nebraska,Mark Sullivan,Dem,False
-NH,1,341,New Hampshire,none,none,none
-NH,2,342,New Hampshire,none,none,none
-NJ,1,345,New Jersey,Robert Andrews,Dem,True
-NJ,1,345,New Jersey,Greg Horton,GOP,False
-NJ,2,346,New Jersey,Cassandra Shober,Dem,False
-NJ,2,346,New Jersey,Frank LoBiondo,GOP,True
-NJ,3,351,New Jersey,Shelley Adler,Dem,False
-NJ,3,351,New Jersey,Jon Runyan,GOP,True
-NJ,4,347,New Jersey,Brian Froelich,Dem,False
-NJ,4,347,New Jersey,Chris Smith,GOP,True
-NJ,5,348,New Jersey,Adam Gussen,Dem,False
-NJ,5,348,New Jersey,Scott Garrett,GOP,True
-NJ,6,349,New Jersey,Frank Pallone,Dem,True
-NJ,6,349,New Jersey,Anna Little,GOP,False
-NJ,7,352,New Jersey,Upendra Chivukula,Dem,False
-NJ,7,352,New Jersey,Leonard Lance,GOP,True
-NJ,8,350,New Jersey,Albio Sires,Dem,True
-NJ,8,350,New Jersey,Maria Karczewski,GOP,False
-NJ,9,355,New Jersey,Bill Pascrell,Dem,True
-NJ,9,355,New Jersey,Shmuley Boteach,GOP,False
-NJ,10,353,New Jersey,Donald Payne Jr.,Dem,False
-NJ,10,353,New Jersey,Brian Kelemen,GOP,False
-NJ,11,357,New Jersey,John Arvanites,Dem,False
-NJ,11,357,New Jersey,Rodney Frelinghuysen,GOP,True
-NJ,12,354,New Jersey,Rush Holt,Dem,True
-NJ,12,354,New Jersey,Eric Beck,GOP,False
-NM,1,360,New Mexico,Janice Arnold-Jones,GOP,False
-NM,1,360,New Mexico,Michelle Lujan Grisham,Dem,False
-NM,2,363,New Mexico,Steve Pearce,GOP,True
-NM,2,363,New Mexico,Evelyn Erhard,Dem,False
-NM,3,361,New Mexico,Jefferson Byrd,GOP,False
-NM,3,361,New Mexico,Ben R. Lujan,Dem,True
-NV,1,366,Nevada,Dina Titus,Dem,False
-NV,1,366,Nevada,Christopher Edwards,GOP,False
-NV,2,367,Nevada,Samuel Koepnick,Dem,False
-NV,2,367,Nevada,Mark Amodei,GOP,True
-NV,3,369,Nevada,John Oceguera,Dem,False
-NV,3,369,Nevada,Joe Heck,GOP,True
-NV,4,604,Nevada,Steven Horsford,Dem,False
-NV,4,604,Nevada,Danny Tarkanian,GOP,False
-NY,1,372,New York,Timothy Bishop,Dem,True
-NY,1,372,New York,Randy Altschuler,GOP,False
-NY,2,373,New York,Vivianne Falcone,Dem,False
-NY,2,373,New York,Peter King,GOP,True
-NY,3,374,New York,Steve Israel,Dem,True
-NY,3,374,New York,Stephen Labate,GOP,False
-NY,4,375,New York,Carolyn McCarthy,Dem,True
-NY,4,375,New York,Francis Becker,GOP,False
-NY,5,376,New York,Gregory Meeks,Dem,True
-NY,5,376,New York,Allan Jennings,GOP,False
-NY,6,377,New York,Grace Meng,Dem,False
-NY,6,377,New York,Daniel Halloran,GOP,False
-NY,7,378,New York,Nydia Velazquez,Dem,True
-NY,8,379,New York,Hakeem Jeffries,Dem,False
-NY,8,379,New York,Alan Bellone,GOP,False
-NY,9,380,New York,Yvette Clarke,Dem,True
-NY,9,380,New York,Daniel Cavanagh,GOP,False
-NY,10,381,New York,Jerrold Nadler,Dem,True
-NY,10,381,New York,Michael Chan,GOP,False
-NY,11,382,New York,Mark Murphy,Dem,False
-NY,11,382,New York,Mike Grimm,GOP,True
-NY,12,383,New York,Carolyn Maloney,Dem,True
-NY,12,383,New York,Christopher Wight,GOP,False
-NY,13,384,New York,Charles Rangel,Dem,True
-NY,14,385,New York,Joe Crowley,Dem,True
-NY,14,385,New York,William Gibbons,GOP,False
-NY,15,386,New York,Jose E. Serrano,Dem,True
-NY,15,386,New York,Frank Della Valle,GOP,False
-NY,16,387,New York,Eliot Engel,Dem,True
-NY,16,387,New York,Joseph McLaughlin,GOP,False
-NY,17,388,New York,Nita Lowey,Dem,True
-NY,17,388,New York,Joe Carvin,GOP,False
-NY,18,389,New York,Sean Maloney,Dem,False
-NY,18,389,New York,Nan Hayworth,GOP,True
-NY,19,390,New York,Julian Schreibman,Dem,False
-NY,19,390,New York,Christopher Gibson,GOP,True
-NY,20,391,New York,Paul Tonko,Dem,True
-NY,20,391,New York,Robert Dieterich,GOP,False
-NY,21,392,New York,Bill Owens,Dem,True
-NY,21,392,New York,Matthew Doheny,GOP,False
-NY,22,393,New York,Dan Lamb,Dem,False
-NY,22,393,New York,Richard Hanna,GOP,True
-NY,23,394,New York,Nate Shinagawa,Dem,False
-NY,23,394,New York,Thomas Reed,GOP,True
-NY,24,395,New York,Daniel Maffei,Dem,False
-NY,24,395,New York,Ann Marie Buerkle,GOP,True
-NY,25,396,New York,Louise Slaughter,Dem,True
-NY,25,396,New York,Maggie Brooks,GOP,False
-NY,26,397,New York,Brian Higgins,Dem,True
-NY,26,397,New York,Michael Madigan,GOP,False
-NY,27,398,New York,Kathy Hochul,Dem,True
-NY,27,398,New York,Chris Collins,GOP,False
-OH,1,405,Ohio,Steve Chabot,GOP,True
-OH,1,405,Ohio,Jeff Sinnard,Dem,False
-OH,2,422,Ohio,Brad Wenstrup,GOP,False
-OH,2,422,Ohio,William Smith,Dem,False
-OH,3,406,Ohio,Joyce Beatty,Dem,False
-OH,3,406,Ohio,Chris Long,GOP,False
-OH,4,407,Ohio,Jim Slone,Dem,False
-OH,4,407,Ohio,Jim Jordan,GOP,True
-OH,5,408,Ohio,Angela Zimmann,Dem,False
-OH,5,408,Ohio,Bob Latta,GOP,True
-OH,6,409,Ohio,Charlie Wilson,Dem,False
-OH,6,409,Ohio,Bill Johnson,GOP,True
-OH,7,410,Ohio,Joyce Healy-Abrams,Dem,False
-OH,7,410,Ohio,Bob Gibbs,GOP,True
-OH,8,411,Ohio,John Boehner,GOP,True
-OH,9,412,Ohio,Marcy Kaptur,Dem,True
-OH,9,412,Ohio,Samuel Wurzelbacher,GOP,False
-OH,10,413,Ohio,Sharen Swartz Neuhardt,Dem,False
-OH,10,413,Ohio,Mike Turner,GOP,True
-OH,11,414,Ohio,Marcia Fudge,Dem,True
-OH,12,415,Ohio,Jim Reese,Dem,False
-OH,12,415,Ohio,Pat Tiberi,GOP,True
-OH,13,416,Ohio,Tim Ryan,Dem,True
-OH,13,416,Ohio,Marisha Agana,GOP,False
-OH,14,417,Ohio,Dale Blanchard,Dem,False
-OH,14,417,Ohio,Steven LaTourette,GOP,True
-OH,15,418,Ohio,Pat Lang,Dem,False
-OH,15,418,Ohio,Steve Stivers,GOP,True
-OH,16,419,Ohio,Betty Sutton,Dem,True
-OH,16,419,Ohio,Jim Renacci,GOP,True
-OK,1,425,Oklahoma,John Olson,Dem,False
-OK,1,425,Oklahoma,Jim Bridenstine,GOP,False
-OK,2,428,Oklahoma,Wayne Herriman,Dem,False
-OK,2,428,Oklahoma,Rob Wallace,Dem,False
-OK,2,428,Oklahoma,George Faught,GOP,False
-OK,2,428,Oklahoma,Markwayne Mullin,GOP,False
-OK,3,426,Oklahoma,Timothy Murray,Dem,False
-OK,3,426,Oklahoma,Frank Lucas,GOP,True
-OK,4,427,Oklahoma,Donna Bebo,Dem,False
-OK,4,427,Oklahoma,Tom Cole,GOP,True
-OK,5,429,Oklahoma,Tom Guild,Dem,False
-OK,5,429,Oklahoma,James Lankford,GOP,True
-OR,1,434,Oregon,Delinda Morgan,GOP,False
-OR,1,434,Oregon,Suzanne Bonamici,Dem,True
-OR,2,435,Oregon,Joyce Segers,Dem,False
-OR,2,435,Oregon,Greg Walden,GOP,True
-OR,3,436,Oregon,Earl Blumenauer,Dem,True
-OR,3,436,Oregon,Ronald Green,GOP,False
-OR,4,437,Oregon,Peter DeFazio,Dem,True
-OR,4,437,Oregon,Art Robinson,GOP,False
-OR,5,438,Oregon,Kurt Schrader,Dem,True
-OR,5,438,Oregon,Fred Thompson,GOP,False
-PA,1,441,Pennsylvania,Robert Brady,Dem,True
-PA,1,441,Pennsylvania,John Featherman,GOP,False
-PA,2,459,Pennsylvania,Chaka Fattah,Dem,True
-PA,2,459,Pennsylvania,Robert Mansfield,GOP,False
-PA,3,442,Pennsylvania,Missa Eaton,Dem,False
-PA,3,442,Pennsylvania,Mike Kelly,GOP,True
-PA,4,443,Pennsylvania,Harry Perkinson,Dem,False
-PA,4,443,Pennsylvania,Scott Perry,GOP,False
-PA,5,444,Pennsylvania,Charles Dumas,Dem,False
-PA,5,444,Pennsylvania,Glenn Thompson,GOP,True
-PA,6,445,Pennsylvania,Manan Trivedi,Dem,False
-PA,6,445,Pennsylvania,Jim Gerlach,GOP,True
-PA,7,446,Pennsylvania,George Badey,Dem,False
-PA,7,446,Pennsylvania,Patrick Meehan,GOP,True
-PA,8,447,Pennsylvania,Kathy Boockvar,Dem,False
-PA,8,447,Pennsylvania,Mike Fitzpatrick,GOP,True
-PA,9,460,Pennsylvania,Bill Shuster,GOP,True
-PA,10,448,Pennsylvania,Philip Scollo,Dem,False
-PA,10,448,Pennsylvania,Thomas Marino,GOP,True
-PA,11,449,Pennsylvania,Gene Stilp,Dem,False
-PA,11,449,Pennsylvania,Lou Barletta,GOP,True
-PA,12,450,Pennsylvania,Mark Critz,Dem,True
-PA,12,450,Pennsylvania,Keith Rothfus,GOP,False
-PA,13,451,Pennsylvania,Allyson Schwartz,Dem,True
-PA,13,451,Pennsylvania,Joseph Rooney,GOP,False
-PA,14,452,Pennsylvania,Mike Doyle,Dem,True
-PA,14,452,Pennsylvania,Hans Lessmann,GOP,False
-PA,15,453,Pennsylvania,Richard Daugherty,Dem,False
-PA,15,453,Pennsylvania,Charles Dent,GOP,True
-PA,16,454,Pennsylvania,Aryanna Strader,Dem,False
-PA,16,454,Pennsylvania,Joseph Pitts,GOP,True
-PA,17,455,Pennsylvania,Matthew Cartwright,Dem,False
-PA,17,455,Pennsylvania,Laureen Cummings,GOP,False
-PA,18,456,Pennsylvania,Larry Maggi,Dem,False
-PA,18,456,Pennsylvania,Tim Murphy,GOP,True
-RI,1,464,Rhode Island,none,none,none
-RI,2,465,Rhode Island,none,none,none
-SC,1,468,South Carolina,Tim Scott,GOP,True
-SC,1,468,South Carolina,Bobbie Rose,Dem,False
-SC,2,469,South Carolina,Joe Wilson,GOP,True
-SC,3,470,South Carolina,Jeff Duncan,GOP,True
-SC,3,470,South Carolina,Brian Doyle,Dem,False
-SC,4,472,South Carolina,Trey Gowdy,GOP,True
-SC,4,472,South Carolina,Deb Morrow,Dem,False
-SC,5,473,South Carolina,Mick Mulvaney,GOP,True
-SC,5,473,South Carolina,Joyce Knott,Dem,False
-SC,6,474,South Carolina,Jim Clyburn,Dem,True
-SC,7,605,South Carolina,Gloria Bromell Tinubu,Dem,False
-SC,7,605,South Carolina,Tom Rice,GOP,False
-SD,1,477,South Dakota,Matt Varilek,Dem,False
-SD,1,477,South Dakota,Kristi Noem,GOP,True
-TN,1,481,Tennessee,none,none,none
-TN,2,482,Tennessee,none,none,none
-TN,3,483,Tennessee,none,none,none
-TN,4,484,Tennessee,none,none,none
-TN,5,485,Tennessee,none,none,none
-TN,6,486,Tennessee,none,none,none
-TN,7,487,Tennessee,none,none,none
-TN,8,488,Tennessee,none,none,none
-TN,9,489,Tennessee,none,none,none
-TX,1,493,Texas,Shirley McKellar,Dem,False
-TX,1,493,Texas,Louie Gohmert,GOP,True
-TX,2,494,Texas,Jim Dougherty,Dem,False
-TX,2,494,Texas,Ted Poe,GOP,True
-TX,3,495,Texas,Sam Johnson,GOP,True
-TX,4,496,Texas,VaLinda Hathcox,Dem,False
-TX,4,496,Texas,Ralph Hall,GOP,True
-TX,5,497,Texas,Tom Berry,Dem,False
-TX,5,497,Texas,Linda Mrosko,Dem,False
-TX,5,497,Texas,Jeb Hensarling,GOP,True
-TX,6,498,Texas,Kenneth Sanders,Dem,False
-TX,6,498,Texas,Joe Barton,GOP,True
-TX,7,499,Texas,James Cargas,Dem,False
-TX,7,499,Texas,Lissa Squiers,Dem,False
-TX,7,499,Texas,John Culberson,GOP,True
-TX,8,500,Texas,Neil Burns,Dem,False
-TX,8,500,Texas,Kevin Brady,GOP,True
-TX,9,501,Texas,Al Green,Dem,True
-TX,9,501,Texas,Steve Mueller,GOP,False
-TX,10,502,Texas,Tawana Cadien,Dem,False
-TX,10,502,Texas,Michael McCaul,GOP,True
-TX,11,503,Texas,Jim Riley,Dem,False
-TX,11,503,Texas,Mike Conaway,GOP,True
-TX,12,504,Texas,Dave Robinson,Dem,False
-TX,12,504,Texas,Kay Granger,GOP,True
-TX,13,505,Texas,Mac Thornberry,GOP,True
-TX,14,506,Texas,Nick Lampson,Dem,False
-TX,14,506,Texas,Felicia Harris,GOP,False
-TX,14,506,Texas,Randy Weber,GOP,False
-TX,15,507,Texas,Ruben Hinojosa,Dem,True
-TX,15,507,Texas,Eddie Zamora,GOP,False
-TX,15,507,Texas,Dale Brueggemann,GOP,False
-TX,16,508,Texas,Beto O'Rourke,Dem,False
-TX,16,508,Texas,Barbara Carrasco,GOP,False
-TX,17,509,Texas,Bill Flores,GOP,True
-TX,18,510,Texas,Sheila Jackson Lee,Dem,True
-TX,18,510,Texas,Sean Seibert,GOP,False
-TX,19,511,Texas,Randy Neugebauer,GOP,True
-TX,20,512,Texas,Joaquin Castro,Dem,False
-TX,20,512,Texas,David Rosa,GOP,False
-TX,21,513,Texas,Candace Duval,Dem,False
-TX,21,513,Texas,Lamar Smith,GOP,True
-TX,22,514,Texas,Kesha Rogers,Dem,False
-TX,22,514,Texas,Pete Olson,GOP,True
-TX,23,515,Texas,Pete Gallego,Dem,False
-TX,23,515,Texas,Ciro Rodriguez,Dem,False
-TX,23,515,Texas,Quico Canseco,GOP,True
-TX,24,516,Texas,Tim Rusk,Dem,False
-TX,24,516,Texas,Kenny Marchant,GOP,True
-TX,25,517,Texas,Elaine Henderson,Dem,False
-TX,25,517,Texas,Wes Riddle,GOP,False
-TX,25,517,Texas,Roger Williams,GOP,False
-TX,26,518,Texas,David Sanchez,Dem,False
-TX,26,518,Texas,Michael Burgess,GOP,True
-TX,27,519,Texas,Rose Harrison,Dem,False
-TX,27,519,Texas,Jerry Trevino,Dem,False
-TX,27,519,Texas,Blake Farenthold,GOP,True
-TX,28,523,Texas,Henry Cuellar,Dem,True
-TX,28,523,Texas,William Hayward,GOP,False
-TX,29,520,Texas,Gene Green,Dem,True
-TX,30,521,Texas,Eddie Bernice Johnson,Dem,True
-TX,30,521,Texas,Travis Washington,GOP,False
-TX,31,524,Texas,Stephen Wyman,Dem,False
-TX,31,524,Texas,John Carter,GOP,True
-TX,32,525,Texas,Katherine McGovern,Dem,False
-TX,32,525,Texas,Pete Sessions,GOP,True
-TX,33,606,Texas,Marc Veasey,Dem,False
-TX,33,606,Texas,Domingo Garcia,Dem,False
-TX,33,606,Texas,Chuck Bradley,GOP,False
-TX,34,607,Texas,Denise Blanchard,Dem,False
-TX,34,607,Texas,Filemon Vela,Dem,False
-TX,34,607,Texas,Jessica Bradshaw,GOP,False
-TX,34,607,Texas,Adela Garza,GOP,False
-TX,35,608,Texas,Lloyd Doggett,Dem,True
-TX,35,608,Texas,Susan Narvaiz,GOP,False
-TX,36,609,Texas,Max Martin,Dem,False
-TX,36,609,Texas,Stephen Takach,GOP,False
-TX,36,609,Texas,Steve Stockman,GOP,False
-UT,1,528,Utah,Donna McAleer,Dem,False
-UT,1,528,Utah,Rob Bishop,GOP,True
-UT,2,529,Utah,Jay Seegmiller,Dem,False
-UT,2,529,Utah,Chris Stewart,GOP,False
-UT,3,530,Utah,Soren Simonsen,Dem,False
-UT,3,530,Utah,Jason Chaffetz,GOP,True
-UT,4,610,Utah,Jim Matheson,Dem,True
-UT,4,610,Utah,Mia Love,GOP,False
-VA,1,534,Virginia,Rob Wittman,GOP,True
-VA,1,534,Virginia,Adam Cook,Dem,False
-VA,2,535,Virginia,Scott Rigell,GOP,True
-VA,2,535,Virginia,Paul Hirschbiel,Dem,False
-VA,3,536,Virginia,Dean Longo,GOP,False
-VA,3,536,Virginia,Bobby Scott,Dem,True
-VA,4,537,Virginia,Ella Ward,Dem,False
-VA,4,537,Virginia,Randy Forbes,GOP,True
-VA,5,538,Virginia,Robert Hurt,GOP,True
-VA,5,538,Virginia,John Douglass,Dem,False
-VA,6,539,Virginia,Robert Goodlatte,GOP,True
-VA,6,539,Virginia,Andy Schmookler,Dem,False
-VA,7,540,Virginia,Eric Cantor,GOP,True
-VA,7,540,Virginia,Wayne Powell,Dem,False
-VA,8,541,Virginia,James Moran,Dem,True
-VA,8,541,Virginia,Patrick Murray,GOP,False
-VA,9,542,Virginia,Morgan Griffith,GOP,True
-VA,9,542,Virginia,Anthony Flaccavento,Dem,False
-VA,10,543,Virginia,Frank Wolf,GOP,True
-VA,10,543,Virginia,Kristin Cabral,Dem,False
-VA,11,544,Virginia,Chris Perkins,GOP,False
-VA,11,544,Virginia,Gerry Connolly,GOP,True
-VT,1,548,Vermont,none,none,none
-WA,1,552,Washington,none,none,none
-WA,2,554,Washington,none,none,none
-WA,3,555,Washington,none,none,none
-WA,4,556,Washington,none,none,none
-WA,5,557,Washington,none,none,none
-WA,6,558,Washington,none,none,none
-WA,7,559,Washington,none,none,none
-WA,8,560,Washington,none,none,none
-WA,9,553,Washington,none,none,none
-WA,10,611,Washington,none,none,none
-WI,1,565,Wisconsin,none,none,none
-WI,2,566,Wisconsin,none,none,none
-WI,3,567,Wisconsin,none,none,none
-WI,4,568,Wisconsin,none,none,none
-WI,5,569,Wisconsin,none,none,none
-WI,6,570,Wisconsin,none,none,none
-WI,7,571,Wisconsin,none,none,none
-WI,8,572,Wisconsin,none,none,none
-WV,1,575,West Virginia,Sue Thorn,Dem,False
-WV,1,575,West Virginia,David McKinley,GOP,True
-WV,2,576,West Virginia,Howard Swint,Dem,False
-WV,2,576,West Virginia,Shelley Capito,GOP,True
-WV,3,577,West Virginia,Nick Rahall,Dem,True
-WV,3,577,West Virginia,Rick Snuffer,GOP,False
-WY,1,581,Wyoming,none,none,none
+state_id,seat_number,office_id,state,primary_date,name,party,incumbent
+AK,1,2,Alaska,2012-08-28,none,none,none
+AL,1,5,Alabama,,Jo Bonner,GOP,True
+AL,2,8,Alabama,,Terese Ford,Dem,False
+AL,2,8,Alabama,,Martha Roby,GOP,True
+AL,3,9,Alabama,,John Harris,Dem,False
+AL,3,9,Alabama,,Mike Rogers,GOP,True
+AL,4,6,Alabama,,Daniel Boman,Dem,False
+AL,4,6,Alabama,,Robert Aderholt,GOP,True
+AL,5,10,Alabama,,Charlie Holley,Dem,False
+AL,5,10,Alabama,,Mo Brooks,GOP,True
+AL,6,11,Alabama,,Penny Bailey,Dem,False
+AL,6,11,Alabama,,Spencer Bachus,GOP,True
+AL,7,12,Alabama,,Terri Sewell,Dem,True
+AL,7,12,Alabama,,Don Chamberlain,GOP,False
+AR,1,15,Arkansas,,Scott Ellington,Dem,False
+AR,1,15,Arkansas,,Rick Crawford,GOP,True
+AR,2,16,Arkansas,,Herb Rule,Dem,False
+AR,2,16,Arkansas,,Tim Griffin,GOP,True
+AR,3,19,Arkansas,,Ken Aden,Dem,False
+AR,3,19,Arkansas,,Steve Womack,GOP,True
+AR,4,17,Arkansas,,Gene Jeffress,Dem,False
+AR,4,17,Arkansas,,Tom Cotton,GOP,False
+AZ,1,22,Arizona,2012-08-28,none,none,none
+AZ,2,23,Arizona,2012-08-28,none,none,none
+AZ,3,24,Arizona,2012-08-28,none,none,none
+AZ,4,25,Arizona,2012-08-28,none,none,none
+AZ,5,26,Arizona,2012-08-28,none,none,none
+AZ,6,28,Arizona,2012-08-28,none,none,none
+AZ,7,29,Arizona,2012-08-28,none,none,none
+AZ,8,30,Arizona,2012-08-28,none,none,none
+AZ,9,600,Arizona,2012-08-28,none,none,none
+CA,1,83,California,,Jim Reed,Dem,False
+CA,1,83,California,,Doug LaMalfa,GOP,False
+CA,2,33,California,,Jared Huffman,Dem,False
+CA,2,33,California,,Dan Roberts,GOP,False
+CA,3,34,California,,Kim Vann,GOP,False
+CA,3,34,California,,John Garamendi,Dem,True
+CA,4,35,California,,Tom McClintock,GOP,True
+CA,4,35,California,,Jack Uppal,Dem,False
+CA,5,36,California,,Mike Thompson,Dem,True
+CA,5,36,California,,Randy Loftin,GOP,False
+CA,6,37,California,,Doris Matsui,Dem,True
+CA,6,37,California,,Joseph McCray Sr.,GOP,False
+CA,7,38,California,,Ami Bera,Dem,False
+CA,7,38,California,,Dan Lungren,GOP,True
+CA,8,39,California,,Gregg Imus,GOP,False
+CA,8,39,California,,Paul Cook,GOP,False
+CA,9,40,California,,Jerry McNerney,Dem,True
+CA,9,40,California,,Ricky Gill,GOP,False
+CA,10,86,California,,Jeff Denham,GOP,True
+CA,10,86,California,,Jose Hernandez,Dem,False
+CA,11,41,California,,George Miller,Dem,True
+CA,11,41,California,,Virginia Fuller,GOP,False
+CA,12,42,California,,Nancy Pelosi,Dem,True
+CA,12,42,California,,John Dennis,GOP,False
+CA,13,43,California,,Barbara Lee,Dem,True
+CA,13,43,California,,Marilyn Singleton,NPD,False
+CA,14,44,California,,Jackie Speier,Dem,True
+CA,14,44,California,,Debbie Bacigalupi,GOP,False
+CA,15,45,California,,Pete Stark,Dem,True
+CA,15,45,California,,Eric Swalwell,Dem,False
+CA,16,46,California,,Jim Costa,Dem,True
+CA,16,46,California,,Brian Whelan,GOP,False
+CA,17,47,California,,Mike Honda,Dem,True
+CA,17,47,California,,Evelyn Li,GOP,False
+CA,18,48,California,,Anna Eshoo,Dem,True
+CA,18,48,California,,Dave Chapman,GOP,False
+CA,19,49,California,,Zoe Lofgren,Dem,True
+CA,19,49,California,,Robert Murray,GOP,False
+CA,20,50,California,,Sam Farr,Dem,True
+CA,20,50,California,,Jeff Taylor,GOP,False
+CA,21,51,California,,David Valadao,GOP,False
+CA,21,51,California,,John Hernandez,DEM,False
+CA,22,52,California,,Devin Nunes,GOP,True
+CA,22,52,California,,Otto Lee,Dem,False
+CA,23,53,California,,Kevin McCarthy,GOP,True
+CA,23,53,California,,Terry Phillips,NPD,False
+CA,24,54,California,,Lois Capps,Dem,True
+CA,24,54,California,,Abel Maldonado,GOP,False
+CA,25,55,California,,Buck McKeon,GOP,True
+CA,25,55,California,,Lee Rogers,Dem,False
+CA,26,56,California,,Julia Brownley,Dem,False
+CA,26,56,California,,Tony Strickland,GOP,False
+CA,27,57,California,,Judy Chu,Dem,True
+CA,27,57,California,,Jack Orswell,GOP,False
+CA,28,58,California,,Adam Schiff,Dem,True
+CA,28,58,California,,Phil Jennerjahn,GOP,False
+CA,29,59,California,,Tony Cardenas,Dem,False
+CA,29,59,California,,David Hernandez,NPD,False
+CA,30,60,California,,Howard Berman,Dem,True
+CA,30,60,California,,Brad Sherman,Dem,True
+CA,31,61,California,,Gary Miller,GOP,True
+CA,31,61,California,,Bob Dutton,GOP,False
+CA,32,62,California,,Grace Napolitano,Dem,True
+CA,32,62,California,,David Miller,GOP,False
+CA,33,63,California,,Henry Waxman,Dem,True
+CA,33,63,California,,Bill Bloomfield,NPD,False
+CA,34,64,California,,Xavier Becerra,Dem,True
+CA,34,64,California,,Stephen Smith,GOP,False
+CA,35,65,California,,Joe Baca,Dem,True
+CA,35,65,California,,Gloria McLeod,Dem,False
+CA,36,66,California,,Mary Bono Mack,GOP,True
+CA,36,66,California,,Raul Ruiz,Dem,False
+CA,37,67,California,,Karen Bass,Dem,True
+CA,38,68,California,,Linda Sanchez,Dem,True
+CA,38,68,California,,Benjamin Campos,GOP,False
+CA,39,69,California,,Jay Chen,Dem,False
+CA,39,69,California,,Ed Royce,GOP,True
+CA,40,70,California,,Lucille Roybal-Allard,Dem,True
+CA,40,70,California,,David Sanchez,Dem,False
+CA,41,71,California,,Mark Takano,Dem,False
+CA,41,71,California,,John Tavaglione,GOP,False
+CA,42,72,California,,Michael Williamson,Dem,False
+CA,42,72,California,,Ken Calvert,GOP,True
+CA,43,73,California,,Maxine Waters,Dem,True
+CA,43,73,California,,Bob Flores,Dem,False
+CA,44,74,California,,Janice Hahn,Dem,True
+CA,44,74,California,,Laura Richardson,Dem,True
+CA,45,75,California,,John Campbell,GOP,True
+CA,45,75,California,,Sukhee Kang,Dem,False
+CA,46,76,California,,Loretta Sanchez,Dem,True
+CA,46,76,California,,Jerry Hayden,GOP,False
+CA,47,77,California,,Alan Lowenthal,Dem,False
+CA,47,77,California,,Gary Delong,GOP,False
+CA,48,85,California,,Dana Rohrabacher,GOP,True
+CA,48,85,California,,Ron Varasteh,Dem,False
+CA,49,78,California,,Darrell Issa,GOP,True
+CA,49,78,California,,Jerry Tetalman,Dem,False
+CA,50,79,California,,Duncan D. Hunter,GOP,True
+CA,50,79,California,,David Secor,Dem,False
+CA,51,80,California,,Juan Vargas,Dem,False
+CA,51,80,California,,Michael Crimmins,GOP,False
+CA,52,84,California,,Brian Bilbray,GOP,True
+CA,52,84,California,,Scott Peters,Dem,False
+CA,53,81,California,,Susan Davis,Dem,True
+CA,53,81,California,,Nick Popaditch,GOP,False
+CO,1,96,Colorado,,Diana DeGette,Dem,True
+CO,1,96,Colorado,,Danny Stroud,GOP,False
+CO,2,89,Colorado,,Jared Polis,Dem,True
+CO,2,89,Colorado,,Kevin Lundberg,GOP,False
+CO,3,90,Colorado,,Sal Pace,Dem,False
+CO,3,90,Colorado,,Scott Tipton,GOP,True
+CO,4,91,Colorado,,Brandon Shaffer,Dem,False
+CO,4,91,Colorado,,Cory Gardner,GOP,True
+CO,5,92,Colorado,,Doug Lamborn,GOP,True
+CO,6,93,Colorado,,Joe Miklosi,Dem,False
+CO,6,93,Colorado,,Mike Coffman,GOP,True
+CO,7,95,Colorado,,Ed Perlmutter,Dem,True
+CO,7,95,Colorado,,Joe Coors,GOP,False
+CT,1,99,Connecticut,,none,none,none
+CT,2,100,Connecticut,,none,none,none
+CT,3,101,Connecticut,,none,none,none
+CT,4,102,Connecticut,,none,none,none
+CT,5,103,Connecticut,,none,none,none
+DE,1,107,Delaware,2012-09-11,none,none,none
+FL,1,133,Florida,,none,none,none
+FL,2,111,Florida,,none,none,none
+FL,3,112,Florida,,none,none,none
+FL,4,113,Florida,,none,none,none
+FL,5,114,Florida,,none,none,none
+FL,6,115,Florida,,none,none,none
+FL,7,116,Florida,,none,none,none
+FL,8,117,Florida,,none,none,none
+FL,9,118,Florida,,none,none,none
+FL,10,119,Florida,,none,none,none
+FL,11,120,Florida,,none,none,none
+FL,12,121,Florida,,none,none,none
+FL,13,122,Florida,,none,none,none
+FL,14,123,Florida,,none,none,none
+FL,15,124,Florida,,none,none,none
+FL,16,125,Florida,,none,none,none
+FL,17,126,Florida,,none,none,none
+FL,18,127,Florida,,none,none,none
+FL,19,136,Florida,,none,none,none
+FL,20,132,Florida,,none,none,none
+FL,21,129,Florida,,none,none,none
+FL,22,130,Florida,,none,none,none
+FL,23,131,Florida,,none,none,none
+FL,24,134,Florida,,none,none,none
+FL,25,135,Florida,,none,none,none
+FL,26,601,Florida,,none,none,none
+FL,27,602,Florida,,none,none,none
+GA,1,139,Georgia,,none,none,none
+GA,2,140,Georgia,,none,none,none
+GA,3,141,Georgia,,none,none,none
+GA,4,142,Georgia,,none,none,none
+GA,5,143,Georgia,,none,none,none
+GA,6,144,Georgia,,none,none,none
+GA,7,145,Georgia,,none,none,none
+GA,8,146,Georgia,,none,none,none
+GA,9,147,Georgia,,none,none,none
+GA,10,148,Georgia,,none,none,none
+GA,11,149,Georgia,,none,none,none
+GA,12,151,Georgia,,none,none,none
+GA,13,152,Georgia,,none,none,none
+GA,14,603,Georgia,,none,none,none
+HI,1,157,Hawaii,,none,none,none
+HI,2,155,Hawaii,,none,none,none
+IA,1,160,Iowa,,Ben Lange,GOP,False
+IA,1,160,Iowa,,Bruce Braley,Dem,True
+IA,2,161,Iowa,,John Archer,GOP,False
+IA,2,161,Iowa,,Dave Loebsack,Dem,True
+IA,3,162,Iowa,,Tom Latham,GOP,True
+IA,3,162,Iowa,,Leonard Boswell,Dem,True
+IA,4,163,Iowa,,Steve King,GOP,True
+IA,4,163,Iowa,,Christie Vilsack,Dem,False
+ID,1,168,Idaho,,Jimmy Farris,Dem,False
+ID,1,168,Idaho,,Raul Labrador,GOP,True
+ID,2,169,Idaho,,Nicole LeFavour,Dem,False
+ID,2,169,Idaho,,Mike Simpson,GOP,True
+IL,1,174,Illinois,,Bobby Rush,Dem,True
+IL,1,174,Illinois,,Donald Peloquin,GOP,False
+IL,2,175,Illinois,,Brian Woodworth,GOP,False
+IL,2,175,Illinois,,Jesse Jackson Jr.,Dem,True
+IL,3,176,Illinois,,Dan Lipinski,Dem,True
+IL,3,176,Illinois,,Richard Grabowski,GOP,False
+IL,4,177,Illinois,,Luis Gutierrez,Dem,True
+IL,5,178,Illinois,,Mike Quigley,Dem,True
+IL,5,178,Illinois,,Dan Schmitt,GOP,False
+IL,6,179,Illinois,,Leslie Coolidge,Dem,False
+IL,6,179,Illinois,,Peter Roskam,GOP,True
+IL,7,180,Illinois,,Danny Davis,Dem,True
+IL,8,181,Illinois,,Tammy Duckworth,Dem,False
+IL,8,181,Illinois,,Joe Walsh,GOP,True
+IL,9,182,Illinois,,Jan Schakowsky,Dem,True
+IL,9,182,Illinois,,Timothy Wolfe,GOP,False
+IL,10,183,Illinois,,Robert Dold,GOP,True
+IL,10,183,Illinois,,Brad Schneider,Dem,False
+IL,11,184,Illinois,,Bill Foster,Dem,False
+IL,11,184,Illinois,,Judy Biggert,GOP,True
+IL,12,185,Illinois,,Jason Plummer,GOP,False
+IL,12,185,Illinois,,Bill Enyart,Dem,False
+IL,13,186,Illinois,,David Gill,Dem,False
+IL,13,186,Illinois,,Rodney Davis,GOP,False
+IL,14,187,Illinois,,Dennis Anderson,Dem,False
+IL,14,187,Illinois,,Randy Hultgren,GOP,True
+IL,15,188,Illinois,,Angela Michael,Dem,False
+IL,15,188,Illinois,,John Shimkus,GOP,True
+IL,16,189,Illinois,,Adam Kinzinger,GOP,True
+IL,17,190,Illinois,,Cheri Bustos,Dem,False
+IL,17,190,Illinois,,Bobby Schilling,GOP,True
+IL,18,191,Illinois,,Steve Waterworth,Dem,False
+IL,18,191,Illinois,,Aaron Schock,GOP,True
+IN,1,195,Indiana,,Peter Visclosky,Dem,True
+IN,1,195,Indiana,,Joel Phelps,GOP,False
+IN,2,196,Indiana,,Brendan Mullen,Dem,False
+IN,2,196,Indiana,,Jackie Walorski,GOP,False
+IN,3,197,Indiana,,Kevin Boyd,Dem,False
+IN,3,197,Indiana,,Marlin Stutzman,GOP,True
+IN,4,198,Indiana,,Tara Nelson,Dem,False
+IN,4,198,Indiana,,Todd Rokita,GOP,True
+IN,5,199,Indiana,,Scott Reske,Dem,False
+IN,5,199,Indiana,,Susan Brooks,GOP,False
+IN,6,200,Indiana,,Bradley Bookout,Dem,False
+IN,6,200,Indiana,,Luke Messer,GOP,False
+IN,7,201,Indiana,,Andre Carson,Dem,True
+IN,7,201,Indiana,,Carlos May,GOP,False
+IN,8,202,Indiana,,Dave Crooks,Dem,False
+IN,8,202,Indiana,,Larry Bucshon,GOP,True
+IN,9,203,Indiana,,Shelli Yoder,Dem,False
+IN,9,203,Indiana,,Todd Young,GOP,True
+KS,1,207,Kansas,,none,none,none
+KS,2,210,Kansas,,none,none,none
+KS,3,208,Kansas,,none,none,none
+KS,4,209,Kansas,,none,none,none
+KY,1,218,Kentucky,,Ed Whitfield,GOP,True
+KY,1,218,Kentucky,,Charles Hatchett,Dem,False
+KY,2,219,Kentucky,,Brett Guthrie,GOP,True
+KY,2,219,Kentucky,,David Williams,Dem,False
+KY,3,214,Kentucky,,Brooks Wicker,GOP,False
+KY,3,214,Kentucky,,John Yarmuth,Dem,True
+KY,4,215,Kentucky,,Thomas Massie,GOP,False
+KY,4,215,Kentucky,,William Adkins,Dem,False
+KY,5,216,Kentucky,,Hal Rogers,GOP,True
+KY,5,216,Kentucky,,Kenneth Stepp,Dem,False
+KY,6,217,Kentucky,,Andy Barr,GOP,False
+KY,6,217,Kentucky,,Ben Chandler,Dem,True
+LA,1,223,Louisiana,,none,none,none
+LA,2,224,Louisiana,,none,none,none
+LA,3,225,Louisiana,,none,none,none
+LA,4,226,Louisiana,,none,none,none
+LA,5,227,Louisiana,,none,none,none
+LA,6,228,Louisiana,,none,none,none
+MA,1,233,Massachusetts,2012-09-06,none,none,none
+MA,2,234,Massachusetts,2012-09-06,none,none,none
+MA,3,235,Massachusetts,2012-09-06,none,none,none
+MA,4,236,Massachusetts,2012-09-06,none,none,none
+MA,5,243,Massachusetts,2012-09-06,none,none,none
+MA,6,237,Massachusetts,2012-09-06,none,none,none
+MA,7,238,Massachusetts,2012-09-06,none,none,none
+MA,8,239,Massachusetts,2012-09-06,none,none,none
+MA,9,242,Massachusetts,2012-09-06,none,none,none
+MD,1,246,Maryland,,Andy Harris,GOP,True
+MD,1,246,Maryland,,Wendy Rosen,Dem,False
+MD,2,247,Maryland,,Nancy Jacobs,GOP,False
+MD,2,247,Maryland,,Dutch Ruppersberger,Dem,True
+MD,3,248,Maryland,,Eric Knowles,GOP,False
+MD,3,248,Maryland,,John Sarbanes,Dem,True
+MD,4,249,Maryland,,Faith Loudon,GOP,False
+MD,4,249,Maryland,,Donna Edwards,Dem,True
+MD,5,250,Maryland,,Tony O'Donnell,GOP,False
+MD,5,250,Maryland,,Steny Hoyer,Dem,True
+MD,6,251,Maryland,,Roscoe Bartlett,GOP,True
+MD,6,251,Maryland,,John Delaney,Dem,False
+MD,7,252,Maryland,,Frank Mirabile,GOP,False
+MD,7,252,Maryland,,Elijah Cummings,Dem,True
+MD,8,253,Maryland,,Ken Timmerman,GOP,False
+MD,8,253,Maryland,,Chris Van Hollen,Dem,True
+ME,1,257,Maine,,Chellie Pingree,Dem,True
+ME,1,257,Maine,,Jonathan Courtney,GOP,False
+ME,2,258,Maine,,Kevin Raye,GOP,False
+ME,2,258,Maine,,Mike Michaud,Dem,True
+MI,1,262,Michigan,,none,none,none
+MI,2,263,Michigan,,none,none,none
+MI,3,264,Michigan,,none,none,none
+MI,4,265,Michigan,,none,none,none
+MI,5,266,Michigan,,none,none,none
+MI,6,267,Michigan,,none,none,none
+MI,7,268,Michigan,,none,none,none
+MI,8,269,Michigan,,none,none,none
+MI,9,270,Michigan,,none,none,none
+MI,10,271,Michigan,,none,none,none
+MI,11,272,Michigan,,none,none,none
+MI,12,273,Michigan,,none,none,none
+MI,13,274,Michigan,,none,none,none
+MI,14,275,Michigan,,none,none,none
+MN,1,280,Minnesota,,none,none,none
+MN,2,281,Minnesota,,none,none,none
+MN,3,282,Minnesota,,none,none,none
+MN,4,283,Minnesota,,none,none,none
+MN,5,284,Minnesota,,none,none,none
+MN,6,285,Minnesota,,none,none,none
+MN,7,286,Minnesota,,none,none,none
+MN,8,287,Minnesota,,none,none,none
+MO,1,299,Missouri,,none,none,none
+MO,2,291,Missouri,,none,none,none
+MO,3,292,Missouri,,none,none,none
+MO,4,293,Missouri,,none,none,none
+MO,5,294,Missouri,,none,none,none
+MO,6,295,Missouri,,none,none,none
+MO,7,296,Missouri,,none,none,none
+MO,8,297,Missouri,,none,none,none
+MS,1,304,Mississippi,,Alan Nunnelee,GOP,True
+MS,1,304,Mississippi,,Brad Morris,Dem,False
+MS,2,303,Mississippi,,Bill Marcy,GOP,False
+MS,2,303,Mississippi,,Bennie Thompson,Dem,True
+MS,3,305,Mississippi,,Gregg Harper,GOP,True
+MS,3,305,Mississippi,,Crystal Biggs,Dem,False
+MS,4,306,Mississippi,,Steven Palazzo,GOP,True
+MS,4,306,Mississippi,,Michael Herrington,Dem,False
+MT,1,310,Montana,,Steve Daines,GOP,False
+MT,1,310,Montana,,Kim Gillan,Dem,False
+NC,1,318,North Carolina,,G.K. Butterfield,Dem,True
+NC,1,318,North Carolina,,Pete DiLauro,GOP,False
+NC,2,319,North Carolina,,Steve Wilkins,Dem,False
+NC,2,319,North Carolina,,Renee Ellmers,GOP,True
+NC,3,314,North Carolina,,Erik Anderson,Dem,False
+NC,3,314,North Carolina,,Walter Jones,GOP,True
+NC,4,320,North Carolina,,David Price,Dem,True
+NC,4,320,North Carolina,,Tim D'Annunzio,GOP,False
+NC,5,321,North Carolina,,Elisabeth Motsinger,Dem,False
+NC,5,321,North Carolina,,Virginia Foxx,GOP,True
+NC,6,322,North Carolina,,Tony Foriest,Dem,False
+NC,6,322,North Carolina,,Howard Coble,GOP,True
+NC,7,315,North Carolina,,Mike McIntyre,Dem,True
+NC,7,315,North Carolina,,David Rouzer,GOP,False
+NC,8,323,North Carolina,,Larry Kissell,Dem,True
+NC,8,323,North Carolina,,Richard Hudson,GOP,False
+NC,9,316,North Carolina,,Jennifer Roberts,Dem,False
+NC,9,316,North Carolina,,Robert Pittenger,GOP,False
+NC,10,324,North Carolina,,Patsy Keever,Dem,False
+NC,10,324,North Carolina,,Patrick McHenry,GOP,True
+NC,11,317,North Carolina,,Hayden Rogers,Dem,False
+NC,11,317,North Carolina,,Mark Meadows,GOP,False
+NC,12,325,North Carolina,,Mel Watt,Dem,True
+NC,12,325,North Carolina,,Jack Brosch,GOP,False
+NC,13,326,North Carolina,,George Holding,GOP,False
+NC,13,326,North Carolina,,Charles Malone,Dem,False
+ND,1,330,North Dakota,,Pam Gulleson,Dem,False
+ND,1,330,North Dakota,,Kevin Cramer,GOP,False
+NE,1,335,Nebraska,,Jeff Fortenberry,GOP,True
+NE,1,335,Nebraska,,Korey Reiman,Dem,False
+NE,2,337,Nebraska,,Lee Terry,GOP,True
+NE,2,337,Nebraska,,John Ewing,Dem,False
+NE,3,336,Nebraska,,Adrian Smith,GOP,True
+NE,3,336,Nebraska,,Mark Sullivan,Dem,False
+NH,1,341,New Hampshire,2012-09-11,none,none,none
+NH,2,342,New Hampshire,2012-09-11,none,none,none
+NJ,1,345,New Jersey,,Robert Andrews,Dem,True
+NJ,1,345,New Jersey,,Greg Horton,GOP,False
+NJ,2,346,New Jersey,,Cassandra Shober,Dem,False
+NJ,2,346,New Jersey,,Frank LoBiondo,GOP,True
+NJ,3,351,New Jersey,,Shelley Adler,Dem,False
+NJ,3,351,New Jersey,,Jon Runyan,GOP,True
+NJ,4,347,New Jersey,,Brian Froelich,Dem,False
+NJ,4,347,New Jersey,,Chris Smith,GOP,True
+NJ,5,348,New Jersey,,Adam Gussen,Dem,False
+NJ,5,348,New Jersey,,Scott Garrett,GOP,True
+NJ,6,349,New Jersey,,Frank Pallone,Dem,True
+NJ,6,349,New Jersey,,Anna Little,GOP,False
+NJ,7,352,New Jersey,,Upendra Chivukula,Dem,False
+NJ,7,352,New Jersey,,Leonard Lance,GOP,True
+NJ,8,350,New Jersey,,Albio Sires,Dem,True
+NJ,8,350,New Jersey,,Maria Karczewski,GOP,False
+NJ,9,355,New Jersey,,Bill Pascrell,Dem,True
+NJ,9,355,New Jersey,,Shmuley Boteach,GOP,False
+NJ,10,353,New Jersey,,Donald Payne Jr.,Dem,False
+NJ,10,353,New Jersey,,Brian Kelemen,GOP,False
+NJ,11,357,New Jersey,,John Arvanites,Dem,False
+NJ,11,357,New Jersey,,Rodney Frelinghuysen,GOP,True
+NJ,12,354,New Jersey,,Rush Holt,Dem,True
+NJ,12,354,New Jersey,,Eric Beck,GOP,False
+NM,1,360,New Mexico,,Janice Arnold-Jones,GOP,False
+NM,1,360,New Mexico,,Michelle Lujan Grisham,Dem,False
+NM,2,363,New Mexico,,Steve Pearce,GOP,True
+NM,2,363,New Mexico,,Evelyn Erhard,Dem,False
+NM,3,361,New Mexico,,Jefferson Byrd,GOP,False
+NM,3,361,New Mexico,,Ben R. Lujan,Dem,True
+NV,1,366,Nevada,,Dina Titus,Dem,False
+NV,1,366,Nevada,,Christopher Edwards,GOP,False
+NV,2,367,Nevada,,Samuel Koepnick,Dem,False
+NV,2,367,Nevada,,Mark Amodei,GOP,True
+NV,3,369,Nevada,,John Oceguera,Dem,False
+NV,3,369,Nevada,,Joe Heck,GOP,True
+NV,4,604,Nevada,,Steven Horsford,Dem,False
+NV,4,604,Nevada,,Danny Tarkanian,GOP,False
+NY,1,372,New York,,Timothy Bishop,Dem,True
+NY,1,372,New York,,Randy Altschuler,GOP,False
+NY,2,373,New York,,Vivianne Falcone,Dem,False
+NY,2,373,New York,,Peter King,GOP,True
+NY,3,374,New York,,Steve Israel,Dem,True
+NY,3,374,New York,,Stephen Labate,GOP,False
+NY,4,375,New York,,Carolyn McCarthy,Dem,True
+NY,4,375,New York,,Francis Becker,GOP,False
+NY,5,376,New York,,Gregory Meeks,Dem,True
+NY,5,376,New York,,Allan Jennings,GOP,False
+NY,6,377,New York,,Grace Meng,Dem,False
+NY,6,377,New York,,Daniel Halloran,GOP,False
+NY,7,378,New York,,Nydia Velazquez,Dem,True
+NY,8,379,New York,,Hakeem Jeffries,Dem,False
+NY,8,379,New York,,Alan Bellone,GOP,False
+NY,9,380,New York,,Yvette Clarke,Dem,True
+NY,9,380,New York,,Daniel Cavanagh,GOP,False
+NY,10,381,New York,,Jerrold Nadler,Dem,True
+NY,10,381,New York,,Michael Chan,GOP,False
+NY,11,382,New York,,Mark Murphy,Dem,False
+NY,11,382,New York,,Mike Grimm,GOP,True
+NY,12,383,New York,,Carolyn Maloney,Dem,True
+NY,12,383,New York,,Christopher Wight,GOP,False
+NY,13,384,New York,,Charles Rangel,Dem,True
+NY,14,385,New York,,Joe Crowley,Dem,True
+NY,14,385,New York,,William Gibbons,GOP,False
+NY,15,386,New York,,Jose E. Serrano,Dem,True
+NY,15,386,New York,,Frank Della Valle,GOP,False
+NY,16,387,New York,,Eliot Engel,Dem,True
+NY,16,387,New York,,Joseph McLaughlin,GOP,False
+NY,17,388,New York,,Nita Lowey,Dem,True
+NY,17,388,New York,,Joe Carvin,GOP,False
+NY,18,389,New York,,Sean Maloney,Dem,False
+NY,18,389,New York,,Nan Hayworth,GOP,True
+NY,19,390,New York,,Julian Schreibman,Dem,False
+NY,19,390,New York,,Christopher Gibson,GOP,True
+NY,20,391,New York,,Paul Tonko,Dem,True
+NY,20,391,New York,,Robert Dieterich,GOP,False
+NY,21,392,New York,,Bill Owens,Dem,True
+NY,21,392,New York,,Matthew Doheny,GOP,False
+NY,22,393,New York,,Dan Lamb,Dem,False
+NY,22,393,New York,,Richard Hanna,GOP,True
+NY,23,394,New York,,Nate Shinagawa,Dem,False
+NY,23,394,New York,,Thomas Reed,GOP,True
+NY,24,395,New York,,Daniel Maffei,Dem,False
+NY,24,395,New York,,Ann Marie Buerkle,GOP,True
+NY,25,396,New York,,Louise Slaughter,Dem,True
+NY,25,396,New York,,Maggie Brooks,GOP,False
+NY,26,397,New York,,Brian Higgins,Dem,True
+NY,26,397,New York,,Michael Madigan,GOP,False
+NY,27,398,New York,,Kathy Hochul,Dem,True
+NY,27,398,New York,,Chris Collins,GOP,False
+OH,1,405,Ohio,,Steve Chabot,GOP,True
+OH,1,405,Ohio,,Jeff Sinnard,Dem,False
+OH,2,422,Ohio,,Brad Wenstrup,GOP,False
+OH,2,422,Ohio,,William Smith,Dem,False
+OH,3,406,Ohio,,Joyce Beatty,Dem,False
+OH,3,406,Ohio,,Chris Long,GOP,False
+OH,4,407,Ohio,,Jim Slone,Dem,False
+OH,4,407,Ohio,,Jim Jordan,GOP,True
+OH,5,408,Ohio,,Angela Zimmann,Dem,False
+OH,5,408,Ohio,,Bob Latta,GOP,True
+OH,6,409,Ohio,,Charlie Wilson,Dem,False
+OH,6,409,Ohio,,Bill Johnson,GOP,True
+OH,7,410,Ohio,,Joyce Healy-Abrams,Dem,False
+OH,7,410,Ohio,,Bob Gibbs,GOP,True
+OH,8,411,Ohio,,John Boehner,GOP,True
+OH,9,412,Ohio,,Marcy Kaptur,Dem,True
+OH,9,412,Ohio,,Samuel Wurzelbacher,GOP,False
+OH,10,413,Ohio,,Sharen Swartz Neuhardt,Dem,False
+OH,10,413,Ohio,,Mike Turner,GOP,True
+OH,11,414,Ohio,,Marcia Fudge,Dem,True
+OH,12,415,Ohio,,Jim Reese,Dem,False
+OH,12,415,Ohio,,Pat Tiberi,GOP,True
+OH,13,416,Ohio,,Tim Ryan,Dem,True
+OH,13,416,Ohio,,Marisha Agana,GOP,False
+OH,14,417,Ohio,,Dale Blanchard,Dem,False
+OH,14,417,Ohio,,Steven LaTourette,GOP,True
+OH,15,418,Ohio,,Pat Lang,Dem,False
+OH,15,418,Ohio,,Steve Stivers,GOP,True
+OH,16,419,Ohio,,Betty Sutton,Dem,True
+OH,16,419,Ohio,,Jim Renacci,GOP,True
+OK,1,425,Oklahoma,,John Olson,Dem,False
+OK,1,425,Oklahoma,,Jim Bridenstine,GOP,False
+OK,2,428,Oklahoma,,Wayne Herriman,Dem,False
+OK,2,428,Oklahoma,,Rob Wallace,Dem,False
+OK,2,428,Oklahoma,,George Faught,GOP,False
+OK,2,428,Oklahoma,,Markwayne Mullin,GOP,False
+OK,3,426,Oklahoma,,Timothy Murray,Dem,False
+OK,3,426,Oklahoma,,Frank Lucas,GOP,True
+OK,4,427,Oklahoma,,Donna Bebo,Dem,False
+OK,4,427,Oklahoma,,Tom Cole,GOP,True
+OK,5,429,Oklahoma,,Tom Guild,Dem,False
+OK,5,429,Oklahoma,,James Lankford,GOP,True
+OR,1,434,Oregon,,Delinda Morgan,GOP,False
+OR,1,434,Oregon,,Suzanne Bonamici,Dem,True
+OR,2,435,Oregon,,Joyce Segers,Dem,False
+OR,2,435,Oregon,,Greg Walden,GOP,True
+OR,3,436,Oregon,,Earl Blumenauer,Dem,True
+OR,3,436,Oregon,,Ronald Green,GOP,False
+OR,4,437,Oregon,,Peter DeFazio,Dem,True
+OR,4,437,Oregon,,Art Robinson,GOP,False
+OR,5,438,Oregon,,Kurt Schrader,Dem,True
+OR,5,438,Oregon,,Fred Thompson,GOP,False
+PA,1,441,Pennsylvania,,Robert Brady,Dem,True
+PA,1,441,Pennsylvania,,John Featherman,GOP,False
+PA,2,459,Pennsylvania,,Chaka Fattah,Dem,True
+PA,2,459,Pennsylvania,,Robert Mansfield,GOP,False
+PA,3,442,Pennsylvania,,Missa Eaton,Dem,False
+PA,3,442,Pennsylvania,,Mike Kelly,GOP,True
+PA,4,443,Pennsylvania,,Harry Perkinson,Dem,False
+PA,4,443,Pennsylvania,,Scott Perry,GOP,False
+PA,5,444,Pennsylvania,,Charles Dumas,Dem,False
+PA,5,444,Pennsylvania,,Glenn Thompson,GOP,True
+PA,6,445,Pennsylvania,,Manan Trivedi,Dem,False
+PA,6,445,Pennsylvania,,Jim Gerlach,GOP,True
+PA,7,446,Pennsylvania,,George Badey,Dem,False
+PA,7,446,Pennsylvania,,Patrick Meehan,GOP,True
+PA,8,447,Pennsylvania,,Kathy Boockvar,Dem,False
+PA,8,447,Pennsylvania,,Mike Fitzpatrick,GOP,True
+PA,9,460,Pennsylvania,,Bill Shuster,GOP,True
+PA,10,448,Pennsylvania,,Philip Scollo,Dem,False
+PA,10,448,Pennsylvania,,Thomas Marino,GOP,True
+PA,11,449,Pennsylvania,,Gene Stilp,Dem,False
+PA,11,449,Pennsylvania,,Lou Barletta,GOP,True
+PA,12,450,Pennsylvania,,Mark Critz,Dem,True
+PA,12,450,Pennsylvania,,Keith Rothfus,GOP,False
+PA,13,451,Pennsylvania,,Allyson Schwartz,Dem,True
+PA,13,451,Pennsylvania,,Joseph Rooney,GOP,False
+PA,14,452,Pennsylvania,,Mike Doyle,Dem,True
+PA,14,452,Pennsylvania,,Hans Lessmann,GOP,False
+PA,15,453,Pennsylvania,,Richard Daugherty,Dem,False
+PA,15,453,Pennsylvania,,Charles Dent,GOP,True
+PA,16,454,Pennsylvania,,Aryanna Strader,Dem,False
+PA,16,454,Pennsylvania,,Joseph Pitts,GOP,True
+PA,17,455,Pennsylvania,,Matthew Cartwright,Dem,False
+PA,17,455,Pennsylvania,,Laureen Cummings,GOP,False
+PA,18,456,Pennsylvania,,Larry Maggi,Dem,False
+PA,18,456,Pennsylvania,,Tim Murphy,GOP,True
+RI,1,464,Rhode Island,2012-09-11,none,none,none
+RI,2,465,Rhode Island,2012-09-11,none,none,none
+SC,1,468,South Carolina,,Tim Scott,GOP,True
+SC,1,468,South Carolina,,Bobbie Rose,Dem,False
+SC,2,469,South Carolina,,Joe Wilson,GOP,True
+SC,3,470,South Carolina,,Jeff Duncan,GOP,True
+SC,3,470,South Carolina,,Brian Doyle,Dem,False
+SC,4,472,South Carolina,,Trey Gowdy,GOP,True
+SC,4,472,South Carolina,,Deb Morrow,Dem,False
+SC,5,473,South Carolina,,Mick Mulvaney,GOP,True
+SC,5,473,South Carolina,,Joyce Knott,Dem,False
+SC,6,474,South Carolina,,Jim Clyburn,Dem,True
+SC,7,605,South Carolina,,Gloria Bromell Tinubu,Dem,False
+SC,7,605,South Carolina,,Tom Rice,GOP,False
+SD,1,477,South Dakota,,Matt Varilek,Dem,False
+SD,1,477,South Dakota,,Kristi Noem,GOP,True
+TN,1,481,Tennessee,,none,none,none
+TN,2,482,Tennessee,,none,none,none
+TN,3,483,Tennessee,,none,none,none
+TN,4,484,Tennessee,,none,none,none
+TN,5,485,Tennessee,,none,none,none
+TN,6,486,Tennessee,,none,none,none
+TN,7,487,Tennessee,,none,none,none
+TN,8,488,Tennessee,,none,none,none
+TN,9,489,Tennessee,,none,none,none
+TX,1,493,Texas,,Shirley McKellar,Dem,False
+TX,1,493,Texas,,Louie Gohmert,GOP,True
+TX,2,494,Texas,,Jim Dougherty,Dem,False
+TX,2,494,Texas,,Ted Poe,GOP,True
+TX,3,495,Texas,,Sam Johnson,GOP,True
+TX,4,496,Texas,,VaLinda Hathcox,Dem,False
+TX,4,496,Texas,,Ralph Hall,GOP,True
+TX,5,497,Texas,,Tom Berry,Dem,False
+TX,5,497,Texas,,Linda Mrosko,Dem,False
+TX,5,497,Texas,,Jeb Hensarling,GOP,True
+TX,6,498,Texas,,Kenneth Sanders,Dem,False
+TX,6,498,Texas,,Joe Barton,GOP,True
+TX,7,499,Texas,,James Cargas,Dem,False
+TX,7,499,Texas,,Lissa Squiers,Dem,False
+TX,7,499,Texas,,John Culberson,GOP,True
+TX,8,500,Texas,,Neil Burns,Dem,False
+TX,8,500,Texas,,Kevin Brady,GOP,True
+TX,9,501,Texas,,Al Green,Dem,True
+TX,9,501,Texas,,Steve Mueller,GOP,False
+TX,10,502,Texas,,Tawana Cadien,Dem,False
+TX,10,502,Texas,,Michael McCaul,GOP,True
+TX,11,503,Texas,,Jim Riley,Dem,False
+TX,11,503,Texas,,Mike Conaway,GOP,True
+TX,12,504,Texas,,Dave Robinson,Dem,False
+TX,12,504,Texas,,Kay Granger,GOP,True
+TX,13,505,Texas,,Mac Thornberry,GOP,True
+TX,14,506,Texas,,Nick Lampson,Dem,False
+TX,14,506,Texas,,Felicia Harris,GOP,False
+TX,14,506,Texas,,Randy Weber,GOP,False
+TX,15,507,Texas,,Ruben Hinojosa,Dem,True
+TX,15,507,Texas,,Eddie Zamora,GOP,False
+TX,15,507,Texas,,Dale Brueggemann,GOP,False
+TX,16,508,Texas,,Beto O'Rourke,Dem,False
+TX,16,508,Texas,,Barbara Carrasco,GOP,False
+TX,17,509,Texas,,Bill Flores,GOP,True
+TX,18,510,Texas,,Sheila Jackson Lee,Dem,True
+TX,18,510,Texas,,Sean Seibert,GOP,False
+TX,19,511,Texas,,Randy Neugebauer,GOP,True
+TX,20,512,Texas,,Joaquin Castro,Dem,False
+TX,20,512,Texas,,David Rosa,GOP,False
+TX,21,513,Texas,,Candace Duval,Dem,False
+TX,21,513,Texas,,Lamar Smith,GOP,True
+TX,22,514,Texas,,Kesha Rogers,Dem,False
+TX,22,514,Texas,,Pete Olson,GOP,True
+TX,23,515,Texas,,Pete Gallego,Dem,False
+TX,23,515,Texas,,Ciro Rodriguez,Dem,False
+TX,23,515,Texas,,Quico Canseco,GOP,True
+TX,24,516,Texas,,Tim Rusk,Dem,False
+TX,24,516,Texas,,Kenny Marchant,GOP,True
+TX,25,517,Texas,,Elaine Henderson,Dem,False
+TX,25,517,Texas,,Wes Riddle,GOP,False
+TX,25,517,Texas,,Roger Williams,GOP,False
+TX,26,518,Texas,,David Sanchez,Dem,False
+TX,26,518,Texas,,Michael Burgess,GOP,True
+TX,27,519,Texas,,Rose Harrison,Dem,False
+TX,27,519,Texas,,Jerry Trevino,Dem,False
+TX,27,519,Texas,,Blake Farenthold,GOP,True
+TX,28,523,Texas,,Henry Cuellar,Dem,True
+TX,28,523,Texas,,William Hayward,GOP,False
+TX,29,520,Texas,,Gene Green,Dem,True
+TX,30,521,Texas,,Eddie Bernice Johnson,Dem,True
+TX,30,521,Texas,,Travis Washington,GOP,False
+TX,31,524,Texas,,Stephen Wyman,Dem,False
+TX,31,524,Texas,,John Carter,GOP,True
+TX,32,525,Texas,,Katherine McGovern,Dem,False
+TX,32,525,Texas,,Pete Sessions,GOP,True
+TX,33,606,Texas,,Marc Veasey,Dem,False
+TX,33,606,Texas,,Domingo Garcia,Dem,False
+TX,33,606,Texas,,Chuck Bradley,GOP,False
+TX,34,607,Texas,,Denise Blanchard,Dem,False
+TX,34,607,Texas,,Filemon Vela,Dem,False
+TX,34,607,Texas,,Jessica Bradshaw,GOP,False
+TX,34,607,Texas,,Adela Garza,GOP,False
+TX,35,608,Texas,,Lloyd Doggett,Dem,True
+TX,35,608,Texas,,Susan Narvaiz,GOP,False
+TX,36,609,Texas,,Max Martin,Dem,False
+TX,36,609,Texas,,Stephen Takach,GOP,False
+TX,36,609,Texas,,Steve Stockman,GOP,False
+UT,1,528,Utah,,Donna McAleer,Dem,False
+UT,1,528,Utah,,Rob Bishop,GOP,True
+UT,2,529,Utah,,Jay Seegmiller,Dem,False
+UT,2,529,Utah,,Chris Stewart,GOP,False
+UT,3,530,Utah,,Soren Simonsen,Dem,False
+UT,3,530,Utah,,Jason Chaffetz,GOP,True
+UT,4,610,Utah,,Jim Matheson,Dem,True
+UT,4,610,Utah,,Mia Love,GOP,False
+VA,1,534,Virginia,,Rob Wittman,GOP,True
+VA,1,534,Virginia,,Adam Cook,Dem,False
+VA,2,535,Virginia,,Scott Rigell,GOP,True
+VA,2,535,Virginia,,Paul Hirschbiel,Dem,False
+VA,3,536,Virginia,,Dean Longo,GOP,False
+VA,3,536,Virginia,,Bobby Scott,Dem,True
+VA,4,537,Virginia,,Ella Ward,Dem,False
+VA,4,537,Virginia,,Randy Forbes,GOP,True
+VA,5,538,Virginia,,Robert Hurt,GOP,True
+VA,5,538,Virginia,,John Douglass,Dem,False
+VA,6,539,Virginia,,Robert Goodlatte,GOP,True
+VA,6,539,Virginia,,Andy Schmookler,Dem,False
+VA,7,540,Virginia,,Eric Cantor,GOP,True
+VA,7,540,Virginia,,Wayne Powell,Dem,False
+VA,8,541,Virginia,,James Moran,Dem,True
+VA,8,541,Virginia,,Patrick Murray,GOP,False
+VA,9,542,Virginia,,Morgan Griffith,GOP,True
+VA,9,542,Virginia,,Anthony Flaccavento,Dem,False
+VA,10,543,Virginia,,Frank Wolf,GOP,True
+VA,10,543,Virginia,,Kristin Cabral,Dem,False
+VA,11,544,Virginia,,Chris Perkins,GOP,False
+VA,11,544,Virginia,,Gerry Connolly,GOP,True
+VT,1,548,Vermont,2012-08-28,none,none,none
+WA,1,552,Washington,,none,none,none
+WA,2,554,Washington,,none,none,none
+WA,3,555,Washington,,none,none,none
+WA,4,556,Washington,,none,none,none
+WA,5,557,Washington,,none,none,none
+WA,6,558,Washington,,none,none,none
+WA,7,559,Washington,,none,none,none
+WA,8,560,Washington,,none,none,none
+WA,9,553,Washington,,none,none,none
+WA,10,611,Washington,,none,none,none
+WI,1,565,Wisconsin,,none,none,none
+WI,2,566,Wisconsin,,none,none,none
+WI,3,567,Wisconsin,,none,none,none
+WI,4,568,Wisconsin,,none,none,none
+WI,5,569,Wisconsin,,none,none,none
+WI,6,570,Wisconsin,,none,none,none
+WI,7,571,Wisconsin,,none,none,none
+WI,8,572,Wisconsin,,none,none,none
+WV,1,575,West Virginia,,Sue Thorn,Dem,False
+WV,1,575,West Virginia,,David McKinley,GOP,True
+WV,2,576,West Virginia,,Howard Swint,Dem,False
+WV,2,576,West Virginia,,Shelley Capito,GOP,True
+WV,3,577,West Virginia,,Nick Rahall,Dem,True
+WV,3,577,West Virginia,,Rick Snuffer,GOP,False
+WY,1,581,Wyoming,,none,none,none
