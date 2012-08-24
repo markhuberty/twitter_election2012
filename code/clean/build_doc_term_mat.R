@@ -158,8 +158,18 @@ corpus <- tm_map(corpus, removePunctuation)
 
 ## Then turn into a doc-term matrix
 
+generic.filename <- "./data/generic.corpus.RData"
+timestamp.filename <- paste("./data/generic.corpus.",
+                            Sys.Date(),
+                            ".RData",
+                            sep=""
+                            )
+                            
 save(corpus,
-     file="./data/generic.corpus.RData"
+     file=generic.filename
+     )
+save(corpus,
+     file=timestamp.filename
      )
 
 max.terms <- 3

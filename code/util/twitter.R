@@ -466,7 +466,6 @@ search.twitter.pages <- function(type="json",
                                    )
       query.all <- list()
       query.all[[1]] <- query.out
-
       ## While there are more pages to get, and the user still wants
       ## to get pages
       while(grepl("next_page", query.out) & page.num <= max.pages) 
@@ -483,7 +482,7 @@ search.twitter.pages <- function(type="json",
                                        showuser=showuser,
                                        result.type=result.type
                                        )
-
+          
           query.all[[page.num]] <- query.out
 
           print(paste("Page num =", page.num))
