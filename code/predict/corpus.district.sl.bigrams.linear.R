@@ -56,7 +56,7 @@ today <- Sys.Date()
 
 generic.outfile.name <- paste("binary.prediction.",
                               today,
-                              "csv",
+                              ".csv",
                               sep=""
                               )
                              

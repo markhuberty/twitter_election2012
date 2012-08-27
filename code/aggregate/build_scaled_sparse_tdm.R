@@ -23,8 +23,9 @@ final.threshold <- c(0.02, 0.005)
 ## scale here equiv to either 0 + 1x (linear)
 ## or 1 + x^2
 scale.params <- list(c(1, 0), c(1, 0, 1, 2), c(0.08))
-scale.type <- c("scale.linear", "scale.quad",
-                "scale.sigmoid")
+scale.type <- "scale.linear"
+## scale.type <- c("scale.linear", "scale.quad",
+##                 "scale.sigmoid")
 type <- c("aggregate", "byweek")
 
 for(i in 1:3)
@@ -70,7 +71,7 @@ for(i in 1:3)
                                   final.threshold=final.threshold[j],
                                   col.names=col.names,
                                   scale=TRUE,
-                                  time.var=house.data$created.at.date,
+                                  time.var=house.data$created_at,
                                   scale.fun=scale.type[k],
                                   scale.params=scale.params[[k]]
                                   )

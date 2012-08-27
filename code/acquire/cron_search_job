@@ -84,7 +84,8 @@ results.fields.desired <- c("profile_image_url",
                             )
 
 states.districts <- data.frame(candidates.pull$state,
-                               candidates.pull$district)
+                               candidates.pull$district
+                               )
 cand.names <- data.frame(candidates.pull$first.name,
                          candidates.pull$last.name
                          )

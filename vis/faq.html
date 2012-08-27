@@ -4,19 +4,185 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<title>prediction experiment faq</title>
+	<title>Voting with your tweet FAQ</title>
 	
 </head>
 
 <body>
 <div id="pe_title">
-	
+  
 </div>
 <div id="pe_intro">
 	
 </div>
-<div id="pe_faq">
-	
+<div id="pe_faq_overview">
+  <h2><a name="intro">Introduction</h2>
+    <ol>
+    <li>What is <a href=""></a>Voting with your tweet</a> trying to
+    do?  </li>
+    <li>How do you predict who will win in each district?</li>
+    We mine the Twitter data feed each night for tweets that mentioned
+    each Congressional candidate in the prior 24 hours. We add those
+    mentions to all mentions of each candidate in our database. We
+    then feed that text into an algorithm that generates the
+    prediction. 
+
+    If you want more information see the FAQs about the data and
+    algoritm below. If you want way more information, you can read the
+    interim technical
+    report <a href="http://markhuberty.berkeley.edu/files/twitter_paper.pdf">here</a>. 
+    
+    <li>This seems dubious. Should I trust your predictions?</li>
+    <b> Probably not!</b> Voting with your Tweet is an experiment. We
+    think this might work (we even think we might know
+    exactly <a href="">why</a> it will work). But we could fail spectacularly!
+    <li>If I shouldn't trust the predictions, then why are you doing
+    this?</li>
+
+    <li> Who else is doing this kind of thing?</li>
+
+    Lots of people. See these papers if you are interested:
+    <ul>
+      
+      <li><a href="http://www.aaai.org/ocs/index.php/ICWSM/ICWSM10/paper/viewPDFInterstitial/1536/1842">O'Connor, Balasubramanyan, Routledge, and Smith</a>. From Tweets to polls: Linking text sentiment to public opinion time series. In <i>Proceedings of the International AAAI Conference on Weblogs and Social Media</i>, pages 122–129, 2010.</li>
+      <li><a href="http://www.aaai.org/ocs/index.php/ICWSM/ICWSM10/paper/viewFile/1441/1852">Tumasjan, A. et al</a>. Election Forecasts With Twitter: How 140
+      Characters Reflect the Political Landscape. <i>Social Science
+      Computer Review</i>. 2010.</li>
+      <li><a href="http://www.scribd.com/doc/31208748/Tweetminster-Predicts-Findings">Tweetminster</a>. Is word of mouth correlated to General
+      Election results? The results are in. 2010.</li>    clean up the data feed along the way
+      clean up the data feed along the way    
+    </ul>
+
+    <li>Should I trust them?</li>
+    <p>Maybe, maybe not. As Daniel Gayo-Avello of the University of Oviedo (Spain) has <a href="http://arxiv.org/abs/1204.6441">pointed</a> <a href="http://arxiv.org/pdf/1206.5851.pdf">out</a>, 
+    most of these papers (and <a href="http://markhuberty.berkeley.edu/files/twitter_paper.pdf.zip">Mark's technical report</a>)
+    were <i>retrospective</i>. They took an election (like the German,
+    Japanese, or British parliamentary elections), split the races in half
+    randomly, and built a prediction algorithm on one half. They then
+    tested how accuracy they were on the other half. This
+    approach--called <i>out of sample</i> prediction--is a good
+    idea. But it still doesn't tell us whether that same approach will
+    work on an election that the algorithm has never seen.</p>
+
+    <p>For instance, an algorithm built on the 2010 United States
+    Congressional Election might have found that tweets that mentioned
+    both the candidate and "Obamacare" were good
+    predictors of Republican victories. 2010 was a strong year for
+    Republicans, and they ran against Democratic incumbents who'd
+    supported President Obama's health care reforms. But health care
+    might play a totally different role in the 2012 race, so this
+    predictor could be wrong.</p>
+
+    <p>Finally, there are many more basic issues: for instance, political
+    tweets (like language in general) is full of sarcasm ("I
+    just <i>love</i> Congressman Smith!"), satire, spam, irony, and a
+    lot of other subtle things. Computer-based linguistic analysis has
+    made enormous strides in understanding human language, but many
+      things remain outside its reach.</p>
+
+    <li>How does your method differ from theirs?</li>
+    <p>These papers generally worked in one of two ways: by just counting
+      how many times a candidate was mentioned on Twitter during the
+      campaign; or counting how many times Twitter users used "positive"
+      or "negative" words to describe the candidates.</p>
+
+    <p>Our method takes a different tack. We used the results of the 2010
+      Congressional election to determine what terms were the best
+      predictors of which party won in each Congressional district. We
+      are now applying that algorithm to the 2012 election. For more
+      information, see the <a href="#algorithms">algorithms</a> section below.</p>
+  </ol>
+  </div>
+  <div id="pe_faq_data">
+<h2><a name="data"></a>Data and Sources</h2>
+  <ol>
+    <li>Where does the data come from?</li>
+    <p>We mine the data from Twitter using their open <a href="https://dev.twitter.com/docs/api/1/get/search">Search
+    API</a>. The Twitter Search API allows anyone to search the
+    Twitter feed from the last week or so. </p>
+    <li>How do you get the data?</li>
+    <p>We query the Search API every night, for all mentions of each
+    Congressional candidate in the past 24 hours. We download and
+    store those tweets and related data about when they were created,
+    whether they were retweets (RT) or mentionds (MT), and other
+    metadata.</p> 
+    <li>What about candidates with really generic names? Don't you get
+    a lot of noise when searching
+    for Candidate Smith?</li>
+
+    
+<p>We've taken steps to try and make sure the data is as clean as
+    possible. For instance, when we gathered data on the 2010
+    election, we found that one of the candidates shared the same name
+    as the kicker for the New Orleans Saints football team. We had a
+    lot of data about game outcomes!</p>
+
+<p>    This time around, we
+    used <a href="http://www.google.com">Google</a> searches identify
+    whether similar kinds of situations existed, and made sure to
+    clean up the data feed along the way. 
+</p>
+    <li>What about spam?</li>
+    
+<p>Spam has become a problem on Twitter lately. We also don't really want to over-rate a candidate simply because their campaign sends out tons of tweets. We already know they think their candidate is great, but that doesn't tell us anything about what voters think.
+</p>
+  </ol>
+</div>
+<div id="pe_faq_algorithm">
+<h2><a name="algorithms"></a>Algorithms</h2>
+  <ol>
+    <li>How does the algorithm really work?</li>
+<p>    The algorithm works by mapping the <i>term frequencies</i> of words that appear in tweets about Congressional candidates, to either (1) which party will win the race (Democrats or Republicans); or (2) the vote share that the Democratic candidate will receive. This is a <i>supervised machine learning</i> approach, that uses the results from the last election to train an algorithm for predicting results in the coming one.
+</p>
+    <li>How was the algorithm built up?</li>
+    
+<p>During the 2010 Congressional election, we gathered approximately 250,000 tweets about 356 Congressional races. Based on those messages and the election outcomes, we trained two machine learning algorithms to determine what word features of those tweets best predicted whether the Democratic or Republican party candidate won each race.
+</p>
+    We did this a series of steps:
+<ol>
+  <li>Count all of the unique <i>bigrams</i> (pairs of consecutive words) in each tweet</li>
+  <li>Count the occurrance of all bigrams in each district for the entire race</li>
+  <li><i>Weight</i> the counts so that terms in tweets closer to the election were treated as more important than terms that occurred much earlier in the election</li>
+  <li>Build up a matrix, using these counts, of all terms in tweets for both candidates in the race, for all districts. This gave us a matrix of <i>D</i> districts and <i>T</i> terms. With filtering for really common words (like the, is, etc) and really uncommon words this gave us about 1000-2000 unique terms for 356 districts</li>
+  <li>Use the <a href="">SuperLearner</a> algorithm to determine which terms were the best predictors (positive or negative) of which party won in each district </li>
+</ol>
+    
+    <li>Can you go into more detail?</li>
+    
+<p>Sure. This is what's called a <i>bag of words</i> approach: take some text, chop it up into individual terms, count how often each term appears, and use those term:frequency counts as a numerical representation of the message.
+</p>
+    
+<p>In the process, of course, we throw out a ton of information: grammar, sentence structure, sentence context, and so forth. We also usually throw out super-common words like <i>is</i> or <i>won't</i>. But in practice the process often works really well. 
+</p>
+    
+<p>Using these term-frequency representations, we can build up "documents" for each Congressional district: one document is all the messages about either of the two candidates. Because we assume that messages that came out later in the campaign are probably better indicators of who might win than those that came out earlier, we weight them more heavily in the aggregate term counts. 
+</p>
+    
+<p>We can now do real math on this matrix. The <a href="https://github.com/ecpolley/SuperLearner">SuperLearner</a> is what's called an ensemble machine learning algorithm: it takes a bunch of different algorithms (like random forests, support vector machines, lasso regression, and others) and uses each to try and predict the elections on their own. It then combines all of these algorithms together by weighting their individual predictions. In practice, this can result in a synthetic prediction algorithm that's more accurate than the more accurate single algorithm. 
+</p>
+    
+<p>All of this work was done with the R statistical programming language. If you are really curious, the code is all on <a href="http://github.com/markhuberty/twitter_election2012">Github</a>.</p>
+  </ol>
+</div>
+
+<div id="faq_pe_topic_models">
+<h2><a name="topic_models">Topic Models</h2>
+  <ol>
+    <li>What do those <a href="">"topics"</a> mean?</li>
+<p>    The topics are an attempt to learn from the Twitter stream what topics are most important to each Congressional district. We represent them as the top 5 terms that "best" represent the topic in each district. </p>
+    <li>Where do those "topics" come from?</li>
+<p>    We generate the topics from the same term-frequency data that we use for the election predictions. <a href="http://en.wikipedia.org/wiki/Topic_model">Topic models</a> are a class of machine learning models that try to learn how text aggregates into categories by looking at the distribution of words in lots of documents. In our case, those documents are the sets of messages mentioning each candidate, or both candidates in a Congressional district. For a good non-technical summary of topic modeling, see <a href="http://www.cs.princeton.edu/~blei/papers/Blei2012.pdf">this paper</a> by Dave Blei. </p>
+    <li>Do these topics actually mean anything?</li>
+<p>    Yes and no. Topic models have been very successful in doing things like categorizing magazine articles, tracking how the discussion of different scientific topics changed over time, or even helping to measure and predict <a href="">who votes for what</a> in the US Congress. But they are ultimately just a statistical construct based on the probability that terms occur together often in multiple documents. </p>
+  </ol>
+</div>
+
+<div id="faq_pe_other">
+<h2><a href="other"></a>Other</h2>
+  <ol>
+    <li>Who's this "we"?</li>
+<p>    <a href="http://markhuberty.berkeley.edu">Mark Huberty</a> wrote the original code and paper predicting the 2010 elections. He's the one who's got egg on his face if this all falls flat! <a href="">Len DeGroot</a> built the web front-end and all of the interactive data visualization front-end. <a href="">Hillary Sanders</a> did the background work preparing for the 2012 election, including the thankless task of cross-checking all the names. She also keeps the query jobs running, and generally keeps us all sane.</p>
+  </ol>
 </div>
 
 </body>

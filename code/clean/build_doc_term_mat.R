@@ -12,20 +12,48 @@ library(foreach)
 
 source("./code/util/twitter.R")
 
-load("./data/twitter.data.house.results.RData")
+## Load the master cron file
+load("./data/master.cron.file.RData")
+## Load the dictionary for doc-term matrix construction
+load("./data/tm.dictionary.RData")
 
-## Make sure we are only looking at D/R candidates
-d.r <- twitter.data.house.results$party %in% c("D", "R")
-house.data <- twitter.data.house.results[d.r,]
-rm(d.r, twitter.data.house.results)
+## This looks like:
+## first.name
+## last.name
+## text
+## created_at
+## to_user
+## from_user
+## to_user_id
+## from_user_id
+## state
+## district
+## iso_language_code
+## source
+## metadata.result_type
+## profile_image.url
+
+## Format the dates correctly
+time.format <-  "%a, %d %b %Y %H:%M:%S %z"
+formatted.date <-
+  strptime(as.character(master.cron.file$created_at), time.format)
+master.cron.file$created_at <- formatted_date
+rm(time.format, formatted.date)
+
+## Subset the candidates to D/R races
+is.dem.or.rep <- master.cron.file$party %in% c("D", "R")
+house.data <- master.cron.file[dem.or.rep,]
+rm(is.dem.or.rep, master.cron.file)
 
 ## Make sure that all tweets come from before the election
 election.date <- as.Date("2012-11-6", format="%Y-%m-%d")
-before.date <- house.data$created.at.date < election.date
+before.date <- house.data$created_at_date < election.date
 house.data <- house.data[before.date, ]
+rm(election.date)
 
+## Chart the tweet age in days before election date
 tweet.age <- round(as.numeric(difftime(election.date,
-                                       house.data$created.at.date,
+                                       house.data$created_at,
                                        units="weeks"
                                        )
                               ),
@@ -36,7 +64,8 @@ tweet.age <- max(tweet.age) - tweet.age
 house.data$tweet.age <- tweet.age
 rm(tweet.age)
 
-## Then make sure we are only looking at races with challengers.
+## Then make sure we are only looking at races with
+## data for both candidates.
 idx.chal <- find.chal.2(house.data$state,
                         house.data$district,
                         house.data$party,
@@ -56,54 +85,57 @@ house.data <- house.data[st.dist %in% has.chal,]
 rm(idx.chal, st.dist, has.chal)
 gc()
 
-house.data <- house.data[,c("state",
-                            "district",
-                            "party",
-                            "first.name.x",
-                            "last.name.x",
-                            "created.at.date",
-                            "from_user_id",
-                            "to_user_id",
-                            "text",
-                            "pctVote",
-                            "d.victory",
-                            "tweet.age",
-                            "chal.idx"
-                            )
-                         ]
+## Shouldn't need this stuff anymore
+## house.data <- house.data[,c("state",
+##                             "district",
+##                             "party",
+##                             "first.name.x",
+##                             "last.name.x",
+##                             "created.at.date",
+##                             "from_user_id",
+##                             "to_user_id",
+##                             "text",
+##                             "pctVote",
+##                             "d.victory",
+##                             "tweet.age",
+##                             "chal.idx"
+##                             )
+##                          ]
 
-names(house.data) <- c("state",
-                       "district",
-                       "party",
-                       "first.name",
-                       "last.name",
-                       "created.at.date",
-                       "from.user.id",
-                       "to.user.id",
-                       "text",
-                       "pctVote",
-                       "d.victory",
-                       "tweet.age",
-                       "chal.idx"
-                       )
+## names(house.data) <- c("state",
+##                        "district",
+##                        "party",
+##                        "first.name",
+##                        "last.name",
+##                        "created.at.date",
+##                        "from.user.id",
+##                        "to.user.id",
+##                        "text",
+##                        "pctVote",
+##                        "d.victory",
+##                        "tweet.age",
+##                        "chal.idx"
+##                        )
 
 
 ## Now clear out the junk in the tweets themselves
 corpus <- tolower(house.data$text)
 
-## Hack out the New Orleans Saints data
-which.nola <-
-  grepl("kicker", corpus) | grepl("orleans", corpus) |
-  grepl("tampa bay",corpus) |
-grepl("saints", corpus) |
-grepl("hartley", corpus) |
-grepl("cliff lee", corpus)
+## Hack out noisy results
+noise.indicator.terms <- c("kicker",
+                           "orleans"
+                           )
+which.noise <- sapply(noise.indicator.terms,
+                      function(x) grepl(x, house.data$text)
+                      )
+which.noise <- rowSums(which.noise) > 0
 
-corpus <- corpus[!which.nola]
-house.data <- house.data[!which.nola, ]
+corpus <- corpus[!which.noise]
+house.data <- house.data[which.noise, ]
 
 
-## First remove all misc cruft
+## Process the corpus in stages to format names, offices
+## First remove all misc cruft (http, etc)
 corpus <- remove.all(corpus)
 
 ## Then replace the major political figures
@@ -180,10 +212,11 @@ for(i in 1:max.terms)
                                                                max = i)
                                                )
 
-
+    ## Build up the corpus with the appropriate dictionary
     tdm.corpus <- DocumentTermMatrix(corpus,
                                      control=list(tokenize=my.tokenizer,
-                                       weighting=weightTf)
+                                       weighting=weightTf),
+                                     dictionary=tm.dictionary
                                      )
 
     ## Generate the date-stamped file
