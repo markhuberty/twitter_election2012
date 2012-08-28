@@ -4,9 +4,9 @@
 
 if(grepl("mac.binary", .Platform$pkgType, fixed=TRUE))
   {
-    setwd("~/Documents/Research/Papers/twitter_election2010")
+    setwd("~/Documents/Research/Papers/twitter_election2012")
   }else{
-    setwd("~/Documents/twitter_election2010")
+    setwd("~/Documents/twitter_election2012")
   }
 
 
@@ -16,7 +16,8 @@ library(RWeka)
 
 
 load("./data/corpus.district.RData")
-
+load("./data/house.data.RData")
+## need to load in the candidate data too
 
 my.tokenizer <- function(x) NGramTokenizer(x, Weka_control(min = 2,
                                                            max = 2)
@@ -27,16 +28,14 @@ corpus.district.tdm <- TermDocumentMatrix(corpus.district,
                                             weighting=weightTf)
                                           )
 
-## Then strip out the sparseness. For this dataset,
-## 0.95 yields about 1411 terms
 sparseness <- 0.99
-
-corpus.district.tdm.sparse <- if(sparseness < 1){
-  removeSparseTerms(corpus.district.tdm,
-                    sparseness)
-}else{
-  corpus.district.tdm
-}
+corpus.district.tdm.sparse <-
+  if(sparseness < 1){
+    removeSparseTerms(corpus.district.tdm,
+                      sparseness)
+  }else{
+    corpus.district.tdm
+  }
 
 
 corpus.district.tdm.mat <- t(as.matrix(corpus.district.tdm.sparse))
@@ -56,234 +55,135 @@ idx.drop <- which(colnames(corpus.district.tdm.mat) %in%
                     "candidate rcanddummy",
                     "congresswoman dcanddummy",
                     "congresswoman rcanddummy",
-                    "cliff lee"
-                   )
+                    )
                   )
 corpus.district.tdm.mat <- corpus.district.tdm.mat[,-idx.drop]
 
-## Begin topic models
+## Begin topic modeling
+## Minimize perplexity to choose topic counts
 
-k <- 5
+
 seed <- 3423
+k.values <- seq(4, 30, 2)
+n.train <- floor(0.9 * nrow(corpus.district.tdm.mat))
+sample.vec <- sample(1:nrow(corpus.district.tdm.mat),
+                     n.train,
+                     replace=FALSE
+                     )
+train.data <- corpus.district.tdm.mat[sample.vec, ]
+test.data <- corpus.district.tdm.mat[-sample.vec, ]
+
+perplexity.trial <- lapply(k.values, function(x){
+  out <- LDA(train.data, k=x, control=list(seed=seed))
+  predict.out <- LDA(train.data, model=out)
+  loglik <- logLik(predict.out)
+  return(loglik)
+
+})
+
+which.k <- which.max(unlist(perplexity.trial))
+k.best <- k.values[which.k]
+
 
 tm.lda.district <- LDA(corpus.district.tdm.mat,
-                       k=k,
+                       k=k.best,
                        control=list(seed=seed)
                        )
 
 terms.lda.district <- terms(tm.lda.district, 5)
 topics.lda.district <- topics(tm.lda.district)
 
-table(as.factor(topics.lda.district),
-      as.factor(cand.data.dist$d.victory)
-      )
-
-
-control_CTM_VEM <- 
-  list(estimate.beta = TRUE, 
-       verbose = 0, prefix = tempfile(), save = 0, 
-       seed = seed, 
-       var = list(iter.max = 500, tol = 10^-6), 
-       em = list(iter.max = 1000, tol = 10^-4), 
-       initialize = "random", 
-       cg = list(iter.max = 500, tol = 10^-5)
-       )
-
-tm.ctm.district <- CTM(corpus.district.tdm.mat,
-                       k=k,
-                       control=control_CTM_VEM
-                       )
-terms.ctm.district <- terms(tm.ctm.district, 5)
-topics.ctm.district <- topics(tm.ctm.district)
-
-table(as.factor(topics.ctm.district),
-      as.factor(cand.data.dist$d.victory)
-      )
-
-## Should redo this w. max loglik / min perplex on held-out
-## sample. See the leghist stuff for details.
-
-
-## Now want to plot the terms by lat/long of the centroids
-
-library(sp)
-library(maptools)
-library(ggplot2)
-library(RColorBrewer)
-cd.map <- readShapePoly("./data/cd99_110.shp")
-cd.map$sortid <-  sapply(slot(cd.map, "polygons"), function(x) slot(x, "ID"))
-cd.map$sortid <- as.numeric(cd.map$sortid)
-
-## PLOT DISTRICT DATA ##
-orig.cd.table <- as(cd.map, "data.frame")
-orig.cd.table$STATE <- as.integer(as.character(orig.cd.table$STATE))
-orig.cd.table$NAME <- ifelse(orig.cd.table$NAME=="One", 1, orig.cd.table$NAME)
-orig.cd.table$NAME <- as.integer(as.character(orig.cd.table$NAME))
-
-orig.cd.table$CD <- as.character(orig.cd.table$CD)
-orig.cd.table$CD <- ifelse(orig.cd.table$CD=="00", 1, orig.cd.table$CD)
-orig.cd.table$CD <- as.integer(orig.cd.table$CD)
-
-
-
-## Fix the fips codes
-fips <- read.csv("./data/fipscodes.csv",
-                 header=TRUE
-                 )
-names(fips) <- c("state", "st.abbr", "fips")
-cand.data.dist.fips <- merge(cand.data.dist,
-                        fips,
-                        by.x="state",
-                        by.y="st.abbr",
-                        all.x=TRUE,
-                        all.y=FALSE
-                        )
-
-
-
-
-## Now need to assign to the districts the first word in the CTM terms
-## Would prefer to color the word by the winner (D=blue, R=red),
-## w/ an alpha = 0.5 or somesuch.
-
-terms.lda.cat <- sapply(1:ncol(terms.lda.district), function(x){
-  paste(terms.lda.district[,x], collapse="\n")
-})
-
-terms.ctm.cat <- sapply(1:ncol(terms.ctm.district), function(x){
-  paste(terms.ctm.district[,x], collapse="\n")
-})
-
-terms.topics.lda <- terms.lda.cat[topics.lda.district]
-terms.topics.ctm <- terms.ctm.cat[topics.ctm.district]
-
-
-terms.districts <- data.frame(cand.data.dist.fips$fips,
-                              cand.data.dist.fips$district,
-                              cand.data.dist.fips$d.victory,
-                              terms.topics.lda,
-                              terms.topics.ctm
-                              )
-names(terms.districts) <- c("state", "district",
-                            "d.victory","terms.lda",
-                            "terms.ctm"
+df.district.topics <- cbind(house.data$state,
+                            house.data$district,
+                            topics.lda.district
                             )
+colnames(df.district.topics) <- c("state",
+                                  "district",
+                                  "topic.num"
+                                  )
+df.district.topics$state.district <-
+  generate.state.district.code(df.district.topics$state,
+                               df.district.topics$district
+                               )
+                               
 
-
-#terms.districts.ctm <- terms.ctm.district[1:2, topics.ctm.district]
-terms.districts$shape <- ifelse(terms.districts$d.victory ==
-                                    1,
-                                    "D",
-                                    "R"
-                                    )
-
-
-## Get the centroids for the districts
-cd.centroids <- coordinates(cd.map)
-
-orig.cd.table$centroid.x <- cd.centroids[,1]
-orig.cd.table$centroid.y <- cd.centroids[,2]
-
-test <- merge(orig.cd.table,
-              terms.districts,
-              by.x=c("STATE", "CD"),
-              by.y=c("state", "district"),
-              all.x=TRUE,
-              all.y=FALSE
-              )
-
-plot.centroid <- function(x,y, label, color, shape, limits, title,
-                          alpha, brewer.palette){
-
-  df <- data.frame(x, y, label, color, shape)
-  
-  out <- ggplot(na.omit(df),
-                aes(x=x,
-                    y=y,
-                    label=label,
-                    color=color,
-                    shape=shape
+topic.term.map <-
+  sapply(1:ncol(terms.lda.district),
+         function(x){
+           
+           terms <- paste(terms.lda.district[, this.topic],
+                          collapse="."
+                          )
+           out <- c(x, ,
+                    terms
                     )
-                ) +
-                                        #geom_text(alpha=0.6, size=2) +
-                  geom_point(alpha=alpha) +
-                    scale_colour_manual(name="District victor",
-                values=c("blue", "red")) + 
-                      scale_shape(name="Topic terms") +
-                        scale_x_continuous(name="", limits=limits) + 
-                          scale_y_continuous(name="") + 
-                            theme_bw() +
-                              opts(title=title)
+           
+         }
+         )
+topic.term.map <- t(topic.term.map)
+colnames(topic.term.map) <- c("topic.num", "topic.label")
 
-  return(out)
+topic.map.filename <- paste("./data/topic.term.map.",
+                            Sys.Date(),
+                            ".csv"
+                            )
+topic.map.master.filename <- "./data/topic.term.map.latest.csv"
+topic.district.filename <- paste("./data/topic.district.map."
+                                 Sys.Date(),
+                                 ".csv"
+                                 )
+topic.district.master.filename <-
+  "./data/topic.district.latest.csv"
 
-}
+## TODO need to ket the right kind of date stamping here for master
+## files
+write.csv(topic.term.map,
+          file=topic.map.filename,
+          row.names=FALSE
+          )
+write.csv(df.district.topics,
+          file=topic.district.filename,
+          row.names=FALSE
+          )
 
-plot.centroid.lda <- plot.centroid(x=test$centroid.x,
-                                   y=test$centroid.y,
-                                   label=test$terms.lda,
-                                   color=test$shape,
-                                   shape=test$terms.lda,
-                                   alpha=0.7,
-                                   title="LDA topics by district",
-                                   brewer.palette="Set1",
-                                   limits=c(-130, -65)
-                                   )
-
-plot.centroid.ctm <- plot.centroid(x=test$centroid.x,
-                                   y=test$centroid.y,
-                                   label=test$terms.ctm,
-                                   color=test$shape,
-                                   shape=test$terms.ctm,
-                                   alpha=0.7,
-                                   title="CTM topics by district",
-                                   brewer.palette="Set1",
-                                   limits=c(-130, -65)
-                                   )
-
-
-plot.centroid.lda.ne <- plot.centroid(x=test$centroid.x,
-                                      y=test$centroid.y,
-                                      label=test$terms.lda,
-                                      color=test$shape,
-                                      shape=test$terms.lda,
-                                      alpha=0.7,
-                                      title="LDA topics by district\n Northeast zoom",
-                                      brewer.palette="Set1",
-                                      limits=c(-95, -65)
-                                      )
-
-plot.centroid.ctm.ne <- plot.centroid(x=test$centroid.x,
-                                      y=test$centroid.y,
-                                      label=test$terms.ctm,
-                                      color=test$shape,
-                                      shape=test$terms.ctm,
-                                      alpha=0.7,
-                                      title="CTM topics by district\n Northeast zoom",
-                                      brewer.palette="Set1",
-                                      limits=c(-95, -65)
-                                      )
-
-pdf("./plots/ggplot_text_centroid_lda.pdf")
-print(plot.centroid.lda)
-dev.off()
+write.csv(topic.term.map,
+          file=topic.map.filename,
+          row.names=FALSE
+          )
+write.csv(df.district.topics,
+          file=topic.district.filename,
+          row.names=FALSE
+          )
 
 
-pdf("./plots/ggplot_text_centroid_ne_lda.pdf")
-print(plot.centroid.lda.ne)
-dev.off()
 
 
-pdf("./plots/ggplot_text_centroid_ctm.pdf")
-print(plot.centroid.ctm)
-dev.off()
+## Other? Can we automate quality checks of some kind?
+## Print some diagnostics? table by party, state,
+## compare to topic coherence from prior day?
+## 
 
 
-pdf("./plots/ggplot_text_centroid_ne_ctm.pdf")
-print(plot.centroid.ctm.ne)
-dev.off()
+## Print diagnostics to a log file
+## Note /  need to make sure that we're subsetting the
+## house data correctly here. 
+log.file.name <- paste("topicmodel.log.file.",
+                       Sys.Date(),
+                       ".log",
+                       sep=""
+                       )
 
+sink(log.file.name)
+print("Topic term labels:\n")
+print(topic.term.map)
 
-## Then plot. Might just be able to plot this as an x-y coord frame.
-## Otherwise, could use ggplot to plot the xy coords and transform.
-## Though the coords don't really transform well in the geom_map() function.
+print("Topic distribution by state:\n")
+table(df.district.topics$state,
+      df.district.topics$topic.num
+      )
+
+print("Topic distribution by incumbent party:\n")
+table(house.data$incumbent.party,
+      df.district.topics$topic.num
+      )
+sink()

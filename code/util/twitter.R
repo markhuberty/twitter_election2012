@@ -94,7 +94,7 @@ parse.json.results <- function(in.json){
 ## Multicore operation is important here to make processing time
 ## viable for large datasets.
 
-parse.json.out <- function(infile, results.fields.desired,
+parse.Json.out <- function(infile, results.fields.desired,
                            state.district, cand.names, num.cores=2){
 
   ## First parse the JSON file to a list
@@ -1193,5 +1193,20 @@ replace.opponent.2 <- function(text,
   })
 
   return(text.ret)
+
+}
+
+
+generate.state.district.code <- function(state, district){
+
+  out <- ifelse(nchar(district) == 1,
+                paste(state, "0", district,
+                      sep=""
+                      ),
+                paste(state, district,
+                      sep=""
+                      )
+                )
+  return(out)
 
 }

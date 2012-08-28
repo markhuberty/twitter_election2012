@@ -18,7 +18,7 @@ source("./code/build_sparse_functions.R")
 
 filename <- "tdm.sparse.20.01.aggregate.scale.linear"
 load(paste("./data/", filename, ".RData",  sep=""))
-corpus.district.tdm.mat <- select.tfidf(tdm.sparse, threshold=0.0005)
+#corpus.district.tdm.mat <- select.tfidf(tdm.sparse, threshold=0.0005)
 rm(tdm.sparse)
 gc()
 
