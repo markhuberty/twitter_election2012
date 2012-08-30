@@ -1,6 +1,107 @@
 ## Infrastructure code to grab the twitter stream
 ## 2012 Congressional Election
 ## Mark Huberty
+## Begun 27 May 2010
+
+# library(RCurl) ## to submit the http requests
+# library(rjson) ## to parse the JSON results
+# library(methods)
+# library(foreach) ## to parallelize the post-processing for speed
+# library(doMC)    ## to parallelize the post-processing for speed
+# library(twitteR)
+
+## This file will provide the scripting functions necessary to query the Twitter 
+## Search API (http://apiwiki.twitter.com/Twitter-Search-API-Method:-search)
+## Limitations:
+## Twitter SEARCH API is not rate-limited by any defined limit.
+## It appears that 1500 requests/day would work
+
+## Goal:
+## These functions will run starting at the opening of polls on Election Day 2010 and run until the close of polls.
+## Want to grab tweets, users, retweets
+## Restrict language to English
+## Restrict by locale if possible
+## Do for all 50 states
+## 
+## URL:
+## http://search.twitter.com/search.format
+ 
+## Formats: 
+## json, atom 
+ 
+## HTTP Method:
+## GET
+ 
+## Requires Authentication (about authentication):
+## false
+ 
+## API rate limited (about rate limiting):
+## 1 call per request
+ 
+## Parameters:
+## callback: Optional. Only available for JSON format. If supplied, the response will use the JSONP format with a callback of the given name.
+## Example: http://search.twitter.com/search.json?callback=foo&q=twitter 
+## lang: Optional: Restricts tweets to the given language, given by an ISO 639-1 code.
+## Example: http://search.twitter.com/search.atom?lang=en&q=devo
+## locale: Optional. Specify the language of the query you are sending (only ja is currently effective). This is intended for language-specific clients and the default should work in the majority of cases.
+## Example: http://search.twitter.com/search.atom?q=東京大地震&locale=ja
+## max_id: Optional. Returns tweets with status ids less than the given id.
+## Example: http://search.twitter.com/search.atom?q=twitter&max_id=1520639490
+## q: Optional.  The text to search for.  See the example queries section for examples of the syntax supported in this parameter
+## Example: http://search.twitter.com/search.json?&q=twitter 
+## rpp: Optional. The number of tweets to return per page, up to a max of 100.
+## Example: http://search.twitter.com/search.atom?q=devo&rpp=15
+## page: Optional. The page number (starting at 1) to return, up to a max of roughly 1500 results (based on rpp * page. Note: there are pagination limits.
+## Example: http://search.twitter.com/search.atom?q=devo&rpp=15&page=2
+## since: Optional. Returns tweets with since the given date.  Date should be formatted as YYYY-MM-DD
+## Example: http://search.twitter.com/search.atom?q=twitter&since=2010-02-28
+## since_id: Optional. Returns tweets with status ids greater than the given id.
+## Example: http://search.twitter.com/search.atom?q=twitter&since_id=1520639490
+## geocode: Optional. Returns tweets by users located within a given radius of the given latitude/longitude.  The location is preferentially taking from the Geotagging API, but will fall back to their Twitter profile. The parameter value is specified by "latitide,longitude,radius", where radius units must be specified as either "mi" (miles) or "km" (kilometers). Note that you cannot use the near operator via the API to geocode arbitrary locations; however you can use this geocode parameter to search near geocodes directly.
+## Example: http://search.twitter.com/search.atom?geocode=40.757929%2C-73.985506%2C25km
+## show_user: Optional. When true, prepends "<user>:" to the beginning of the tweet. This is useful for readers that do not display Atom's author field. The default is false.
+## Example: http://search.twitter.com/search.atom?q=twitterapi&show_user=true
+## until: Optional. Returns tweets with generated before the given date.  Date should be formatted as YYYY-MM-DD
+## Example: http://search.twitter.com/search.atom?q=twitter&until=2010-03-28
+## result_type: Optional. Specifies what type of search results you would prefer to receive.
+ 
+## Valid values include:
+ 
+## mixed: In a future release this will become the default value. Include both popular and real time results in the response.
+## recent: The current default value. Return only the most recent results in the response.
+## popular: Return only the most popular results in the response.
+## Example: http://search.twitter.com/search.atom?q=Twitter&result_type=mixed
+## Example: http://search.twitter.com/search.json?q=twitterapi&result_type=popular
+## Example: http://search.twitter.com/search.atom?q=justin+bieber&result_type=recent
+ 
+## Usage Notes:
+## Query strings should be URL encoded.
+## Queries are limited 140 URL encoded characters.
+## Some users may be absent from search results.
+## The since_id parameter will be removed from the next_page element as it is not supported for pagination. If since_id is removed a warning will be added to alert you.
+## This method will return an HTTP 404 error if since_id is used and is too old to be in the search index.
+## If you are having trouble constructing your query, use the advanced search form to construct your search, then add the format. For example http://search.twitter.com/search?q=twitter would become http://search.twitter.com/search.json?q=twitter
+## Applications must have a meaningful and unique User Agent when using this method. A HTTP Referrer is expected but not required. Search traffic that does not include a User Agent will be rate limited to fewer API calls per hour than applications including a User Agent string.
+## After April 1st, 2010 we have a new feature for returning popular tweets in beta. After the beta period the value of result_type=mixed will become the default.
+ 
+## Example queries:
+## Containing a word: http://search.twitter.com/search.atom?q=twitter
+## From a user: http://search.twitter.com/search.atom?q=from%3Aal3x
+## Replying to a user (tweet starts with @mzsanford): http://search.twitter.com/search.atom?q=to%3Amzsanford
+## Mentioning a user (tweet contains @biz): http://search.twitter.com/search.atom?q=%40biz
+## Containing a hashtag (up to 16 characters): http://search.twitter.com/search.atom?q=%23haiku
+## Combine any of the operators together: http://search.twitter.com/search.atom?q=happy+hour&until=2009-03-24
+## Originating from an application: http://search.twitter.com/search.atom?q=landing+source:tweetie
+ 
+## Search operators:
+## Most search operators can be used with API queries.
+ 
+## Boolean operators:
+## OR to combine queries:
+## Mentioning @twitterapi OR @twitter: http://search.twitter.com/search.atom?q=%40twitterapi+OR+%40twitter
+## Negation: place - in front of the operator.
+## Referencing a user but not from that user: http://search.twitter.com/search.atom?q=dougw+-from%3Adougw
+
 
 library(RCurl) ## to submit the http requests
 library(rjson) ## to parse the JSON results
@@ -55,12 +156,16 @@ parse.json.results <- function(in.json){
   list.results <- lapply(1:length(in.json), function(x){
     lapply(1:length(in.json[[x]]), function(y){
 
-      ## Check to make sure there are results
-      if(length(in.json[[x]][[y]]$results) !=0){
+      ## Check to make sure theinre are results
+                                  # I CHANGED THE BELOW LINES SO THE ATOMIC VECTOR 
+                                  # ERROR WOULDN"T OCCUR: ['results'] instead of $results. - Hillary
+                                  # ... Not sure if the breaks something. ...y]]['results'] always 
+                                  # comes out NULL.
+      if(length(in.json[[x]][[y]]['results']) !=0){
         
-        out <- mclapply(1:length(in.json[[x]][[y]]$results), function(z){
+        out <- mclapply(1:length(in.json[[x]][[y]]['results']), function(z){
           
-          try(unlist(in.json[[x]][[y]]$results[[z]], recursive=FALSE))
+          try(unlist(in.json[[x]][[y]]['results'][[z]], recursive=FALSE))
           
         }
                         )      
@@ -161,8 +266,9 @@ parse.Json.out <- function(infile, results.fields.desired,
                                         #print(paste("results matrix dim=",dim(mat)))
   
 
+  
   ## Convert to a data frame
-  mat <- as.data.frame(mat)
+  mat <- as.data.frame(mat)    # HAS TOO MANY ROWS. NAmes vector longer that matrix height.
   ## print(summary(mat))
   ## print(names(mat))
   names(mat) <- c(results.fields.desired,
@@ -540,6 +646,22 @@ count.top.words <- function(freq.mat, N)
   }
 
 
+## Function to get party info. Short term, probably. Would be more elegant 
+## to have the cron job incorporate the party data, but I'll likely do that later.
+get.party.vector <- function(house.data, candidates){
+  
+  names_cron <- ((paste(house.data$first.name, house.data$last.name, house.data$state)))
+  # Need first name, last name, and state, so that there are not duplicates.
+  all.names <- paste(candidates$first.name, candidates$last.name, candidates$state)
+  cron_vs_all_idx <- sapply(names_cron, function(x){
+    all.names.match <- which(x==all.names)
+    return(all.names.match)
+  }
+  )
+  cron_parties <- candidates$party[as.numeric(cron_vs_all_idx)]
+  return(cron_parties)
+}
+
 ## Function find.chal
 ## Input: vectors from a data frame of candidate data with the
 ## following attributes: state, district, and party of candidate
@@ -651,7 +773,7 @@ party.dummies <- function(corpus,
                           )
   
   corpus.out <- str_replace(corpus,
-                            "CandDummy".
+                            "CandDummy",
                             party.canddummy
                             )
   corpus.out <- str_replace(corpus.out,

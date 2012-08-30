@@ -1,8 +1,13 @@
-#!/usr/local/bin/Rscript --verbose
+#!/usr/bin/Rscript --verbose
 
-setwd("~/Documents/twitter_election2012/cron_data")
+setwd("~/Documents/twitter_election2012/data")
 source("../code/util/twitter.R")
 
+require(doMC)
+require(multicore)
+require(foreach)
+require(rjson)
+require(RCurl)
 ## The master data. Only first.time is here
 load("cron.input.data.RData")
 
@@ -24,49 +29,47 @@ candidates <- read.csv("../data/candidates.final.2012.csv")
 ##3                              candidates$last.name != "",]
 
 candidates.pull <- candidates[(candidates$Running != "Not running" &
-                               candidates$last.name != ""&
-                               !is.na(candidates$last.name)),]
+  candidates$last.name != ""&
+  !is.na(candidates$last.name)),]
 
 ## Write the encoded query string.
 ## %22 here is the code for quotes to make sure
 ## that the whole name is mentioned.
 pull.list <- c()
 for(i in 1:dim(candidates.pull)[1])
-  {
-
-      pull.list <- c(pull.list, paste("%22",
-                                      candidates.pull$first.name[i],
-                                      "+",
-                                      candidates.pull$last.name[i],
-                                      "%22",
-                                      sep=""
-                                      )
-                     )
-      
-
-
-  }
+{
+  
+  pull.list <- c(pull.list, paste("%22",
+                                  candidates.pull$first.name[i],
+                                  "+",
+                                  candidates.pull$last.name[i],
+                                  "%22",
+                                  sep=""
+  )
+  )
+}
 
 if(first.time==1)
-  {
-    file.today <- search.twitter.pages(terms=pull.list,
-                                       rpp=100,
-                                       delay.interval=1,
-                                       write.out=FALSE
-                                       )
-
-  }else{
-    ## If the job has run before, then only get updates
-    ## from yesterday. (Assumes the job runs nightly)
-    yesterday <- Sys.Date() - 1
-    file.today <- search.twitter.pages(terms=pull.list,
-                                       rpp=100,
-                                       since.date=yesterday,
-                                       delay.interval=1,
-                                       write.out=FALSE
-                                       )
-    
-  }
+{
+  file.today <- search.twitter.pages(terms=pull.list,
+                                     rpp=100,
+                                     delay.interval=1,
+                                     since.date=Sys.Date()-1, 
+                                     write.out=FALSE
+  )
+  
+}else{
+  ## If the job has run before, then only get updates
+  ## from yesterday. (Assumes the job runs nightly)
+  yesterday <- Sys.Date() - 1
+  file.today <- search.twitter.pages(terms=pull.list,
+                                     rpp=100,
+                                     since.date=yesterday,
+                                     delay.interval=1,
+                                     write.out=FALSE
+  )
+  
+}
 
 names(file.today) <- pull.list
 
@@ -81,14 +84,13 @@ results.fields.desired <- c("profile_image_url",
                             "to_user",
                             "iso_language_code",
                             "source"
-                            )
+)
 
 states.districts <- data.frame(candidates.pull$state,
-                               candidates.pull$district
-                               )
+                               candidates.pull$district)
 cand.names <- data.frame(candidates.pull$first.name,
                          candidates.pull$last.name
-                         )
+)
 names(states.districts) <- c("state", "district")
 names(cand.names) <- c("first.name", "last.name")
 
@@ -97,14 +99,14 @@ file.today.parsed <- parse.json.out(file.today,
                                     results.fields.desired=results.fields.desired,
                                     state.district=states.districts,
                                     cand.names=cand.names,
-                                    num.cores=3
-                                    )
+                                    num.cores=2
+)
 
 ## Select for only English words
 ## Replace URL encoding for quotes and ampersands with the real thing
 file.today.parsed.en <-
   file.today.parsed[file.today.parsed$iso_language_code=="en"&
-                    !is.na(file.today.parsed$text),]
+  !is.na(file.today.parsed$text),]
 
 
 file.today.parsed.en$text <- gsub("&quot;", "", file.today.parsed.en$text)
@@ -115,21 +117,21 @@ file.today.parsed.en <- file.today.parsed.en[!duplicated(file.today.parsed.en$id
 
 ## Save the time/date stamped cron file
 save(file.today.parsed.en, file=paste("cron.file.",
-       gsub(" ", "", date()), ".RData", sep="")
-     )
+                                      gsub(" ", "", date()), ".RData", sep="")
+)
 
 ## Write to the master file
 if(first.time==1)
-  {
-
-    master.cron.file <- file.today.parsed.en
-    
-  }else{
-
-    master.cron.file <- rbind(master.cron.file,
-                              file.today.parsed.en
-                              )
-  }
+{
+  
+  master.cron.file <- file.today.parsed.en
+  
+}else{
+  
+  master.cron.file <- rbind(master.cron.file,
+                            file.today.parsed.en
+  )
+}
 #since.id <- max(file.today.parsed.en$id)
 
 #save(since.id, "cron.since.id.RData")
@@ -145,3 +147,4 @@ print(paste("Cron job for ", date(), "completed"))
 print(paste("Size of today's matrix:", dim(file.today.parsed.en)))
 print(paste("Size of master file:", dim(master.cron.file)))
 sink()
+

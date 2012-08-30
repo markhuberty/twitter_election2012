@@ -4,18 +4,14 @@
 ## concatenating tweets. Cat'ing tweets gives the
 ## problem of bigrams at the junction
 
-if(grepl("mac.binary", .Platform$pkgType, fixed=TRUE))
-  {
-    setwd("~/Documents/Research/Papers/twitter_election2010")
-  }else{
-    setwd("~/Documents/twitter_election2010")
-  }
+
+setwd("~/Documents/twitter_election2012")  
 
 
 library(Matrix)
 library(foreach)
 
-source("./code/build_sparse_functions.R")
+source("./code/util/build_sparse_functions.R")
 
 initial.threshold <- c(3,3) 
 final.threshold <- c(0.02, 0.005)
@@ -24,18 +20,12 @@ final.threshold <- c(0.02, 0.005)
 ## or 1 + x^2
 scale.params <- list(c(1, 0), c(1, 0, 1, 2), c(0.08))
 scale.type <- "scale.linear"
-## scale.type <- c("scale.linear", "scale.quad",
-##                 "scale.sigmoid")
+
 type <- c("aggregate", "byweek")
 
-for(i in 1:3)
-  {
-    ## 1:3 code for unigrams/bigrams/trigrams
-    file.in <- paste("./data/generic.tdm.",
-                     i,
-                     ".RData",
-                     sep=""
-                     )
+    i <- 2
+    ## 2 code for unigrams/bigrams/trigrams
+    file.in <- "./data/generic.tdm.2.RData"
     
     load(file.in)
 
@@ -102,4 +92,4 @@ for(i in 1:3)
       }
     rm(house.data, tdm.corpus)
     gc()
-  }
+  
