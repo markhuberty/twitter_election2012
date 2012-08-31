@@ -15,7 +15,7 @@ load("./data/cron.input.data.RData")
 ## If not the first time, load up the aggregate file
 if(first.time != 1)
 {
-  load("./data/master.cron.file.RData")
+  load("./data/cron_output/master.cron.file.RData")
 }else{
   print("First loop")
 }
@@ -105,19 +105,23 @@ file.today.parsed <- parse.json.out(file.today,
 ## Replace URL encoding for quotes and ampersands with the real thing
 file.today.parsed.en <-
   file.today.parsed[file.today.parsed$iso_language_code=="en"&
-  !is.na(file.today.parsed$text),]
+                    !is.na(file.today.parsed$text),
+                    ]
 
 
 file.today.parsed.en$text <- gsub("&quot;", "", file.today.parsed.en$text)
 file.today.parsed.en$text <- gsub("&amp;", "&", file.today.parsed.en$text)
 
 ## Drop any dups that we get by virtue of the moving window problem
-file.today.parsed.en <- file.today.parsed.en[!duplicated(file.today.parsed.en$id),]
+file.today.parsed.en <- unique(file.today.parsed.en)
 
 ## Save the time/date stamped cron file
-save(file.today.parsed.en, file=paste("./data/cron_output/cron.file.",
-                                      gsub(" ", "", date()), ".RData", sep="")
-)
+save(file.today.parsed.en,
+     file=paste("./data/cron_output/cron.file.",
+       gsub(" ", "", Sys.Date()), ".RData",
+       sep=""
+       )
+     )
 
 ## Write to the master file
 if(first.time==1)
@@ -129,7 +133,7 @@ if(first.time==1)
 
   master.cron.file <- rbind(master.cron.file,
                             file.today.parsed.en
-  )
+                            )
 }
 #since.id <- max(file.today.parsed.en$id)
 
@@ -139,10 +143,10 @@ if(first.time==1)
 ## Save the output and log the job completion.
 first.time <- 0
 save(master.cron.file, file="./data/cron_output/master.cron.file.RData")
-save(first.time, file="./data/cron_output/cron.input.data.RData")
+save(first.time, file="./data/cron.input.data.RData")
 
 sink(file="./logs/cron.job.log", append=TRUE, type="output")
-print(paste("Cron job for ", date(), "completed"))
+print(paste("Cron job for ", Sys.Date(), "completed"))
 print(paste("Size of today's matrix:", dim(file.today.parsed.en)))
 print(paste("Size of master file:", dim(master.cron.file)))
 sink()

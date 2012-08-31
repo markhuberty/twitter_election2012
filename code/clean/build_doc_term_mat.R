@@ -1,4 +1,4 @@
-## 
+##
 ## Code to build a new version of the DTM
 ## That works by summing the row-counts rather than
 ## concatenating tweets. Cat'ing tweets gives the
@@ -13,9 +13,11 @@ library(foreach)
 source("./code/util/twitter.R")
 
 ## Load the master cron file
-load("./data/master.cron.file.RData")
+load("./data/cron_output/master.cron.file.RData")
 ## Load the dictionary for doc-term matrix construction
 load("./data/tm_dictionary.RData")
+## Load the candidate data
+candidates <- read.csv("./data/candidates.final.2012.csv")
 
 ## This looks like:
 ## first.name
@@ -53,7 +55,8 @@ election.date <- as.Date("2012-11-6", format="%Y-%m-%d")
 # Need to make the two dates comparable: -h
 formatted.election.date <- strptime(election.date, time.format)
 # MAKE as numeric --> number of seconds since 1960 or something similar. -h
-before.date <- as.numeric(house.data$created_at) < as.numeric(formatted.election.date)
+before.date <-
+  as.numeric(house.data$created_at) < as.numeric(formatted.election.date)
 house.data <- house.data[before.date, ]
 # rm(election.date) -hs
 
@@ -221,14 +224,14 @@ tm.dictionary <- Dictionary(corpus.colnames)
 i=2
 
 my.tokenizer <- function(x) NGramTokenizer(x, Weka_control(min = i, max = i))
-  
+
 ## Build up the corpus with the appropriate dictionary
 tdm.corpus <- DocumentTermMatrix(corpus,
                                  control=list(tokenize=my.tokenizer,
                                                 weighting=weightTf,
                                  dictionary=tm.dictionary)
   )
-  
+
   ## Generate the date-stamped file
   today <- Sys.Date()
   timestamp.file.name <- paste("./data/generic.tdm.",
@@ -237,14 +240,14 @@ tdm.corpus <- DocumentTermMatrix(corpus,
                                today,
                                sep=""
   )
-  
+
   ## Generate the generic file
   generic.file.name <- paste("./data/generic.tdm.",
                              i,
                              ".RData",
                              sep=""
   )
-  
+
   ## Save the raw corpus as both a generic file and a date-stamped
   ## file for recordkeeping
   save(tdm.corpus,
@@ -255,4 +258,3 @@ tdm.corpus <- DocumentTermMatrix(corpus,
        house.data,
        file=timestamp.file.name
   )
-
