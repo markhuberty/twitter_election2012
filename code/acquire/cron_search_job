@@ -1,7 +1,8 @@
 #!/usr/bin/Rscript --verbose
 
-setwd("~/Documents/twitter_election2012/data")
-source("../code/util/twitter.R")
+#setwd("~/Documents/twitter_election2012/data")
+setwd("/Users/markhuberty/Documents/Research/Papers/twitter_election2012/")
+source("./code/util/twitter.R")
 
 require(doMC)
 require(multicore)
@@ -9,18 +10,18 @@ require(foreach)
 require(rjson)
 require(RCurl)
 ## The master data. Only first.time is here
-load("cron.input.data.RData")
+load("./data/cron.input.data.RData")
 
 ## If not the first time, load up the aggregate file
 if(first.time != 1)
 {
-  load("master.cron.file.RData")
+  load("./data/master.cron.file.RData")
 }else{
   print("First loop")
 }
 
 ## Read in the candidates we will query
-candidates <- read.csv("../data/candidates.final.2012.csv")
+candidates <- read.csv("./data/candidates.final.2012.csv")
 
 ## Identify those who are going to be queried.
 ## This shouldn't be an issue in the final candidate set
@@ -28,25 +29,23 @@ candidates <- read.csv("../data/candidates.final.2012.csv")
 ## candidates.pull <- candidates[!is.na(candidates$last.name) &
 ##3                              candidates$last.name != "",]
 
-candidates.pull <- candidates[(candidates$Running != "Not running" &
-  candidates$last.name != ""&
-  !is.na(candidates$last.name)),]
+candidates.pull <- candidates
 
 ## Write the encoded query string.
 ## %22 here is the code for quotes to make sure
 ## that the whole name is mentioned.
 pull.list <- c()
-for(i in 1:dim(candidates.pull)[1])
-{
+for(i in 1:nrow(candidates.pull)) {
   
-  pull.list <- c(pull.list, paste("%22",
-                                  candidates.pull$first.name[i],
-                                  "+",
-                                  candidates.pull$last.name[i],
-                                  "%22",
-                                  sep=""
-  )
-  )
+  pull.list <- c(pull.list,
+                 paste("%22",
+                       candidates.pull$first.name[i],
+                       "+",
+                       candidates.pull$last.name[i],
+                       "%22",
+                       sep=""
+                       )
+                 )
 }
 
 if(first.time==1)
@@ -56,7 +55,7 @@ if(first.time==1)
                                      delay.interval=1,
                                      since.date=Sys.Date()-1, 
                                      write.out=FALSE
-  )
+                                     )
   
 }else{
   ## If the job has run before, then only get updates
@@ -116,7 +115,7 @@ file.today.parsed.en$text <- gsub("&amp;", "&", file.today.parsed.en$text)
 file.today.parsed.en <- file.today.parsed.en[!duplicated(file.today.parsed.en$id),]
 
 ## Save the time/date stamped cron file
-save(file.today.parsed.en, file=paste("cron.file.",
+save(file.today.parsed.en, file=paste("./data/cron_output/cron.file.",
                                       gsub(" ", "", date()), ".RData", sep="")
 )
 
@@ -139,10 +138,10 @@ if(first.time==1)
 
 ## Save the output and log the job completion.
 first.time <- 0
-save(master.cron.file, file="master.cron.file.RData")
-save(first.time, file="cron.input.data.RData")
+save(master.cron.file, file="./data/cron_output/master.cron.file.RData")
+save(first.time, file="./data/cron_output/cron.input.data.RData")
 
-sink(file="cron.job.log", append=TRUE, type="output")
+sink(file="./logs/cron.job.log", append=TRUE, type="output")
 print(paste("Cron job for ", date(), "completed"))
 print(paste("Size of today's matrix:", dim(file.today.parsed.en)))
 print(paste("Size of master file:", dim(master.cron.file)))

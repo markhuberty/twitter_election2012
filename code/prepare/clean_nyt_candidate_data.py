@@ -47,6 +47,22 @@ for idx, item in enumerate(nyt_parsed):
 
 
 
+
+## Split and format the names
+split_names = [n.split(" ") for item['name'] in denorm_list]
+
+for idx, s in enumerate(split_names):
+    first_name = s[0]
+    if len(s) == 2:
+        last_name = s[1]
+    else:
+        if re.search(s[1], '[A-Z\.]{2}'):
+            last_name = s[2]
+        else:
+            last_name = s[1] + ' ' + s[2]
+    denorm_list[i]['first_name'] = first_name
+    denorm_list[i]['last_name'] = last_name
+
 fieldnames = ['state_id',
               'seat_number',
               'office_id',
@@ -54,8 +70,11 @@ fieldnames = ['state_id',
               'primary_date',
               'name',
               'party',
-              'incumbent'
+              'incumbent',
+              'first_name',
+              'last_name'
               ]
+
 
 with(open('/Users/markhuberty/Documents/Research/Papers/'
           'twitter_election2012/data/candidates.csv', 'wt')) as f:
