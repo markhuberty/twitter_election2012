@@ -10,7 +10,7 @@
 # library(doMC)    ## to parallelize the post-processing for speed
 # library(twitteR)
 
-## This file will provide the scripting functions necessary to query the Twitter 
+## This file will provide the scripting functions necessary to query the Twitter
 ## Search API (http://apiwiki.twitter.com/Twitter-Search-API-Method:-search)
 ## Limitations:
 ## Twitter SEARCH API is not rate-limited by any defined limit.
@@ -22,25 +22,25 @@
 ## Restrict language to English
 ## Restrict by locale if possible
 ## Do for all 50 states
-## 
+##
 ## URL:
 ## http://search.twitter.com/search.format
- 
-## Formats: 
-## json, atom 
- 
+
+## Formats:
+## json, atom
+
 ## HTTP Method:
 ## GET
- 
+
 ## Requires Authentication (about authentication):
 ## false
- 
+
 ## API rate limited (about rate limiting):
 ## 1 call per request
- 
+
 ## Parameters:
 ## callback: Optional. Only available for JSON format. If supplied, the response will use the JSONP format with a callback of the given name.
-## Example: http://search.twitter.com/search.json?callback=foo&q=twitter 
+## Example: http://search.twitter.com/search.json?callback=foo&q=twitter
 ## lang: Optional: Restricts tweets to the given language, given by an ISO 639-1 code.
 ## Example: http://search.twitter.com/search.atom?lang=en&q=devo
 ## locale: Optional. Specify the language of the query you are sending (only ja is currently effective). This is intended for language-specific clients and the default should work in the majority of cases.
@@ -48,7 +48,7 @@
 ## max_id: Optional. Returns tweets with status ids less than the given id.
 ## Example: http://search.twitter.com/search.atom?q=twitter&max_id=1520639490
 ## q: Optional.  The text to search for.  See the example queries section for examples of the syntax supported in this parameter
-## Example: http://search.twitter.com/search.json?&q=twitter 
+## Example: http://search.twitter.com/search.json?&q=twitter
 ## rpp: Optional. The number of tweets to return per page, up to a max of 100.
 ## Example: http://search.twitter.com/search.atom?q=devo&rpp=15
 ## page: Optional. The page number (starting at 1) to return, up to a max of roughly 1500 results (based on rpp * page. Note: there are pagination limits.
@@ -64,16 +64,16 @@
 ## until: Optional. Returns tweets with generated before the given date.  Date should be formatted as YYYY-MM-DD
 ## Example: http://search.twitter.com/search.atom?q=twitter&until=2010-03-28
 ## result_type: Optional. Specifies what type of search results you would prefer to receive.
- 
+
 ## Valid values include:
- 
+
 ## mixed: In a future release this will become the default value. Include both popular and real time results in the response.
 ## recent: The current default value. Return only the most recent results in the response.
 ## popular: Return only the most popular results in the response.
 ## Example: http://search.twitter.com/search.atom?q=Twitter&result_type=mixed
 ## Example: http://search.twitter.com/search.json?q=twitterapi&result_type=popular
 ## Example: http://search.twitter.com/search.atom?q=justin+bieber&result_type=recent
- 
+
 ## Usage Notes:
 ## Query strings should be URL encoded.
 ## Queries are limited 140 URL encoded characters.
@@ -83,7 +83,7 @@
 ## If you are having trouble constructing your query, use the advanced search form to construct your search, then add the format. For example http://search.twitter.com/search?q=twitter would become http://search.twitter.com/search.json?q=twitter
 ## Applications must have a meaningful and unique User Agent when using this method. A HTTP Referrer is expected but not required. Search traffic that does not include a User Agent will be rate limited to fewer API calls per hour than applications including a User Agent string.
 ## After April 1st, 2010 we have a new feature for returning popular tweets in beta. After the beta period the value of result_type=mixed will become the default.
- 
+
 ## Example queries:
 ## Containing a word: http://search.twitter.com/search.atom?q=twitter
 ## From a user: http://search.twitter.com/search.atom?q=from%3Aal3x
@@ -92,10 +92,10 @@
 ## Containing a hashtag (up to 16 characters): http://search.twitter.com/search.atom?q=%23haiku
 ## Combine any of the operators together: http://search.twitter.com/search.atom?q=happy+hour&until=2009-03-24
 ## Originating from an application: http://search.twitter.com/search.atom?q=landing+source:tweetie
- 
+
 ## Search operators:
 ## Most search operators can be used with API queries.
- 
+
 ## Boolean operators:
 ## OR to combine queries:
 ## Mentioning @twitterapi OR @twitter: http://search.twitter.com/search.atom?q=%40twitterapi+OR+%40twitter
@@ -130,13 +130,13 @@ parse.json <- function(infile){
 
     }
            )
-           
-    
+
+
   }
                       )
 
   return(list.json)
-  
+
 }
 
 ## FUNCTION parse.json.results
@@ -157,29 +157,29 @@ parse.json.results <- function(in.json){
     lapply(1:length(in.json[[x]]), function(y){
 
       ## Check to make sure theinre are results
-                                  # I CHANGED THE BELOW LINES SO THE ATOMIC VECTOR 
+                                  # I CHANGED THE BELOW LINES SO THE ATOMIC VECTOR
                                   # ERROR WOULDN"T OCCUR: ['results'] instead of $results. - Hillary
-                                  # ... Not sure if the breaks something. ...y]]['results'] always 
+                                  # ... Not sure if the breaks something. ...y]]['results'] always
                                   # comes out NULL.
       if(length(in.json[[x]][[y]]['results']) !=0){
-        
+
         out <- mclapply(1:length(in.json[[x]][[y]]['results']), function(z){
-          
+
           try(unlist(in.json[[x]][[y]]['results'][[z]], recursive=FALSE))
-          
+
         }
-                        )      
-        
-        
+                        )
+
+
       }
-      
+
     }
-           
+
            )
-  }    
-                         
+  }
+
                          )
-  
+
   return(list.results)
 
 }
@@ -193,13 +193,13 @@ parse.json.results <- function(in.json){
 ### Parse the "results" element
 ### Parse the "other" elements
 ### Merge the two results
-## Output: A data frame with one row for each tweet 
+## Output: A data frame with one row for each tweet
 ## Note: this assumes that for a list of N queries, the output is a
 ## list of N lists, of which the elements are JSON objects that can be parsed.
 ## Multicore operation is important here to make processing time
 ## viable for large datasets.
 
-parse.Json.out <- function(infile, results.fields.desired,
+parse.json.out <- function(infile, results.fields.desired,
                            state.district, cand.names, num.cores=2){
 
   ## First parse the JSON file to a list
@@ -207,15 +207,15 @@ parse.Json.out <- function(infile, results.fields.desired,
   ## list.json <- lapply(1:length(infile), function(x){
   ##   #print(x)
   ##   fromJSON(infile[[x]])
-    
+
   ## }
   ##                     )
 
-  
+
   registerDoMC(num.cores)
-  
+
   list.json <- parse.json(infile)
-  
+
   list.results <- parse.json.results(list.json)
 
   print(paste("Total number of results", length(list.results)))
@@ -229,15 +229,15 @@ parse.Json.out <- function(infile, results.fields.desired,
   ## Core routine that takes the parsed json object (now a list of
   ## lists) and unlists it into a data frame with the desired fields
   ## and the input fields for state and candidate.
-  
+
   mat <- foreach(i=1:length(list.results), .combine=rbind) %:%
     foreach(z=1:length(list.results[[i]]), .combine=rbind) %:%
-      foreach(j=1:length(list.results[[i]][[z]]), .combine=rbind) %dopar% { 
+      foreach(j=1:length(list.results[[i]][[z]]), .combine=rbind) %dopar% {
 
         entry <- unlist(list.results[[i]][[z]][[j]])[results.fields.desired]
         #print(length(entry))
         #print(class(entry))
-        
+
         if(is.null(entry)){
           entry <- rep(NA, length(results.fields.desired))
           out <- c(as.character(entry),
@@ -264,9 +264,9 @@ parse.Json.out <- function(infile, results.fields.desired,
         out
       }
                                         #print(paste("results matrix dim=",dim(mat)))
-  
 
-  
+
+
   ## Convert to a data frame
   mat <- as.data.frame(mat)    # HAS TOO MANY ROWS. NAmes vector longer that matrix height.
   ## print(summary(mat))
@@ -278,9 +278,9 @@ parse.Json.out <- function(infile, results.fields.desired,
                   "last.name"
                   )
   rownames(mat) <- sapply(1:dim(mat)[1], function(x){
-    
+
     paste("row", x, sep="")
-    
+
   }
                           )
   mat.results <<- mat
@@ -348,12 +348,12 @@ merge.terms <- function(names, searchTerms){
           searchTerms,
           sep="+"
           )
-    
-    
+
+
   }
                 )
   return(out)
-  
+
 }
 
 ## FUNCTION search.loop
@@ -371,7 +371,7 @@ search.loop <- function(terms,
 
   if(length(terms) != length(out.file.names))
     stop("Must provide a file name for each set of search terms")
-  
+
   out <- lapply(1:length(terms), function(x){
 
     search.twitter(terms[[x]],
@@ -379,7 +379,7 @@ search.loop <- function(terms,
                    since.date=since,
                    out.file=out.file.names[x]
                    )
-    
+
   }
                 )
 
@@ -420,7 +420,7 @@ search.manager <- function(terms,
 
   ## Set the initial "since" value to the previous day
   query.time.prev <- strptime(start.time-(24*3600), format="%Y-%m-%d")
-  
+
   while(end.time > Sys.time()){
 
     query.time <- strptime(Sys.time(), format="%Y-%m-%d")
@@ -428,7 +428,7 @@ search.manager <- function(terms,
                                       delay.interval=delay.interval,
                                       since=query.time.prev
                                       )
-    
+
     out.file.name <- paste("search.results.",
                            gsub(" ", "", date()),
                            ".RData",
@@ -439,7 +439,7 @@ search.manager <- function(terms,
     Sys.sleep(wait.interval)
 
   }
-  
+
 }
 
 
@@ -469,7 +469,7 @@ get.twitter.url <- function(type, term, rpp, page, since.date,
                                         #"&lang=", lang,
                  "&result_type=", result.type,
                  ## "&geocode=", paste(latitude, longitude, radius, sep=","),
-                 sep=""                 
+                 sep=""
                  )
                                         #print(url)
                                         #out[[i]] <- try(getURL(url))
@@ -492,13 +492,13 @@ get.twitter.url <- function(type, term, rpp, page, since.date,
     ## 500 Internal Server Error: Something is broken.  Please post to the group so the Twitter team can investigate.
     ## 502 Bad Gateway: Twitter is down or being upgraded.
     ## 503 Service Unavailable: The Twitter servers are up, but overloaded with requests. Try again later.
-    
+
     http.errors <- c("Not Modified", "Bad Request", "Unauthorized",
                      "Forbidden", "Not Found", "Not Acceptable",
                      "Enhance Your Calm", "Internal Server Error",
                      "Bad Gateway", "Service Unavailable"
                      )
-    
+
     ## Error handling for (in order) Twitter HTTP errors,
     ## the twitter Fail Whale,
     ## and CURL errors from RCURL
@@ -516,11 +516,11 @@ get.twitter.url <- function(type, term, rpp, page, since.date,
         ## Scale the wait based on the error response chain
         Sys.sleep(5 + 5 * (error.counter - 1))
         query.out <- try(getURL(url))
-        
+
       }
 
     return(query.out)
-    
+
   }
 }
 
@@ -559,7 +559,7 @@ search.twitter.pages <- function(type="json",
       if(!is.na(terms[i]))
         {
 
-          
+
       page.num <- 1
 
       query.out <- get.twitter.url(type=type,
@@ -574,9 +574,9 @@ search.twitter.pages <- function(type="json",
       query.all[[1]] <- query.out
       ## While there are more pages to get, and the user still wants
       ## to get pages
-      while(grepl("next_page", query.out) & page.num <= max.pages) 
+      while(grepl("next_page", query.out) & page.num <= max.pages)
         {
-          
+
           Sys.sleep(delay.interval)
 
           page.num <- page.num + 1
@@ -588,7 +588,7 @@ search.twitter.pages <- function(type="json",
                                        showuser=showuser,
                                        result.type=result.type
                                        )
-          
+
           query.all[[page.num]] <- query.out
 
           print(paste("Page num =", page.num))
@@ -606,7 +606,7 @@ search.twitter.pages <- function(type="json",
       ## Pause to avoid throttling by twitter. 1-2s is fine.
       Sys.sleep(delay.interval)
 
-          
+
     }
 
     }
@@ -627,17 +627,17 @@ search.twitter.pages <- function(type="json",
 ## Output: A vector of top terms and frequencies
 count.top.words <- function(freq.mat, N)
   {
-    
+
     freqs <- colSums(freq.mat)
     freqs <- sort(freqs, decreasing=TRUE)
-    
+
     term.occurance <- sum(freqs, na.rm=TRUE)
 
     out <- data.frame(names(freqs)[1:N],
                       freqs[1:N],
                       freqs[1:N] / term.occurance
                       )
-    
+
     names(out) <- c("Term", "Frequency", "Frequency (pct of total)")
 
     return(out)
@@ -646,10 +646,10 @@ count.top.words <- function(freq.mat, N)
   }
 
 
-## Function to get party info. Short term, probably. Would be more elegant 
+## Function to get party info. Short term, probably. Would be more elegant
 ## to have the cron job incorporate the party data, but I'll likely do that later.
 get.party.vector <- function(house.data, candidates){
-  
+
   names_cron <- ((paste(house.data$first.name, house.data$last.name, house.data$state)))
   # Need first name, last name, and state, so that there are not duplicates.
   all.names <- paste(candidates$first.name, candidates$last.name, candidates$state)
@@ -678,7 +678,7 @@ find.chal.2 <- function(state, district, party, idx=TRUE)
                  district == df.unique$district[x] &
                  party != df.unique$party[x]
                  )
-    
+
     if(length(out) > 0)
       return(TRUE)
     else
@@ -690,14 +690,14 @@ find.chal.2 <- function(state, district, party, idx=TRUE)
   if(idx)
     {
       return(has.chal)
-      
+
     }else{
 
       ## Else return the state/dist/party data
       return(df.unique[has.chal,])
 
     }
-  
+
 }
 
 find.chal.idx <- function(state, district, party){
@@ -705,7 +705,7 @@ find.chal.idx <- function(state, district, party){
   df.unique <- unique(df)
 
   idx.cand.opp <- foreach(x=1:nrow(df.unique), .combine="rbind") %do% {
-    
+
     idx.cand <- which(df$state == df.unique$state[x] &
                       df$district == df.unique$district[x] &
                       df$party == df.unique$party[x]
@@ -718,11 +718,11 @@ find.chal.idx <- function(state, district, party){
     out <- cbind(idx.cand, idx.chal[1])
 
     return(out)
-    
+
   }
 
   return(idx.cand.opp)
-  
+
 }
 
 
@@ -730,7 +730,7 @@ find.chal <- function(state, district, party)
   {
 
     N <- length(state)
-    
+
     out <- sapply(1:N, function(x){
 
       idx <- which(state == state[x] &
@@ -746,7 +746,7 @@ find.chal <- function(state, district, party)
     })
 
     return(out)
-    
+
   }
 
 
@@ -771,7 +771,7 @@ party.dummies <- function(corpus,
                           "OppDummy",
                           sep=""
                           )
-  
+
   corpus.out <- str_replace(corpus,
                             "CandDummy",
                             party.canddummy
@@ -780,9 +780,9 @@ party.dummies <- function(corpus,
                             "OppDummy",
                             party.oppdummy
                             )
-    
+
   return(corpus.out)
-  
+
 }
 
 
@@ -806,7 +806,7 @@ party.neutral.dummies <- function(corpus,
                            corpus[x],
                            fixed=FALSE
                            )
-        
+
         corpus.out <- gsub("DOppDummy[A-Z0-9a-z]*",
                            "cand1dummy",
                            corpus.out,
@@ -828,13 +828,13 @@ party.neutral.dummies <- function(corpus,
                            corpus[x],
                            fixed=FALSE
                            )
-        
+
         corpus.out <- gsub("ROppDummy[A-Z0-9a-z]*",
                            "cand1dummy",
                            corpus.out,
                            fixed=FALSE
                            )
-        
+
         corpus.out <- gsub("DCandDummy[A-Z0-9a-z]*",
                            "cand2dummy",
                            corpus.out,
@@ -850,9 +850,9 @@ party.neutral.dummies <- function(corpus,
     return(corpus.out)
 
   })
-    
+
   return(out)
-  
+
 }
 
 remove.office.identifiers <- function(corpus.text,
@@ -883,12 +883,12 @@ party.neutral.party.dummies <- function(corpus.text,
 
         corpus.out <- gsub("democrat", "party1", corpus.text[x], fixed=TRUE)
         corpus.out <- gsub("republican", "party2", corpus.out, fixed=TRUE)
-        
+
       }else{
 
         corpus.out <- gsub("republican", "party1", corpus.text[x], fixed=TRUE)
         corpus.out <- gsub("democrat", "party2", corpus.out, fixed=TRUE)
-        
+
 
       }
 
@@ -926,9 +926,9 @@ aggregate.to.district <- function(corpus, cand.data){
     if(has.inc){
 
       out <- as.character(d$party[d$incumbent == 1])
-      
+
     }else{
-      
+
       out <- "N"
 
     }
@@ -940,7 +940,7 @@ aggregate.to.district <- function(corpus, cand.data){
                 )
 
   st.dist$incumbent <- inc
-  
+
   corpus.out <- foreach(i = 1:dim(st.dist)[1], .combine=c) %dopar% {
 
     idx <- which(cand.data$state==st.dist$state[i] &
@@ -949,10 +949,10 @@ aggregate.to.district <- function(corpus, cand.data){
 
     corpus.sub <- paste(corpus[idx], collapse=" ")
 
-    
+
   }
 
-  
+
   cand.data.out <- cand.data[cand.data$party=="D",]
 
   out <- list(st.dist,
@@ -961,7 +961,7 @@ aggregate.to.district <- function(corpus, cand.data){
 
   return(out)
 
-  
+
 }
 
 aggregate.to.district.wk <- function(corpus, cand.data){
@@ -974,7 +974,7 @@ aggregate.to.district.wk <- function(corpus, cand.data){
   names(st.dist) <- c("state", "dist", "age.wk")
 
   st.dist <- unique(st.dist)
-  
+
   corpus.out <- foreach(i = 1:dim(st.dist)[1], .combine=c) %dopar% {
 
     idx <- which(cand.data$state==st.dist$state[i] &
@@ -984,10 +984,10 @@ aggregate.to.district.wk <- function(corpus, cand.data){
 
     corpus.sub <- paste(corpus[idx], collapse=" ")
 
-    
+
   }
 
-  
+
   #cand.data.out <- cand.data[cand.data$party=="D",]
 
   cand.data.out <- cand.data[,c("state",
@@ -995,14 +995,14 @@ aggregate.to.district.wk <- function(corpus, cand.data){
                                 "pctVote"
                                 )
                              ]
-  
+
   out <- list(st.dist,
               cand.data.out,
               corpus.out)
 
   return(out)
 
-  
+
 }
 
 
@@ -1029,7 +1029,7 @@ SL.svm.c <- function(..., type.class='C-classification',
                      kernel='linear'){
 
   SL.svm(..., type.class=type.class, kernel=kernel)
-  
+
 }
 
 SL.svm.c.10 <- function(..., type.class='C-classification',
@@ -1037,41 +1037,41 @@ SL.svm.c.10 <- function(..., type.class='C-classification',
                         ){
 
   SL.svm(..., type.class=type.class, kernel=kernel, cost=cost)
-  
+
 }
 
-SL.gbmfit.1 <- function (Y.temp, X.temp, newX.temp, family, obsWeights, gbm.trees = 10000, 
-    ...) 
+SL.gbmfit.1 <- function (Y.temp, X.temp, newX.temp, family, obsWeights, gbm.trees = 10000,
+    ...)
 {
     tryCatch(require(gbm), warning = function(...) {
         stop("you have selected gbm as a library algorithm but do not have the gbm package installed")
     })
     if (family$family == "gaussian") {
-      
+
         fit.gbm1 <- gbm.fit(x=X.temp,
                             y=Y.temp,
-                            distribution = "gaussian", 
+                            distribution = "gaussian",
                             n.trees = gbm.trees,
                             interaction.depth = 1,
                             #cv.folds = 5,
                             w = obsWeights,
                             verbose = FALSE
                             )
-        
+
         best.iter1 <- gbm.perf(fit.gbm1, method = "OOB", plot.it = FALSE)
-        out <- predict(fit.gbm1, newdata = newX.temp, best.iter1, 
+        out <- predict(fit.gbm1, newdata = newX.temp, best.iter1,
             type = "response")
         fit <- list(object = fit.gbm1, n.trees = best.iter1)
     }
-    
+
     if (family$family == "binomial") {
-        gbm.model <- as.formula(paste("Y.temp~", paste(colnames(X.temp), 
+        gbm.model <- as.formula(paste("Y.temp~", paste(colnames(X.temp),
             collapse = "+")))
-        fit.gbm1 <- gbm(formula = gbm.model, data = X.temp, distribution = "bernoulli", 
-            n.trees = gbm.trees, interaction.depth = 1, cv.folds = 5, 
+        fit.gbm1 <- gbm(formula = gbm.model, data = X.temp, distribution = "bernoulli",
+            n.trees = gbm.trees, interaction.depth = 1, cv.folds = 5,
             keep.data = TRUE, verbose = FALSE, weights = obsWeights)
         best.iter1 <- gbm.perf(fit.gbm1, method = "cv", plot.it = FALSE)
-        out <- predict(fit.gbm1, newdata = newX.temp, best.iter1, 
+        out <- predict(fit.gbm1, newdata = newX.temp, best.iter1,
             type = "response")
         fit <- list(object = fit.gbm1, n.trees = best.iter1)
     }
@@ -1080,14 +1080,14 @@ SL.gbmfit.1 <- function (Y.temp, X.temp, newX.temp, family, obsWeights, gbm.tree
     return(foo)
 }
 
-SL.gamfit.1 <- function (Y.temp, X.temp, newX.temp, family, obsWeights, deg.gam = 2, 
-    ...) 
+SL.gamfit.1 <- function (Y.temp, X.temp, newX.temp, family, obsWeights, deg.gam = 2,
+    ...)
 {
     tryCatch(require(gam), warning = function(...) {
         stop("you have selected gam as a library algorithm but do not have the gam package installed")
     })
-    
-    fit.gam <- gam::gam.fit(x = X.temp, y = Y.temp, family = family, 
+
+    fit.gam <- gam::gam.fit(x = X.temp, y = Y.temp, family = family,
         control = gam.control(maxit = 50, bf.maxit = 50), weights = obsWeights)
     out <- predict(fit.gam, newdata = newX.temp, type = "response")
     fit <- list(object = fit.gam)
@@ -1121,7 +1121,7 @@ remove.all <- function(x){
   out <- remove.usernames(out)
 
   return(out)
-  
+
 }
 
 remove.http <- function(x){
@@ -1129,54 +1129,54 @@ remove.http <- function(x){
   #out <- gsub("\\b[http://][a-zA-Z./\\+\\?%\\-]*\\w\\b", "", x)
   out <- gsub("\\bhttp://[a-zA-Z0-9./\\+\\?%\\-]*\\b", "", x)
   return(out)
-  
+
 }
 
 is.rt <- function(x){
 
   rt <- grepl("\\b[RTrt]{2}\\s@[a-zA-Z0-9]*", x)
   return(rt)
-  
+
 }
 
 remove.rt <- function(x){
 
   out <- gsub("\\b[RTrt]{2}\\s@[a-zA-Z0-9]*", "", x, fixed=FALSE)
   return(out)
-  
+
 }
 
 remove.usernames <- function(x){
 
   out <- gsub("@[a-zA-Z0-9]*", "", x)
   return(out)
-  
+
 }
 
 replace.president <- function(x){
-  
+
   gsub("\\Qbarack obama\\E|\\Qobama\\E", "PresidentDummy", x)
 
-  
+
 }
 
 ## replace.speaker <- function(x){
 
 ##   gsub("\\Qnancy pelosi\\E|\\Qpelosi\\E", "SpeakerDummy", x)
-  
+
 ## }
 
 replace.speaker <- function(x){
 
   gsub("\\Qjohn boehner\\E|\\Qboehner\\E", "SpeakerDummy", x)
-  
+
 }
 
 
 replace.leader <- function(x){
 
   gsub("\\Qharry reid\\E|\\Qreid\\E", "LeaderDummy", x)
-  
+
 }
 
 ## Special function for replacing the speaker and leader
@@ -1193,7 +1193,7 @@ replace.pol.names <- function(string,
                               dist.speaker
                               ){
 
-  
+
   out <- ifelse(state==st.speaker & district==dist.speaker,
                 string,
                 replace.speaker(string)
@@ -1206,7 +1206,7 @@ replace.pol.names <- function(string,
 
   return(out)
 
-  
+
 }
 
 
@@ -1223,13 +1223,13 @@ replace.candidate <- function(tweet.df, corpus){
                       )
 
   corpus.out <- sapply(1:length(df.regexp), function(x){
-    
+
     gsub(df.regexp[x], "CandDummy", corpus[x])
-    
+
   })
 
   return(corpus.out)
-  
+
 }
 
 replace.opponent <- function(tweet.df,
@@ -1243,7 +1243,7 @@ replace.opponent <- function(tweet.df,
   corpus <- tweet.df$corpus
 
   corpus.out <- foreach(i = 1:length(corpus), .combine=c) %dopar% {
-    
+
       id <- which(first.names == tweet.df$first.name[i] &
                   last.names == tweet.df$last.name[i] &
                   state == tweet.df$state[i] &
@@ -1254,12 +1254,12 @@ replace.opponent <- function(tweet.df,
       if(length(id) > 0)
         {
           id.chal <- chal.idx[id]
-          
+
           chal.first <- tolower(first.names[id.chal])
           chal.last <- tolower(last.names[id.chal])
 
-          
-          
+
+
           regexp <- paste("\\Q",
                           chal.first,
                           " ",
@@ -1276,16 +1276,16 @@ replace.opponent <- function(tweet.df,
           ##             regexp
           ##             )
           ##       )
-          
+
           out <- gsub(regexp, "OppDummy", corpus[i])
           return(out)
         }else{
           return(corpus[i])
         }
-      
+
     }
   return(corpus.out)
-  
+
 
 }
 
@@ -1311,7 +1311,7 @@ replace.opponent.2 <- function(text,
 
     out <- gsub(regexp, "OppDummy", text[x])
     return(out)
-    
+
   })
 
   return(text.ret)

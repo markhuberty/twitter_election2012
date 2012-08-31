@@ -20,9 +20,14 @@ nyt_parsed = json.loads(nyt_data)
 denorm_list = []
 for idx, item in enumerate(nyt_parsed):
     print idx
+    if item['seat_number'] < 10:
+        state_dist = item['state_id'] + '0' + str(item['seat_number'])
+    else:
+        state_dist = item['state_id'] + str(item['seat_number'])
     if item['candidates']:
         for c in item['candidates']:
-            temp = {'state_id':item['state_id'],
+            temp = {'state_dist': state_dist,
+                    'state_id':item['state_id'],
                     'seat_number': item['seat_number'],
                     'office_id': item['office_id'],
                     'state': item['state'],
@@ -33,7 +38,8 @@ for idx, item in enumerate(nyt_parsed):
                     }
             denorm_list.append(temp)
     else:
-        temp = {'state_id':item['state_id'],
+        temp = {'state_dist': state_dist,
+                'state_id':item['state_id'],
                 'seat_number': item['seat_number'],
                 'office_id': item['office_id'],
                 'state': item['state'],
@@ -64,8 +70,9 @@ for idx, s in enumerate(split_names):
     denorm_list[idx]['first_name'] = first_name
     denorm_list[idx]['last_name'] = last_name
 
-fieldnames = ['state_id',
-              'seat_number',
+fieldnames = ['state_dist',
+              'state_id',
+              'district',
               'office_id',
               'state',
               'primary_date',
