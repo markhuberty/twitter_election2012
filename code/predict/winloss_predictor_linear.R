@@ -7,7 +7,6 @@ library(e1071)
 library(randomForest)
 
 source("./code/util/twitter.R")
-source("./code/aggregate/build_sparse_functions.R")
 load("./algorithms/binary.linear.predictor.RData")
 
 filename <- "tdm.sparse.20.01.aggregate.scale.linear"
@@ -18,7 +17,8 @@ load(paste("./data/doc_term_mat/", filename, ".RData",  sep=""))
 corpus.district.tdm.mat <-
   tdm.sparse[order(rownames(tdm.sparse)),]
 
-## Retitle columns with generic names
+## Retitle columns with generic names to handle a
+## superlearner bug that hates spaces in colnames
 orig.names <- colnames(corpus.district.tdm.mat)
 new.names <- paste("V", 1:ncol(corpus.district.tdm.mat), sep="")
 colnames(corpus.district.tdm.mat) <- new.names
@@ -29,7 +29,7 @@ corpus.district.tdm.mat.scale <- scale(corpus.district.tdm.mat)
 
 ## Get the out-of-sample prediction accuracy estimates
 SL.predict.discrete <- predict(train.superlearner.discrete,
-                               newdata=corpus.district.tdm.mat
+                               newdata=corpus.district.tdm.mat.scale
                                )
 
 outfile <- data.frame(rownames(corpus.district.tdm.mat),
