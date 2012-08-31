@@ -48,7 +48,7 @@
     prediction.</p>
 
     <p class="vt_answer">If you want more information see the FAQs about the data and
-    algoritm below. If you want way more information, you can read the
+    algorithm below. If you want way more information, you can read the
     interim technical
     report <a href="http://markhuberty.berkeley.edu/files/twitter_paper.pdf">here</a>. </p>
     
@@ -97,7 +97,7 @@
 
     <p class="vt_answer">Finally, there are many more basic issues: political campaigns
     are full of spam and distraction; political speech is full of
-    sarcasm, irony, and satiure; people who tweet may not be people
+    sarcasm, irony, and satire; people who tweet may not be people
     who vote (people over the age of 65 vote regularly but tweet
     rarely; the reverse is true for young people). Computer-based
     linguistic analysis has made enormous strides in understanding
@@ -128,7 +128,7 @@
     <p class="vt_answer">We query the Search API every night, for all mentions of each
       Congressional candidate in the past 24 hours. We download and
       store those tweets and related data about when they were created,
-      whether they were retweets (RT) or mentionds (MT), and other
+      whether they were retweets (RT) or mentions (MT), and other
       metadata.</p> 
     <li>What about candidates with really generic names? Don't you get
       a lot of noise when searching
@@ -165,10 +165,10 @@
       <p class="vt_answer">We did this a series of steps:</p>
       <ol class="vt_answer">
         <li>Count all of the unique <i>bigrams</i> (pairs of consecutive words) in each tweet</li>
-        <li>Count the occurrance of all bigrams in each district for the entire race</li>
+        <li>Count the occurrence of all bigrams in each district for the entire race</li>
         <li><i>Weight</i> the counts so that terms in tweets closer to the election were treated as more important than terms that occurred much earlier in the election</li>
         <li>Build up a matrix, using these counts, of all terms in tweets for both candidates in the race, for all districts. This gave us a matrix of <i>D</i> districts and <i>T</i> terms. With filtering for really common words (like the, is, etc) and really uncommon words this gave us about 1000-2000 unique terms for 356 districts</li>
-        <li>Use the <a href="">SuperLearner</a> algorithm to determine which terms were the best predictors (positive or negative) of which party won in each district </li>
+        <li>Use the <a href="https://github.com/ecpolley/SuperLearner">SuperLearner</a> algorithm to determine which terms were the best predictors (positive or negative) of which party won in each district </li>
       </ol>
       
       <li>Can you go into more detail?</li>
@@ -197,7 +197,7 @@
       about 85% of the time, this provides a good baseline. It then
       adjusts the baseline prediction based on sentiment and
       action-related phrases. For instance, "voted hcr" indicating
-      that the incumbent voted for healthcare reform)  was one of
+      that the incumbent voted for health care reform)  was one of
       the most influential predictors alongside incumbency-related
       phrases.</p>
       
