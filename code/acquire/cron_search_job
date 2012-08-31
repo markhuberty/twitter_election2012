@@ -29,7 +29,8 @@ candidates <- read.csv("./data/candidates.final.2012.csv")
 ## candidates.pull <- candidates[!is.na(candidates$last.name) &
 ##3                              candidates$last.name != "",]
 
-candidates.pull <- candidates
+candidates.pull <-
+  candidates[candidates.pull$unique_cand_id != "none",]
 
 ## Write the encoded query string.
 ## %22 here is the code for quotes to make sure
@@ -83,23 +84,16 @@ results.fields.desired <- c("profile_image_url",
                             "to_user",
                             "iso_language_code",
                             "source"
-)
+                            )
 
-states.districts <- data.frame(candidates.pull$state,
-                               candidates.pull$district)
-cand.names <- data.frame(candidates.pull$first_name,
-                         candidates.pull$last_name
-                         )
-names(states.districts) <- c("state", "district")
-names(cand.names) <- c("first.name", "last.name")
 
 ## Parse the file immediately
-file.today.parsed <- parse.json.out(file.today,
-                                    results.fields.desired,
-                                    state.district=states.districts,
-                                    cand.names=cand.names,
-                                    num.cores=2
-                                    )
+file.today.parsed <-
+  parse.json.out(file.today,
+                 results.fields.desired,
+                 unique.cand.id=as.character(candidates.pull$unique_cand_id),
+                 num.cores=2
+                 )
 
 ## Select for only English words
 ## Replace URL encoding for quotes and ampersands with the real thing

@@ -24,7 +24,7 @@ scale.linear <- function(vec, params){
 
   m <- params[1]
   b <- params[2]
-  
+
   vec.scale <- m * vec + b
 
   vec.scale <- vec.scale / max(vec.scale)
@@ -42,7 +42,7 @@ scale.linear <- function(vec, params){
 scale.quad <- function(vec, params){
 
   stopifnot(length(params) == 4)
-  
+
   a <- params[1]
   b <- params[2]
   c <- params[3]
@@ -77,7 +77,7 @@ scale.sigmoid <- function(vec, params){
   vec.scale <- vec.scale / max(vec.scale)
 
   return(vec.scale)
-  
+
 }
 
 ## End scaling functions
@@ -99,7 +99,7 @@ scale.weights.by.time <- function(time.var,
                                   ){
 
   stopifnot(length(time.var) == nrow(sparse.mat))
-  
+
   ## Transform the time var into a 1:n index
   x <- as.integer(time.var) - min(as.integer(time.var)) + 1
 
@@ -110,11 +110,11 @@ scale.weights.by.time <- function(time.var,
   scale.factor <- fun(x, scale.params)
 
   print("Scaling factor computed")
-  
+
   sparse.mat <- sparse.mat * scale.factor
-  
+
   return(sparse.mat)
-  
+
 
 }
 
@@ -147,7 +147,7 @@ aggregate.by <- function(fac, sparse.mat, binary=FALSE){
 
   mat.out <- list(unique.factor, mat.out)
   return(mat.out)
-  
+
 }
 
 ## Takes as input a disaggregated doc-term matrix
@@ -169,7 +169,8 @@ generate.sparse.tdm <- function(tdm,
                                 scale=FALSE,
                                 time.var=NULL,
                                 scale.fun=NULL,
-                                scale.params=NULL
+                                scale.params=NULL,
+                                sparse.filter=TRUE
                                 ){
 
   sparse.corpus <- sparseMatrix(i=tdm$i,
@@ -183,14 +184,18 @@ generate.sparse.tdm <- function(tdm,
 
   ## col.sparseness <- colSums(sparse.corpus > 0) / row.count
   print("Sparse matrix constructed")
-  
-  word.count <- colSums(sparse.corpus)
-  ## Sparseness computed
-  idx.to.keep <- which(word.count >= initial.threshold)
+  print(dim(sparse.corpus))
 
-  sparse.corpus <- sparse.corpus[,idx.to.keep]
-  col.names <- col.names[idx.to.keep]
+  if(sparse.filter)
+    {
+      word.count <- colSums(sparse.corpus)
+      ## Sparseness computed
+      idx.to.keep <- which(word.count >= initial.threshold)
 
+      sparse.corpus <- sparse.corpus[,idx.to.keep]
+      col.names <- col.names[idx.to.keep]
+      print(dim(sparse.corpus))
+    }
 
   if(scale)
     sparse.corpus <- scale.weights.by.time(time.var=time.var,
@@ -198,7 +203,7 @@ generate.sparse.tdm <- function(tdm,
                                            scale.fun=scale.fun,
                                            scale.params=scale.params
                                            )
-  
+
   print("Sparseness computed")
   print(dim(sparse.corpus))
 
@@ -215,16 +220,18 @@ generate.sparse.tdm <- function(tdm,
   ## handle the compute problem by throwing out really sparse stuff
   ## This actually makes sure that sparseness is equiv to what's in
   ## the tm package
-  sparseness <- colSums(tdm.agg > 0) / nrow(tdm.agg)
-  
-  to.save <- which(sparseness > final.threshold)
-
-  tdm.agg <- tdm.agg[,to.save]
+  if(sparse.filter)
+    {
+      sparseness <- colSums(tdm.agg > 0) / nrow(tdm.agg)
+      to.save <- which(sparseness > final.threshold)
+      tdm.agg <- tdm.agg[,to.save]
+      col.names <- col.names[to.save]
+    }
 
   rownames(tdm.agg) <- row.names
-  colnames(tdm.agg) <- col.names[to.save]
+  colnames(tdm.agg) <- col.names
 
-  return(tdm.agg)  
+  return(tdm.agg)
 
 }
 
@@ -263,7 +270,7 @@ weight.tfidf <- function(mat){
 select.tfidf <- function(mat, threshold){
 
   stopifnot(threshold > 0)
-  
+
   mat.tfidf <- weight.tfidf(mat)
 
   ## Take averages by column

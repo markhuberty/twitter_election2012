@@ -72,11 +72,25 @@ tweet.age <- max(tweet.age) - tweet.age
 house.data$tweet.age <- tweet.age
 rm(tweet.age)
 
-# Get party information -h
-parties <- get.party.vector(house.data, candidates)
-house.data <- cbind(house.data, parties)
-colnames(house.data)[ncol(house.data)] <- "party"
-
+house.data$unique_cand_id <-
+  as.character(house.data$unique_cand_id)
+candidates$unique_cand_id <-
+  as.character(candidates$unique_cand_id)
+# Merge in the party data
+house.data <- merge(house.data,
+                    candidates[,c("unique_cand_id",
+                                  "state_dist",
+                                  "state",
+                                  "district",
+                                  "party",
+                                  "first_name",
+                                  "last_name"
+                                  )
+                               ],
+                    by="unique_cand_id",
+                    all.x=TRUE,
+                    all.y=FALSE
+                    )
 
 ## Then make sure we are only looking at races with
 ## data for both candidates.
@@ -140,17 +154,18 @@ corpus <- tolower(house.data$text)
 ## Hack out noisy results
 noise.indicator.terms <- c("kicker",
                            "orleans"
-                      )
-which.noise <- sapply(noise.indicator.terms,
-                      function(x) grepl(x, house.data$text)
-                      )
-which.noise <- rowSums(which.noise) > 0
+                           )
+which.noise <- str_detect(house.data$text,
+                          paste(noise.indicator.terms,
+                                collapse="|"
+                                )
+                          )
 
 corpus <- corpus[!which.noise]
 house.data <- house.data[!which.noise, ] # Added !
 
 ## Process the corpus in stages to format names, offices
-## First remove all misc cruft (http, etc)
+## Remove http://* and usernames
 corpus <- remove.all(corpus)
 
 ## Then replace the major political figures
@@ -166,13 +181,13 @@ corpus <- replace.pol.names(corpus,
 ## Then replace the candidate names with dummies
 corpus <- replace.candidate(house.data,
                             corpus
-)
+                            )
 
 ## Need to get the actual challenger index
 chal.idx <- find.chal.idx(house.data$state,
                           house.data$district,
                           house.data$party
-)
+                          )
 
 house.data$chal.idx[chal.idx[,1]] <- chal.idx[,2]
 rm(chal.idx)
@@ -180,23 +195,23 @@ gc()
 
 ## Replace the opponent names with dummies
 corpus <- replace.opponent.2(corpus,
-                             house.data$first.name,
-                             house.data$last.name,
+                             house.data$first_name,
+                             house.data$last_name,
                              house.data$chal.idx
-)
+                             )
 
 ## Then replace the cand/opp dummies with
 ## party-specific variants
 
 corpus <- party.dummies(corpus,
                         house.data$party
-)
+                        )
 
 corpus <- Corpus(VectorSource(corpus),
                  readerControl=list(readPlain),
                  language="en",
                  load=TRUE
-)
+                 )
 
 ## Strip out stopwords, whitespace, punctuation
 corpus <- tm_map(corpus, stripWhitespace)
@@ -205,8 +220,8 @@ corpus <- tm_map(corpus, removePunctuation)
 
 ## Then turn into a doc-term matrix
 
-generic.filename <- "./data/generic.corpus.RData"
-timestamp.filename <- paste("./data/generic.corpus.",
+generic.filename <- "./data/doc_term_mat/generic.corpus.RData"
+timestamp.filename <- paste("./data/doc_term_mat/generic.corpus.",
                             Sys.Date(),
                             ".RData",
                             sep=""
@@ -219,42 +234,52 @@ save(corpus,
      file=timestamp.filename
     )
 
-# create tm.dictionary
+# Generate the bigram dictionary
 tm.dictionary <- Dictionary(corpus.colnames)
-i=2
 
-my.tokenizer <- function(x) NGramTokenizer(x, Weka_control(min = i, max = i))
+## Generate the by-tweet doc-term matrices
+## 1 for topic modeling
+## 2 for prediction
+ngrams <- c(1,2)
+dictionaries <- list(NULL,
+                     tm.dictionary
+                     )
 
-## Build up the corpus with the appropriate dictionary
-tdm.corpus <- DocumentTermMatrix(corpus,
-                                 control=list(tokenize=my.tokenizer,
-                                                weighting=weightTf,
-                                 dictionary=tm.dictionary)
-  )
+for(i in ngrams){
+  my.tokenizer <-
+    function(x) NGramTokenizer(x, Weka_control(min = i, max = i))
+
+  ## Build up the corpus with the appropriate dictionary
+  tdm.corpus <- DocumentTermMatrix(corpus,
+                                   control=list(tokenize=my.tokenizer,
+                                     weighting=weightTf,
+                                     dictionary=dictionaries[[i]])
+                                   )
 
   ## Generate the date-stamped file
   today <- Sys.Date()
-  timestamp.file.name <- paste("./data/generic.tdm.",
+  timestamp.file.name <- paste("./data/doc_term_mat/generic.tdm.",
                                i,
                                ".",
                                today,
                                sep=""
-  )
+                               )
 
   ## Generate the generic file
-  generic.file.name <- paste("./data/generic.tdm.",
+  generic.file.name <- paste("./data/doc_term_mat/generic.tdm.",
                              i,
                              ".RData",
                              sep=""
-  )
+                             )
 
   ## Save the raw corpus as both a generic file and a date-stamped
   ## file for recordkeeping
   save(tdm.corpus,
        house.data,
        file=generic.file.name
-  )
+       )
   save(tdm.corpus,
        house.data,
        file=timestamp.file.name
-  )
+       )
+}

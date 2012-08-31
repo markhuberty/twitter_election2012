@@ -1,7 +1,24 @@
+import urllib
 import re
 import csv
-import urllib
+import hashlib
 import json
+
+## Define some functions
+
+def fix_party_names(input_party, party_name_dict):
+    for k in party_name_dict:
+        regex = '|'.join(party_name_dict[k])
+        input_party = re.sub(regex, k, input_party)
+    return(input_party)
+
+party_name_dict = {'D':['Dem[\.]*', 'DEM[\.]*', 'Democrat'],
+                   'R':['Rep[\.]*', 'REP[\.]*', 'Republican',
+                        'GOP'],
+                   'I':['NPD']
+                   }
+
+## End function def
 
 ## Get the NYT candidate data
 
@@ -28,47 +45,43 @@ for idx, item in enumerate(nyt_parsed):
         for c in item['candidates']:
             temp = {'state_dist': state_dist,
                     'state_id':item['state_id'],
-                    'seat_number': item['seat_number'],
+                    'district': item['seat_number'],
                     'office_id': item['office_id'],
                     'state': item['state'],
                     'primary_date': item['primary_date'],
                     'name': c['name'],
-                    'party': c['party'],
+                    'party': fix_party_names(c['party'], party_name_dict),
                     'incumbent':c['incumbent']
                     }
+            split_names = temp['name'].split(" ")
+            first_name = split_names[0]
+            if len(split_names) >= 2:
+                last_name = ' '.join(split_names[1:])
+            else:
+                last_name = 'none'
+            temp['last_name'] = last_name
+            temp['first_name'] = first_name
+            temp['unique_cand_id'] = '_'.join([temp['state_dist'],
+                                               temp['party'],
+                                               temp['last_name']
+                                               ]
+                                              )
             denorm_list.append(temp)
     else:
         temp = {'state_dist': state_dist,
                 'state_id':item['state_id'],
-                'seat_number': item['seat_number'],
+                'district': item['seat_number'],
                 'office_id': item['office_id'],
                 'state': item['state'],
                 'primary_date': item['primary_date'],
                 'name': 'none',
                 'party': 'none',
-                'incumbent':'none'
+                'incumbent':'none',
+                'first_name':'none',
+                'last_name':'none',
+                'unique_cand_id':'none'
                 }
         denorm_list.append(temp)
-
-
-
-
-## Split and format the names
-split_names = [item['name'].split(" ") for item in denorm_list]
-
-for idx, s in enumerate(split_names):
-    first_name = s[0]
-    if len(s) == 2:
-        last_name = s[1]
-    elif len(s) > 2:
-        if re.search(s[1], '[A-Z\.]{2}'):
-            last_name = s[2]
-        else:
-            last_name = s[1] + ' ' + s[2]
-    else:
-        last_name = 'none'
-    denorm_list[idx]['first_name'] = first_name
-    denorm_list[idx]['last_name'] = last_name
 
 fieldnames = ['state_dist',
               'state_id',
@@ -80,7 +93,8 @@ fieldnames = ['state_dist',
               'party',
               'incumbent',
               'first_name',
-              'last_name'
+              'last_name',
+              'unique_cand_id'
               ]
 
 

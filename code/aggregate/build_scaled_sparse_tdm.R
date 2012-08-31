@@ -5,7 +5,7 @@
 ## problem of bigrams at the junction
 
 
-setwd("~/Documents/twitter_election2012")  
+setwd("~/Documents/twitter_election2012")
 
 
 library(Matrix)
@@ -13,8 +13,8 @@ library(foreach)
 
 source("./code/util/build_sparse_functions.R")
 
-initial.threshold <- c(3,3) 
-final.threshold <- c(0.02, 0.005)
+initial.threshold <- c(3,3)
+final.threshold <- c(0.01, 0.005)
 
 ## scale here equiv to either 0 + 1x (linear)
 ## or 1 + x^2
@@ -23,73 +23,75 @@ scale.type <- "scale.linear"
 
 type <- c("aggregate", "byweek")
 
-    i <- 2
-    ## 2 code for unigrams/bigrams/trigrams
-    file.in <- "./data/generic.tdm.2.RData"
-    
-    load(file.in)
+ngrams <- c(1,2)
+for(i in ngrams){
 
-    
-    agg.fac.wk <- paste(house.data$state,
-                        house.data$district,
-                        house.data$tweet.age,
-                        sep="."
-                        )
+  file.in <- paste("./data/doc_term_mat/generic.tdm.",
+                   i,
+                   ".RData",
+                   sep=""
+                   )
 
-    agg.fac.dist <- paste(house.data$state,
-                          house.data$district,
-                          sep="."
-                          )
+  load(file.in)
 
 
-    ## Don't aggregate by week if scaling, doesn't make sense
-    agg.fac.list <- list(agg.fac.dist## ,
-                         ## agg.fac.wk 
-                         )
+  agg.fac.wk <- paste(house.data$state_dist,
+                      house.data$tweet.age,
+                      sep="."
+                      )
+
+  agg.fac.dist <- house.data$state_dist
 
 
-    col.names <- unlist(tdm.corpus$dimnames[2])
+  ## Don't aggregate by week if scaling, doesn't make sense
+  agg.fac.list <- list(agg.fac.dist,
+                       agg.fac.wk
+                       )
+  scale.agg <- c(TRUE, FALSE)
 
-    for(j in 1:length(agg.fac.list))
-      { ## Agg levels
-        for(k in 1:length(scale.type))
-          {
-            tdm.sparse <-
-              generate.sparse.tdm(tdm.corpus,
-                                  agg.fac=agg.fac.list[[j]],
-                                  initial.threshold=initial.threshold[j],
-                                  final.threshold=final.threshold[j],
-                                  col.names=col.names,
-                                  scale=TRUE,
-                                  time.var=house.data$created_at,
-                                  scale.fun=scale.type[k],
-                                  scale.params=scale.params[[k]]
-                                  )
 
-            filename <- paste("./data/tdm.sparse.",
-                              i,
-                                        #".pctvote.unigrams.",
-                              final.threshold[j],
-                              ".",
-                              type[j],
-                              ".",
-                              scale.type[k],
-                              ".RData",
-                              sep=""
-                              )
+  col.names <- unlist(tdm.corpus$dimnames[2])
 
-            print(dim(tdm.sparse))
-            
-            save(house.data,
-                 tdm.sparse,
-                 file=filename
-                 )
+  for(j in 1:length(agg.fac.list))
+    { ## Agg levels
+      for(k in 1:length(scale.type))
+        {
+          tdm.sparse <-
+            generate.sparse.tdm(tdm.corpus,
+                                agg.fac=agg.fac.list[[j]],
+                                initial.threshold=initial.threshold[j],
+                                final.threshold=final.threshold[j],
+                                col.names=col.names,
+                                scale=scale.agg[j],
+                                time.var=as.Date(house.data$created_at),
+                                scale.fun=scale.type[k],
+                                scale.params=scale.params[[k]],
+                                sparse.filter=FALSE
+                                )
 
-            rm(tdm.sparse)
-            gc()
+          filename <- paste("./data/doc_term_mat/tdm.sparse.",
+                            i,
+                            final.threshold[j],
+                            ".",
+                            type[j],
+                            ".",
+                            scale.type[k],
+                            ".RData",
+                            sep=""
+                            )
 
-          }
-      }
-    rm(house.data, tdm.corpus)
-    gc()
-  
+          print(dim(tdm.sparse))
+
+          save(house.data,
+               tdm.sparse,
+               file=filename
+               )
+
+          rm(tdm.sparse)
+          gc()
+
+        }
+    }
+  rm(house.data, tdm.corpus)
+  gc()
+}

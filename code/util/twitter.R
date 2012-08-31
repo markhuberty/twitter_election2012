@@ -200,7 +200,7 @@ parse.json.results <- function(in.json){
 ## viable for large datasets.
 
 parse.json.out <- function(infile, results.fields.desired,
-                           state.district, cand.names, num.cores=2){
+                           unique.cand.id, num.cores=2){
 
   ## First parse the JSON file to a list
   ## Each element in the list contains the results of one query
@@ -220,9 +220,10 @@ parse.json.out <- function(infile, results.fields.desired,
 
   print(paste("Total number of results", length(list.results)))
 
-  mat <- matrix(ncol=(length(results.fields.desired) + 4))
-  colnames(mat) <- c(results.fields.desired, "state", "district",
-                     "first.name", "last.name")
+  mat <- matrix(ncol=(length(results.fields.desired) + 1))
+  colnames(mat) <- c(results.fields.desired,
+                     "unique_cand_id"
+                     )
 
   obs.counter <- 0
 
@@ -241,18 +242,12 @@ parse.json.out <- function(infile, results.fields.desired,
         if(is.null(entry)){
           entry <- rep(NA, length(results.fields.desired))
           out <- c(as.character(entry),
-                   as.character(state.district$state[i]),
-                   as.character(state.district$district[i]),
-                   as.character(cand.names$first.name[i]),
-                   as.character(cand.names$last.name[i])
+                   unique.cand.id[i]
                    )
                                         #break
         }else{
           out <- c(as.character(entry),
-                   as.character(state.district$state[i]),
-                   as.character(state.district$district[i]),
-                   as.character(cand.names$first.name[i]),
-                   as.character(cand.names$last.name[i])
+                   unique.cand.id[i]
                    )
           #print(length(out))
         }
@@ -272,10 +267,7 @@ parse.json.out <- function(infile, results.fields.desired,
   ## print(summary(mat))
   ## print(names(mat))
   names(mat) <- c(results.fields.desired,
-                  "state",
-                  "district",
-                  "first.name",
-                  "last.name"
+                  "unique_cand_id"
                   )
   rownames(mat) <- sapply(1:dim(mat)[1], function(x){
 
@@ -1005,6 +997,14 @@ aggregate.to.district.wk <- function(corpus, cand.data){
 
 }
 
+## FUNCTION is.spam
+is.spam <- function(input.text){
+
+
+
+
+}
+
 
 ## CUSTOM FUNCTIONS FOR THE SUPERLEARNER LIBRARIES
 
@@ -1112,23 +1112,22 @@ SL.svm.polynom.nusvc02 <- function(..., type.class='nu-regression', nu=0.2){
 ## proper names for candidates and offices with dummy variables
 ## to allow comparison across races
 
-remove.all <- function(x){
+remove.all <-
+  function(x){
 
-  out <- remove.http(x)
-  print(length(out))
-  out <- remove.rt(out)
-  print(length(out))
-  out <- remove.usernames(out)
-
-  return(out)
+    out <- remove.http(x)
+    print(length(out))
+    out <- remove.rt(out)
+    print(length(out))
+    has.out <- remove.usernames(out)
+    return(out)
 
 }
 
 remove.http <- function(x){
 
-  #out <- gsub("\\b[http://][a-zA-Z./\\+\\?%\\-]*\\w\\b", "", x)
-  out <- gsub("\\bhttp://[a-zA-Z0-9./\\+\\?%\\-]*\\b", "", x)
-  return(out)
+  corpus <- gsub("\\bhttp://[a-zA-Z0-9./\\+\\?%\\-]*\\b", "", x)
+  return(corpus)
 
 }
 
@@ -1213,11 +1212,11 @@ replace.pol.names <- function(string,
 replace.candidate <- function(tweet.df, corpus){
 
   df.regexp  <- paste("\\Q",
-                      tolower(tweet.df$first.name),
+                      tolower(tweet.df$first_name),
                       " ",
-                      tolower(tweet.df$last.name),
+                      tolower(tweet.df$last_name),
                       "\\E|\\Q",
-                      tolower(tweet.df$last.name),
+                      tolower(tweet.df$last_name),
                       "\\E",
                       sep=""
                       )
