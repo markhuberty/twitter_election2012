@@ -1331,3 +1331,19 @@ generate.state.district.code <- function(state, district){
   return(out)
 
 }
+
+
+##' Helper function to translate a sparse Matrix into
+##' a document-term matrix equivalent to that produced by the tm package.
+##' @title SparseToDtm
+##' @param sparseM : a sparse Matrix of form dgCMatrix.
+##' @param weighting one of weightTf, weightTfIdf, or weightBin
+##' @return a simple_triplet_matrix as described in the slam package,
+##' with the same dimensions and properties as sparseM.
+##' @author Mark Huberty
+sparse.to.dtm <- function(sparseM, weighting=weightTf){
+
+  stm <- as.DocumentTermMatrix(sparseM, weighting=weighting)
+  return(stm)
+
+}

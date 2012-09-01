@@ -12,14 +12,16 @@ library(Matrix)
 library(foreach)
 
 source("./code/util/build_sparse_functions.R")
+source("./code/util/twitter.R")
 
 ## scale here equiv to either 0 + 1x (linear)
 ## or 1 + x^2
 scale.params <- list(NULL, c(1, 0), c(1, 0, 1, 2), c(0.08))
 scale.type <- c("scale.uniform", "scale.linear")
-purposes <- c("voteshare", "winloss")
+purposes <- c("voteshare", "winloss", "topicmodel")
 type <- c("aggregate", "byweek")
 
+## Generate the
 ngrams <- c(1,2)
 for(p in purposes){
   for(i in ngrams){
@@ -52,22 +54,25 @@ for(p in purposes){
 
     col.names <- unlist(tdm.corpus$dimnames[2])
 
+
     for(j in 1:length(agg.fac.list))
       { ## Agg levels
-        for(k in 1:length(scale.type))
-          { ## scaling types
+
+        if(p=="topicmodel")
+          {
+
             tdm.sparse <-
               generate.sparse.tdm(tdm.corpus,
                                   agg.fac=agg.fac.list[[j]],
-                                  initial.threshold=NULL,
-                                  final.threshold=NULL,
+                                  initial.threshold=0,
+                                  final.threshold=0.01,
                                   col.names=col.names,
-                                  scale=scale.agg[j],
+                                  scale=FALSE,
                                   time.var=as.Date(house.data$created_at),
-                                  scale.fun=scale.type[k],
+                                  scale.fun="scale.uniform",
                                   scale.params=scale.params[[k]],
-                                  sparse.filter=FALSE
                                   )
+            tdm.sparse <- sparse.to.dtm(tdm.sparse)
 
             filename <- paste("./data/doc_term_mat/tdm.sparse.",
                               i,
@@ -75,8 +80,6 @@ for(p in purposes){
                               p,
                               ".",
                               type[j],
-                              ".",
-                              scale.type[k],
                               ".RData",
                               sep=""
                               )
@@ -91,9 +94,52 @@ for(p in purposes){
             rm(tdm.sparse)
             gc()
 
+
+          }else{
+
+            for(k in 1:length(scale.type))
+              { ## scaling types
+                tdm.sparse <-
+                  generate.sparse.tdm(tdm.corpus,
+                                      agg.fac=agg.fac.list[[j]],
+                                      initial.threshold=NULL,
+                                      final.threshold=NULL,
+                                      col.names=col.names,
+                                      scale=scale.agg[j],
+                                      time.var=as.Date(house.data$created_at),
+                                      scale.fun=scale.type[k],
+                                      scale.params=scale.params[[k]],
+                                      sparse.filter=FALSE
+                                      )
+
+                filename <- paste("./data/doc_term_mat/tdm.sparse.",
+                                  i,
+                                  ".",
+                                  p,
+                                  ".",
+                                  type[j],
+                                  ".",
+                                  scale.type[k],
+                                  ".RData",
+                                  sep=""
+                                  )
+
+                print(dim(tdm.sparse))
+
+                save(house.data,
+                     tdm.sparse,
+                     file=filename
+                     )
+
+                rm(tdm.sparse)
+                gc()
+
+              }
           }
       }
-    rm(house.data, tdm.corpus)
-    gc()
+
   }
+  rm(house.data, tdm.corpus)
+  gc()
+
 }
