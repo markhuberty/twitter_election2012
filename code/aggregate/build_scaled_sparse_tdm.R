@@ -13,85 +13,87 @@ library(foreach)
 
 source("./code/util/build_sparse_functions.R")
 
-initial.threshold <- c(3,3)
-final.threshold <- c(0.01, 0.005)
-
 ## scale here equiv to either 0 + 1x (linear)
 ## or 1 + x^2
-scale.params <- list(c(1, 0), c(1, 0, 1, 2), c(0.08))
-scale.type <- "scale.linear"
-
+scale.params <- list(NULL, c(1, 0), c(1, 0, 1, 2), c(0.08))
+scale.type <- c("scale.uniform", "scale.linear")
+purposes <- c("voteshare", "winloss")
 type <- c("aggregate", "byweek")
 
 ngrams <- c(1,2)
-for(i in ngrams){
+for(p in purposes){
+  for(i in ngrams){
 
-  file.in <- paste("./data/doc_term_mat/generic.tdm.",
-                   i,
-                   ".RData",
-                   sep=""
-                   )
+    file.in <- paste("./data/doc_term_mat/generic.tdm.",
+                     i,
+                     ".",
+                     p,
+                     ".RData",
+                     sep=""
+                     )
 
-  load(file.in)
-
-
-  agg.fac.wk <- paste(house.data$state_dist,
-                      house.data$tweet.age,
-                      sep="."
-                      )
-
-  agg.fac.dist <- house.data$state_dist
+    load(file.in)
 
 
-  ## Don't aggregate by week if scaling, doesn't make sense
-  agg.fac.list <- list(agg.fac.dist,
-                       agg.fac.wk
-                       )
-  scale.agg <- c(TRUE, FALSE)
+    agg.fac.wk <- paste(house.data$state_dist,
+                        house.data$tweet.age,
+                        sep="."
+                        )
+
+    agg.fac.dist <- house.data$state_dist
 
 
-  col.names <- unlist(tdm.corpus$dimnames[2])
+    ## Don't aggregate by week if scaling, doesn't make sense
+    agg.fac.list <- list(agg.fac.dist,
+                         agg.fac.wk
+                         )
+    scale.agg <- c(TRUE, FALSE)
 
-  for(j in 1:length(agg.fac.list))
-    { ## Agg levels
-      for(k in 1:length(scale.type))
-        {
-          tdm.sparse <-
-            generate.sparse.tdm(tdm.corpus,
-                                agg.fac=agg.fac.list[[j]],
-                                initial.threshold=initial.threshold[j],
-                                final.threshold=final.threshold[j],
-                                col.names=col.names,
-                                scale=scale.agg[j],
-                                time.var=as.Date(house.data$created_at),
-                                scale.fun=scale.type[k],
-                                scale.params=scale.params[[k]],
-                                sparse.filter=FALSE
-                                )
 
-          filename <- paste("./data/doc_term_mat/tdm.sparse.",
-                            i,
-                            final.threshold[j],
-                            ".",
-                            type[j],
-                            ".",
-                            scale.type[k],
-                            ".RData",
-                            sep=""
-                            )
+    col.names <- unlist(tdm.corpus$dimnames[2])
 
-          print(dim(tdm.sparse))
+    for(j in 1:length(agg.fac.list))
+      { ## Agg levels
+        for(k in 1:length(scale.type))
+          { ## scaling types
+            tdm.sparse <-
+              generate.sparse.tdm(tdm.corpus,
+                                  agg.fac=agg.fac.list[[j]],
+                                  initial.threshold=NULL,
+                                  final.threshold=NULL,
+                                  col.names=col.names,
+                                  scale=scale.agg[j],
+                                  time.var=as.Date(house.data$created_at),
+                                  scale.fun=scale.type[k],
+                                  scale.params=scale.params[[k]],
+                                  sparse.filter=FALSE
+                                  )
 
-          save(house.data,
-               tdm.sparse,
-               file=filename
-               )
+            filename <- paste("./data/doc_term_mat/tdm.sparse.",
+                              i,
+                              ".",
+                              p,
+                              ".",
+                              type[j],
+                              ".",
+                              scale.type[k],
+                              ".RData",
+                              sep=""
+                              )
 
-          rm(tdm.sparse)
-          gc()
+            print(dim(tdm.sparse))
 
-        }
-    }
-  rm(house.data, tdm.corpus)
-  gc()
+            save(house.data,
+                 tdm.sparse,
+                 file=filename
+                 )
+
+            rm(tdm.sparse)
+            gc()
+
+          }
+      }
+    rm(house.data, tdm.corpus)
+    gc()
+  }
 }

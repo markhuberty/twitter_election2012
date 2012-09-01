@@ -80,6 +80,12 @@ scale.sigmoid <- function(vec, params){
 
 }
 
+scale.uniform <- function(vec, params=NULL){
+
+  return(vec)
+
+}
+
 ## End scaling functions
 
 ## FUNCTION scale.weights.by.time

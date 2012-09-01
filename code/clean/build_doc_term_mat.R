@@ -14,8 +14,15 @@ source("./code/util/twitter.R")
 
 ## Load the master cron file
 load("./data/cron_output/master.cron.file.RData")
-## Load the dictionary for doc-term matrix construction
-load("./data/tm_dictionary.RData")
+## Load the dictionaries for doc-term matrix construction
+load("./data/tm_winloss_dict.RData")
+load("./data/tm_voteshare_dict.RData")
+tm.voteshare.dictionary <- Dictionary(tm.voteshare.dictionary)
+tm.winloss.dictionary <- Dictionary(tm.winloss.dictionary)
+rm(tm.voteshare.dict,
+   rm.winloss.dict
+   )
+
 ## Load the candidate data
 candidates <- read.csv("./data/candidates.final.2012.csv")
 
@@ -36,13 +43,13 @@ candidates <- read.csv("./data/candidates.final.2012.csv")
 ## profile_image.url
 
 ## Format the dates correctly
- time.format <-  "%a, %d %b %Y %H:%M:%S %z"
- formatted.date <-
+time.format <-  "%a, %d %b %Y %H:%M:%S %z"
+formatted.date <-
   strptime(as.character(master.cron.file$created_at), time.format)
- time.format <- "%Y-%m-%d"
- formatted.date <-
+time.format <- "%Y-%m-%d"
+formatted.date <-
   strptime(as.character(formatted.date), time.format)
- master.cron.file$created_at <- formatted.date
+master.cron.file$created_at <- formatted.date
 
 
 ## Subset the candidates to D/R races
@@ -234,52 +241,61 @@ save(corpus,
      file=timestamp.filename
     )
 
-# Generate the bigram dictionary
-tm.dictionary <- Dictionary(corpus.colnames)
 
 ## Generate the by-tweet doc-term matrices
 ## 1 for topic modeling
 ## 2 for prediction
 ngrams <- c(1,2)
-dictionaries <- list(NULL,
-                     tm.dictionary
+dictionaries <- list(tm.voteshare.dictionary,
+                     tm.winloss.dictionary
                      )
+names(dictionaries) <- c("voteshare",
+                         "winloss"
+                         )
 
 for(i in ngrams){
-  my.tokenizer <-
-    function(x) NGramTokenizer(x, Weka_control(min = i, max = i))
+  for(d in names(dictionaries)){
 
-  ## Build up the corpus with the appropriate dictionary
-  tdm.corpus <- DocumentTermMatrix(corpus,
-                                   control=list(tokenize=my.tokenizer,
-                                     weighting=weightTf,
-                                     dictionary=dictionaries[[i]])
-                                   )
+    my.tokenizer <-
+      function(x) NGramTokenizer(x, Weka_control(min = i, max = i))
 
-  ## Generate the date-stamped file
-  today <- Sys.Date()
-  timestamp.file.name <- paste("./data/doc_term_mat/generic.tdm.",
+    ## Build up the corpus with the appropriate dictionary
+    tdm.corpus <- DocumentTermMatrix(corpus,
+                                     control=list(tokenize=my.tokenizer,
+                                       weighting=weightTf,
+                                       dictionary=dictionaries[[d]])
+                                     )
+
+    ## Generate the date-stamped file
+    today <- Sys.Date()
+    timestamp.file.name <- paste("./data/doc_term_mat/generic.tdm.",
+                                 i,
+                                 ".",
+                                 d,
+                                 ".",
+                                 today,
+                                 ".RData",
+                                 sep=""
+                                 )
+
+    ## Generate the generic file
+    generic.file.name <- paste("./data/doc_term_mat/generic.tdm.",
                                i,
                                ".",
-                               today,
+                               d,
+                               ".RData",
                                sep=""
                                )
 
-  ## Generate the generic file
-  generic.file.name <- paste("./data/doc_term_mat/generic.tdm.",
-                             i,
-                             ".RData",
-                             sep=""
-                             )
-
-  ## Save the raw corpus as both a generic file and a date-stamped
-  ## file for recordkeeping
-  save(tdm.corpus,
-       house.data,
-       file=generic.file.name
-       )
-  save(tdm.corpus,
-       house.data,
-       file=timestamp.file.name
-       )
+    ## Save the raw corpus as both a generic file and a date-stamped
+    ## file for recordkeeping
+    save(tdm.corpus,
+         house.data,
+         file=generic.file.name
+         )
+    save(tdm.corpus,
+         house.data,
+         file=timestamp.file.name
+         )
+  }
 }

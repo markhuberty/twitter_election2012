@@ -9,7 +9,7 @@ library(randomForest)
 source("./code/util/twitter.R")
 load("./algorithms/binary.linear.predictor.RData")
 
-filename <- "tdm.sparse.20.01.aggregate.scale.linear"
+filename <- "tdm.sparse.2.aggregate.scale.linear"
 load(paste("./data/doc_term_mat/", filename, ".RData",  sep=""))
 
 ## Make sure that the input and output data are in the same order (st-dist)
