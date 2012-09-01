@@ -4,6 +4,9 @@ library(RWeka)
 
 load("./data/doc_term_mat/tdm.sparse.2.topicmodel.aggregate.RData")
 candidates <- read.csv("./data/candidates.final.2012.csv")
+districts <- read.csv("./data/districts.csv",
+                      stringsAsFactors=FALSE
+                      )
 
 ## Drop specialized phrases that aren't useful here
 idx.drop <- which(colnames(tdm.sparse) %in%
@@ -70,13 +73,7 @@ colnames(df.district.topics) <- c("state_dist",
                                   )
 
 df.district.topics <- merge(df.district.topics,
-                            candidates[candidates$incumbent=="True",
-                                       c("state_dist",
-                                         "state_id",
-                                         "district",
-                                         "incumbent.party"
-                                         )
-                                       ],
+                            districts,
                             by="state_dist",
                             all.x=TRUE,
                             all.y=FALSE
@@ -89,6 +86,7 @@ colClasses <- c("character",
                 "character",
                 "integer",
                 "character",
+                "character",
                 "Date"
                 )
 
@@ -100,13 +98,13 @@ for(col in 1:ncol(df.district.topics))
   }
 
 topic.district.filename <-
-  paste("./data/topic_models/topic.district.map.",
+  paste("./data/topic_models/district.topic.bigrams.",
         Sys.Date(),
         ".csv",
         sep=""
         )
 topic.district.master.filename <-
-  "./data/topic_models/topic.district.master.csv"
+  "./data/topic_models/district.topic.bigrams.master.csv"
 
 write.csv(df.district.topics,
           file=topic.district.filename,
@@ -117,14 +115,7 @@ if(file.exists(topic.district.master.filename))
   {
 
     master <- read.csv(topic.district.master.filename,
-                       colClasses=c("character",
-                         "integer",
-                         "character",
-                         "character",
-                         "integer",
-                         "character",
-                         "Date"
-                         )
+                       colClasses=colClasses
                        )
     master <- rbind(master,
                     df.district.topics
@@ -136,7 +127,7 @@ if(file.exists(topic.district.master.filename))
 
   }else{
 
-    write.csv(master,
+    write.csv(df.district.topics,
               file=topic.district.master.filename,
               row.names=FALSE
               )
@@ -161,7 +152,7 @@ table(df.district.topics$state,
       )
 
 print("Topic distribution by incumbent party:\n")
-table(df.district.topics$incumbent.party,
+table(as.factor(df.district.topics$incumbent_party),
       df.district.topics$topic.num
       )
 sink()
