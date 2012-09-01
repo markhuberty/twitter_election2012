@@ -99,13 +99,14 @@ for(col in 1:ncol(df.district.topics))
 
   }
 
-topic.district.filename <- paste("./data/topic.district.map.",
-                                 Sys.Date(),
-                                 ".csv",
-                                 sep=""
-                                 )
+topic.district.filename <-
+  paste("./data/topic_models/topic.district.map.",
+        Sys.Date(),
+        ".csv",
+        sep=""
+        )
 topic.district.master.filename <-
-  "./data/topic.district.master.csv"
+  "./data/topic_models/topic.district.master.csv"
 
 write.csv(df.district.topics,
           file=topic.district.filename,
@@ -143,9 +144,8 @@ if(file.exists(topic.district.master.filename))
   }
 
 ## Print diagnostics to a log file
-## Note /  need to make sure that we're subsetting the
-## house data correctly here.
-log.file.name <- paste("topicmodel.log.file.",
+
+log.file.name <- paste("./data/topic_models/topicmodel.log.file.",
                        Sys.Date(),
                        ".log",
                        sep=""
@@ -161,7 +161,7 @@ table(df.district.topics$state,
       )
 
 print("Topic distribution by incumbent party:\n")
-table(house.data$incumbent.party,
+table(df.district.topics$incumbent.party,
       df.district.topics$topic.num
       )
 sink()

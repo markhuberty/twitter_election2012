@@ -51,7 +51,8 @@ for idx, item in enumerate(nyt_parsed):
                     'primary_date': item['primary_date'],
                     'name': c['name'],
                     'party': fix_party_names(c['party'], party_name_dict),
-                    'incumbent':c['incumbent']
+                    'incumbent':c['incumbent'],
+                    'rating':item['rating']
                     }
             split_names = temp['name'].split(" ")
             first_name = split_names[0]
@@ -77,6 +78,7 @@ for idx, item in enumerate(nyt_parsed):
                 'name': 'none',
                 'party': 'none',
                 'incumbent':'none',
+                'rating':item['rating'],
                 'first_name':'none',
                 'last_name':'none',
                 'unique_cand_id':'none'
@@ -99,7 +101,56 @@ fieldnames = ['state_dist',
 
 
 with(open('../../data/candidates.csv', 'wt')) as f:
-    writer = csv.DictWriter(f, fieldnames=fieldnames)
+    writer = csv.DictWriter(f,
+                            fieldnames=fieldnames,
+                            extrasaction='ignore'
+                            )
     writer.writer.writerow(writer.fieldnames)
     for d in denorm_list:
         writer.writerow(d)
+
+
+## Collapse into a district-level file as well
+
+district_keys = ['state_dist',
+                 'state',
+                 'district',
+                 'party',
+                 'rating'
+                 ]
+district_file = {}
+for d in denorm_list:
+    state_dist = d['state_dist']
+    if state_dist in district_file:
+        if district_file[state_dist]['incumbent_party']:
+            continue
+        else:
+            if d['incumbent']:
+                district_file[state_dist]['incumbent_party'] = d['party']
+    else:
+        district_file[state_dist] = {'state': d['state'],
+                                     'district': d['district'],
+                                     'rating':d['rating']
+                                     }
+        if d['incumbent']:
+            district_file[state_dist]['incumbent_party'] = d['party']
+        else:
+            district_file[state_dist]['incumbent_party'] = None
+
+fieldnames = ['state_dist',
+              'state',
+              'district',
+              'incumbent_party',
+              'rating'
+              ]
+
+with(open('../../data/districts.csv', 'wt')) as f:
+    writer = csv.DictWriter(f, fieldnames=fieldnames)
+    writer.writer.writerow(writer.fieldnames)
+    for d in district_file:
+        out = {}
+        out['state_dist'] = d
+        for k in district_file[d]:
+            out[k] = district_file[d][k]
+        writer.writerow(out)
+
