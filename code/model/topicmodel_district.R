@@ -2,36 +2,11 @@ library(tm)
 library(topicmodels)
 library(RWeka)
 
-load("./data/doc_term_mat/generic.corpus.RData")
+load("./data/doc_term_mat/tdm.sparse.2.topicmodel.aggregate.RData")
 candidates <- read.csv("./data/candidates.final.2012.csv")
-source("./code/util/build_sparse_functions.R")
 
-## Generate the input data
-my.tokenizer <- function(x) NGramTokenizer(x, Weka_control(min = 2,
-                                                           max = 2)
-                                           )
-corpus <-
-corpus.district.tdm <- TermDocumentMatrix(corpus,
-                                          control=list(tokenize=my.tokenizer,
-                                            weighting=weightTf)
-                                          )
-agg.fac.dist <- house.data$state_dist
-
-sparseness <- 0.99
-corpus.district.tdm.sparse <-
-  if(sparseness < 1){
-    removeSparseTerms(corpus.district.tdm,
-                      sparseness)
-  }else{
-    corpus.district.tdm
-  }
-
-
-corpus.district.tdm.mat <- t(as.matrix(corpus.district.tdm.sparse))
-print(dim(corpus.district.tdm.mat))
-
-## Try to drop some stuff
-idx.drop <- which(colnames(corpus.district.tdm.mat) %in%
+## Drop specialized phrases that aren't useful here
+idx.drop <- which(colnames(tdm.sparse) %in%
                   c("rep dcanddummy",
                     "rep rcanddummy",
                     "support dcanddummy",
@@ -43,115 +18,129 @@ idx.drop <- which(colnames(corpus.district.tdm.mat) %in%
                     "candidate dcanddummy",
                     "candidate rcanddummy",
                     "congresswoman dcanddummy",
-                    "congresswoman rcanddummy",
+                    "congresswoman rcanddummy"
                     )
                   )
-corpus.district.tdm.mat <- corpus.district.tdm.mat[,-idx.drop]
+tdm.sparse <- tdm.sparse[,-idx.drop]
 
-## Begin topic modeling
-## Minimize perplexity to choose topic counts
-
-
+## Set the k value to maximize the log-lik of the model
+## in held-out data
 seed <- 3423
 k.values <- seq(4, 30, 2)
-n.train <- floor(0.9 * nrow(corpus.district.tdm.mat))
-sample.vec <- sample(1:nrow(corpus.district.tdm.mat),
+n.train <- floor(0.9 * nrow(tdm.sparse))
+sample.vec <- sample(1:nrow(tdm.sparse),
                      n.train,
                      replace=FALSE
                      )
-train.data <- corpus.district.tdm.mat[sample.vec, ]
-test.data <- corpus.district.tdm.mat[-sample.vec, ]
+train.data <- tdm.sparse[sample.vec, ]
+test.data <- tdm.sparse[-sample.vec, ]
 
-perplexity.trial <- lapply(k.values, function(x){
+loglik.trial <- lapply(k.values, function(x){
   out <- LDA(train.data, k=x, control=list(seed=seed))
-  predict.out <- LDA(train.data, model=out)
+  predict.out <- LDA(train.data, model=out,
+                     estimate.beta=FALSE
+                     )
   loglik <- logLik(predict.out)
   return(loglik)
 
 })
 
-which.k <- which.max(unlist(perplexity.trial))
-k.best <- k.values[which.k]
+which.k <- which.max(unlist(loglik.trial))
 
-
-tm.lda.district <- LDA(corpus.district.tdm.mat,
-                       k=k.best,
+tm.lda.district <- LDA(tdm.sparse,
+                       k=k.values[which.k],
                        control=list(seed=seed)
                        )
 
 terms.lda.district <- terms(tm.lda.district, 5)
+topic.labels <- apply(terms.lda.district,
+                      2,
+                      function(x) paste(x, collapse="|")
+                      )
 topics.lda.district <- topics(tm.lda.district)
 
-df.district.topics <- cbind(house.data$state,
-                            house.data$district,
-                            topics.lda.district
+df.district.topics <- cbind(rownames(tdm.sparse),
+                            topics.lda.district,
+                            topic.labels[topics.lda.district]
                             )
-colnames(df.district.topics) <- c("state",
-                                  "district",
-                                  "topic.num"
+
+colnames(df.district.topics) <- c("state_dist",
+                                  "topic.num",
+                                  "topic.label"
                                   )
-df.district.topics$state.district <-
-  generate.state.district.code(df.district.topics$state,
-                               df.district.topics$district
-                               )
 
-
-topic.term.map <-
-  sapply(1:ncol(terms.lda.district),
-         function(x){
-
-           terms <- paste(terms.lda.district[, this.topic],
-                          collapse="."
-                          )
-           out <- c(x, ,
-                    terms
-                    )
-
-         }
-         )
-topic.term.map <- t(topic.term.map)
-colnames(topic.term.map) <- c("topic.num", "topic.label")
-
-topic.map.filename <- paste("./data/topic.term.map.",
-                            Sys.Date(),
-                            ".csv"
+df.district.topics <- merge(df.district.topics,
+                            candidates[candidates$incumbent=="True",
+                                       c("state_dist",
+                                         "state_id",
+                                         "district",
+                                         "incumbent.party"
+                                         )
+                                       ],
+                            by="state_dist",
+                            all.x=TRUE,
+                            all.y=FALSE
                             )
-topic.map.master.filename <- "./data/topic.term.map.latest.csv"
-topic.district.filename <- paste("./data/topic.district.map."
+df.district.topics$date <- Sys.Date()
+
+colClasses <- c("character",
+                "integer",
+                "character",
+                "character",
+                "integer",
+                "character",
+                "Date"
+                )
+
+for(col in 1:ncol(df.district.topics))
+  {
+
+    class(df.district.topics[,col]) <- colClasses[col]
+
+  }
+
+topic.district.filename <- paste("./data/topic.district.map.",
                                  Sys.Date(),
-                                 ".csv"
+                                 ".csv",
+                                 sep=""
                                  )
 topic.district.master.filename <-
-  "./data/topic.district.latest.csv"
+  "./data/topic.district.master.csv"
 
-## TODO need to ket the right kind of date stamping here for master
-## files
-write.csv(topic.term.map,
-          file=topic.map.filename,
-          row.names=FALSE
-          )
 write.csv(df.district.topics,
           file=topic.district.filename,
           row.names=FALSE
           )
 
-write.csv(topic.term.map,
-          file=topic.map.filename,
-          row.names=FALSE
-          )
-write.csv(df.district.topics,
-          file=topic.district.filename,
-          row.names=FALSE
-          )
+if(file.exists(topic.district.master.filename))
+  {
 
+    master <- read.csv(topic.district.master.filename,
+                       colClasses=c("character",
+                         "integer",
+                         "character",
+                         "character",
+                         "integer",
+                         "character",
+                         "Date"
+                         )
+                       )
+    master <- rbind(master,
+                    df.district.topics
+                    )
+    write.csv(master,
+              file=topic.district.master.filename,
+              row.names=FALSE
+              )
 
+  }else{
 
+    write.csv(master,
+              file=topic.district.master.filename,
+              row.names=FALSE
+              )
 
-## Other? Can we automate quality checks of some kind?
-## Print some diagnostics? table by party, state,
-## compare to topic coherence from prior day?
-##
-
+  }
 
 ## Print diagnostics to a log file
 ## Note /  need to make sure that we're subsetting the
@@ -164,7 +153,7 @@ log.file.name <- paste("topicmodel.log.file.",
 
 sink(log.file.name)
 print("Topic term labels:\n")
-print(topic.term.map)
+print(topic.labels)
 
 print("Topic distribution by state:\n")
 table(df.district.topics$state,
