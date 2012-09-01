@@ -234,10 +234,10 @@ timestamp.filename <- paste("./data/doc_term_mat/generic.corpus.",
                             sep=""
                             )
 
-save(corpus,
+save(corpus, house.data,
      file=generic.filename
     )
-save(corpus,
+save(corpus, house.data,
      file=timestamp.filename
     )
 
@@ -247,10 +247,12 @@ save(corpus,
 ## 2 for prediction
 ngrams <- c(1,2)
 dictionaries <- list(tm.voteshare.dictionary,
-                     tm.winloss.dictionary
+                     tm.winloss.dictionary,
+                     NULL
                      )
 names(dictionaries) <- c("voteshare",
-                         "winloss"
+                         "winloss",
+                         "topicmodel"
                          )
 
 for(i in ngrams){

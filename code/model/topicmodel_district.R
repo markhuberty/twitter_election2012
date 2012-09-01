@@ -1,32 +1,21 @@
-## Code to model the topics by district
-## Begun 22 September 2011
-## Mark Huberty
-
-if(grepl("mac.binary", .Platform$pkgType, fixed=TRUE))
-  {
-    setwd("~/Documents/Research/Papers/twitter_election2012")
-  }else{
-    setwd("~/Documents/twitter_election2012")
-  }
-
-
 library(tm)
 library(topicmodels)
 library(RWeka)
 
+load("./data/doc_term_mat/generic.corpus.RData")
+candidates <- read.csv("./data/candidates.final.2012.csv")
+source("./code/util/build_sparse_functions.R")
 
-load("./data/corpus.district.RData")
-load("./data/house.data.RData")
-## need to load in the candidate data too
-
+## Generate the input data
 my.tokenizer <- function(x) NGramTokenizer(x, Weka_control(min = 2,
                                                            max = 2)
                                            )
-
-corpus.district.tdm <- TermDocumentMatrix(corpus.district,
+corpus <-
+corpus.district.tdm <- TermDocumentMatrix(corpus,
                                           control=list(tokenize=my.tokenizer,
                                             weighting=weightTf)
                                           )
+agg.fac.dist <- house.data$state_dist
 
 sparseness <- 0.99
 corpus.district.tdm.sparse <-
@@ -105,19 +94,19 @@ df.district.topics$state.district <-
   generate.state.district.code(df.district.topics$state,
                                df.district.topics$district
                                )
-                               
+
 
 topic.term.map <-
   sapply(1:ncol(terms.lda.district),
          function(x){
-           
+
            terms <- paste(terms.lda.district[, this.topic],
                           collapse="."
                           )
            out <- c(x, ,
                     terms
                     )
-           
+
          }
          )
 topic.term.map <- t(topic.term.map)
@@ -161,12 +150,12 @@ write.csv(df.district.topics,
 ## Other? Can we automate quality checks of some kind?
 ## Print some diagnostics? table by party, state,
 ## compare to topic coherence from prior day?
-## 
+##
 
 
 ## Print diagnostics to a log file
 ## Note /  need to make sure that we're subsetting the
-## house data correctly here. 
+## house data correctly here.
 log.file.name <- paste("topicmodel.log.file.",
                        Sys.Date(),
                        ".log",
