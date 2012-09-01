@@ -1,6 +1,7 @@
 #!/usr/local/bin/Rscript --verbose
 
-setwd("~/projects/twitter_election2012")
+#setwd("~/projects/twitter_election2012")
+setwd("/mnt/fwire_80/twitter_election2012")
 
 print("Acquiring data")
 source("./code/acquire/cron_search_job.R")
