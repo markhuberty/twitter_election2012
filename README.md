@@ -30,7 +30,8 @@ working paper cited above.
 
 Technical notes
 ----------------------------
-People wanting to experiment with the algorithms should note the following issues
+People wanting to experiment with the algorithms should note the following issues:
+
 1. The algorithms depend on the SuperLearner package and only work with the 1.x series. This work used SuperLearner v.1.1-18. 
 2. The voteshare predictor uses the arm library. More recent versions changed some underlying function names. The algorithms require arm version 1.3-07. 
 3. The code will run on the latest version of R (2.15.1) but a bug in 2.15.0 will prevent `arm_1.3-07` from installing. 
