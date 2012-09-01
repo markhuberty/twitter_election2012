@@ -1,6 +1,5 @@
 ## Generates predictions for the win/loss outcomes
 library(SuperLearner)
-library(ggplot2)
 library(foreach)
 library(glmnet)
 library(e1071)
@@ -9,13 +8,19 @@ library(randomForest)
 source("./code/util/twitter.R")
 load("./algorithms/binary.linear.predictor.RData")
 
-filename <- "tdm.sparse.2.aggregate.scale.linear"
+filename <- "tdm.sparse.2.winloss.aggregate.scale.linear"
 load(paste("./data/doc_term_mat/", filename, ".RData",  sep=""))
 
 ## Make sure that the input and output data are in the same order (st-dist)
 ## TODO Check that this is still right in the flow-through
 corpus.district.tdm.mat <-
   tdm.sparse[order(rownames(tdm.sparse)),]
+
+## Take out zero-valued rows
+which.nonzero <- which(rowSums(as.matrix(corpus.district.tdm.mat)) > 0)
+
+if(length(which.nonzero) > 0)
+  corpus.district.tdm.mat <-  corpus.district.tdm.mat[which.nonzero, ]
 
 ## Retitle columns with generic names to handle a
 ## superlearner bug that hates spaces in colnames
@@ -26,6 +31,7 @@ rm(new.names)
 
 ## Scaled the data so columns are all mean=0, sd=1
 corpus.district.tdm.mat.scale <- scale(corpus.district.tdm.mat)
+corpus.district.tdm.mat.scale[is.nan(corpus.district.tdm.mat.scale)] <- 0
 
 ## Get the out-of-sample prediction accuracy estimates
 SL.predict.discrete <- predict(train.superlearner.discrete,

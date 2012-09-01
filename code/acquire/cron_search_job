@@ -1,7 +1,3 @@
-#!/usr/bin/Rscript --verbose
-
-#setwd("~/Documents/twitter_election2012/data")
-setwd("/Users/markhuberty/Documents/Research/Papers/twitter_election2012/")
 source("./code/util/twitter.R")
 
 require(doMC)
@@ -9,6 +5,7 @@ require(multicore)
 require(foreach)
 require(rjson)
 require(RCurl)
+
 ## The master data. Only first.time is here
 load("./data/cron.input.data.RData")
 

@@ -1,6 +1,5 @@
 ## Generates predictions for the win/loss outcomes
 library(SuperLearner)
-library(ggplot2)
 library(foreach)
 library(glmnet)
 library(e1071)
@@ -13,9 +12,14 @@ filename <- "tdm.sparse.2.voteshare.aggregate.scale.uniform"
 load(paste("./data/doc_term_mat/", filename, ".RData",  sep=""))
 
 ## Make sure that the input and output data are in the same order (st-dist)
-## TODO Check that this is still right in the flow-through
 corpus.district.tdm.mat <-
   tdm.sparse[order(rownames(tdm.sparse)),]
+
+which.nonzero <- which(rowSums(as.matrix(corpus.district.tdm.mat)) > 0)
+
+if(length(which.nonzero) > 0)
+  corpus.district.tdm.mat <-  corpus.district.tdm.mat[which.nonzero, ]
+
 
 ## Retitle columns with generic names to handle a
 ## superlearner bug that hates spaces in colnames
@@ -35,6 +39,7 @@ SL.predict.cont <- predict(train.superlearner.cont,
                            newdata=corpus.district.tdm.mat.scale
                            )
 
+print("Prediction successful, generating output")
 outfile <- data.frame(rownames(corpus.district.tdm.mat),
                       SL.predict.cont$fit
                       )
@@ -64,6 +69,7 @@ master.outfile.timestamp <-
         ".csv"
         )
 
+print("Saving voteshare prediction output")
 ## Save the generic prediction
 write.csv(outfile,
           file=generic.outfile.name,
@@ -80,7 +86,6 @@ if(file.exists(master.outfile.name))
                            stringsAsFactors=FALSE,
                            colClasses=c("character",
                              "numeric",
-                             "integer",
                              "Date")
                            )
     master.outfile <- rbind(master.csv,

@@ -4,7 +4,7 @@
 ## concatenating tweets. Cat'ing tweets gives the
 ## problem of bigrams at the junction
 
-setwd("~/Documents/twitter_election2012")
+
 
 library(tm)
 library(RWeka)

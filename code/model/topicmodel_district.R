@@ -97,6 +97,18 @@ for(col in 1:ncol(df.district.topics))
 
   }
 
+
+topicmodel.ldamodel.filename <-
+  paste("./data/topic_models/district_lda_model.",
+        Sys.Date(),
+        ".RData",
+        sep=""
+        )
+save(tm.lda.district,
+     file=topicmodel.ldamodel.filename
+     )
+
+
 topic.district.filename <-
   paste("./data/topic_models/district.topic.bigrams.",
         Sys.Date(),
@@ -136,7 +148,7 @@ if(file.exists(topic.district.master.filename))
 
 ## Print diagnostics to a log file
 
-log.file.name <- paste("./data/topic_models/topicmodel.log.file.",
+log.file.name <- paste("./logs/topic_models/topicmodel.log.file.",
                        Sys.Date(),
                        ".log",
                        sep=""
@@ -147,12 +159,14 @@ print("Topic term labels:\n")
 print(topic.labels)
 
 print("Topic distribution by state:\n")
-table(df.district.topics$state,
-      df.district.topics$topic.num
+print(table(df.district.topics$state,
+            df.district.topics$topic.num
+            )
       )
 
 print("Topic distribution by incumbent party:\n")
-table(as.factor(df.district.topics$incumbent_party),
-      df.district.topics$topic.num
+print(table(as.factor(df.district.topics$incumbent_party),
+            df.district.topics$topic.num
+            )
       )
 sink()

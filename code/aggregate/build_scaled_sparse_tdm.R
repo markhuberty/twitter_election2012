@@ -5,9 +5,6 @@
 ## problem of bigrams at the junction
 
 
-setwd("~/Documents/twitter_election2012")
-
-
 library(Matrix)
 library(foreach)
 
