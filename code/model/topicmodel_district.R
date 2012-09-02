@@ -1,8 +1,9 @@
 library(tm)
 library(topicmodels)
 library(RWeka)
+library(stringr)
 
-load("./data/doc_term_mat/tdm.sparse.2.topicmodel.aggregate.RData")
+load("./data/doc_term_mat/tdm.sparse.1.topicmodel.aggregate.RData")
 candidates <- read.csv("./data/candidates.final.2012.csv")
 districts <- read.csv("./data/districts.csv",
                       stringsAsFactors=FALSE
@@ -10,18 +11,10 @@ districts <- read.csv("./data/districts.csv",
 
 ## Drop specialized phrases that aren't useful here
 idx.drop <- which(colnames(tdm.sparse) %in%
-                  c("rep dcanddummy",
-                    "rep rcanddummy",
-                    "support dcanddummy",
-                    "support rcanddummy",
-                    "congressman dcanddummy",
-                    "congressman rcanddummy",
-                    "rcanddummy congress",
-                    "dcanddummy congress",
-                    "candidate dcanddummy",
-                    "candidate rcanddummy",
-                    "congresswoman dcanddummy",
-                    "congresswoman rcanddummy"
+                  c("congressman",
+                    "congresswoman",
+                    "rep",
+                    "candidate"
                     )
                   )
 tdm.sparse <- tdm.sparse[,-idx.drop]
@@ -64,6 +57,9 @@ topic.labels <- apply(terms.lda.district,
                       2,
                       function(x) paste(x, collapse="|")
                       )
+
+## Drop the "dummy" language here for decency's sake
+topic.labels <- str_replace_all(topic.labels, "dummy", "")
 topics.lda.district <- topics(tm.lda.district)
 
 df.district.topics <- cbind(rownames(tdm.sparse),
@@ -113,38 +109,42 @@ save(tm.lda.district,
 
 
 topic.district.filename <-
-  paste("./data/topic_models/district.topic.bigrams.",
+  paste("./data/topic_models/district.topic.unigrams.",
         Sys.Date(),
         ".csv",
         sep=""
         )
 topic.district.master.filename <-
-  "./data/topic_models/district.topic.bigrams.master.csv"
+  "./data/topic_models/district.topic.unigrams.master.csv"
 
 write.csv(df.district.topics,
           file=topic.district.filename,
-          row.names=FALSE
+          row.names=FALSE,
+          fileEncoding="UTF-8"
           )
 
 if(file.exists(topic.district.master.filename))
   {
 
     master <- read.csv(topic.district.master.filename,
-                       colClasses=colClasses
+                       colClasses=colClasses,
+                       fileEncoding="UTF-8"
                        )
     master <- rbind(master,
                     df.district.topics
                     )
     write.csv(master,
               file=topic.district.master.filename,
-              row.names=FALSE
+              row.names=FALSE,
+              fileEncoding="UTF-8"
               )
 
   }else{
 
     write.csv(df.district.topics,
               file=topic.district.master.filename,
-              row.names=FALSE
+              row.names=FALSE,
+              fileEncoding="UTF-8"
               )
 
   }
