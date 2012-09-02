@@ -26,6 +26,10 @@ idx.drop <- which(colnames(tdm.sparse) %in%
                   )
 tdm.sparse <- tdm.sparse[,-idx.drop]
 
+## Drop rows with no data
+which.nonzero <- which(rowSums(as.matrix(tdm.sparse)) >0)
+tdm.sparse <- tdm.sparse[which.nonzero,]
+
 ## Set the k value to maximize the log-lik of the model
 ## in held-out data
 seed <- 3423
@@ -64,7 +68,7 @@ topics.lda.district <- topics(tm.lda.district)
 
 df.district.topics <- cbind(rownames(tdm.sparse),
                             topics.lda.district,
-                            topic.labels[topics.lda.district]
+                            as.character(topic.labels[topics.lda.district])
                             )
 
 colnames(df.district.topics) <- c("state_dist",
@@ -80,23 +84,22 @@ df.district.topics <- merge(df.district.topics,
                             )
 df.district.topics$date <- Sys.Date()
 
-colClasses <- c("character",
-                "integer",
-                "character",
-                "character",
-                "integer",
-                "character",
-                "character",
-                "Date"
-                )
-
-for(col in 1:ncol(df.district.topics))
-  {
-
-    class(df.district.topics[,col]) <- colClasses[col]
-
-  }
-
+df.district.topics$state_dist <-
+  as.character(df.district.topics$state_dist)
+df.district.topics$topic.num <-
+  as.integer(as.character(df.district.topics$topic.num))
+df.district.topics$topic.label <-
+  as.character(df.district.topics$topic.label)
+df.district.topics$state <-
+  as.character(df.district.topics$state)
+df.district.topics$district <-
+  as.integer(as.character(df.district.topics$district))
+df.district.topics$incumbent_party <-
+  as.character(df.district.topics$incumbent_party)
+df.district.topics$rating <-
+  as.character(df.district.topics$rating)
+df.district.topics$date <-
+  as.Date(as.character(df.district.topics$date))
 
 topicmodel.ldamodel.filename <-
   paste("./data/topic_models/district_lda_model.",

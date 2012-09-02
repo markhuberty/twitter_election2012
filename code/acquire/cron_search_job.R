@@ -6,7 +6,7 @@ require(foreach)
 require(rjson)
 require(RCurl)
 
-debug <- FALSE
+debug <- TRUE
 ## The master data. Only first.time is here
 load("./data/cron.input.data.RData")
 
@@ -87,7 +87,13 @@ results.fields.desired <- c("profile_image_url",
                             "source"
                             )
 
-
+cron.filename <- paste("./data/cron_output/cron.json.list.",
+                       Sys.Date(),
+                       ".RData"
+                       )
+save(file.today,
+     file=cron.filename
+     )
 ## Parse the file immediately
 file.today.parsed <-
   parse.json.out(file.today,

@@ -19,9 +19,6 @@ load("./data/tm_winloss_dict.RData")
 load("./data/tm_voteshare_dict.RData")
 tm.voteshare.dictionary <- Dictionary(tm.voteshare.dictionary)
 tm.winloss.dictionary <- Dictionary(tm.winloss.dictionary)
-rm(tm.voteshare.dict,
-   rm.winloss.dict
-   )
 
 ## Load the candidate data
 candidates <- read.csv("./data/candidates.final.2012.csv")
