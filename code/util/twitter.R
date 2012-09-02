@@ -126,7 +126,15 @@ parse.json <- function(infile){
     lapply(1:length(infile[[x]]), function(y){
 
       ##print(x)
-      try(fromJSON(infile[[x]][[y]]))
+      out <- try(fromJSON(infile[[x]][[y]]))
+
+      if(grepl("Error", out))
+        {
+          print(x)
+          print(y)
+          out <- FALSE
+        }
+      return(out)
 
     }
            )
@@ -139,6 +147,7 @@ parse.json <- function(infile){
 
 }
 
+## DEPRECATED SEPT 2012
 ## FUNCTION parse.json.results
 ## Input: a parsed JSON object or objects in list form
 ## Operation: converts the "results" portion of each list element to
@@ -151,38 +160,38 @@ parse.json <- function(infile){
 ## multicore operations are supported to improve on processing time
 ## for very large datasets
 
-parse.json.results <- function(in.json){
+## parse.json.results <- function(in.json){
 
-  list.results <- lapply(1:length(in.json), function(x){
-    lapply(1:length(in.json[[x]]), function(y){
+##   list.results <- lapply(1:length(in.json), function(x){
+##     lapply(1:length(in.json[[x]]), function(y){
 
-      ## Check to make sure theinre are results
-                                  # I CHANGED THE BELOW LINES SO THE ATOMIC VECTOR
-                                  # ERROR WOULDN"T OCCUR: ['results'] instead of $results. - Hillary
-                                  # ... Not sure if the breaks something. ...y]]['results'] always
-                                  # comes out NULL.
-      if(length(in.json[[x]][[y]]['results']) !=0){
+##       ## Check to make sure theinre are results
+##                                   # I CHANGED THE BELOW LINES SO THE ATOMIC VECTOR
+##                                   # ERROR WOULDN"T OCCUR: ['results'] instead of $results. - Hillary
+##                                   # ... Not sure if the breaks something. ...y]]['results'] always
+##                                   # comes out NULL.
+##       if(length(in.json[[x]][[y]]['results']) !=0){
 
-        out <- mclapply(1:length(in.json[[x]][[y]]['results']), function(z){
+##         out <- mclapply(1:length(in.json[[x]][[y]]['results']), function(z){
 
-          try(unlist(in.json[[x]][[y]]['results'][[z]], recursive=FALSE))
+##           try(unlist(in.json[[x]][[y]]['results'][[z]], recursive=FALSE))
 
-        }
-                        )
+##         }
+##                         )
 
 
-      }
+##       }
 
-    }
+##     }
 
-           )
-  }
+##            )
+##   }
 
-                         )
+##                          )
 
-  return(list.results)
+##   return(list.results)
 
-}
+## }
 
 ## FUNCTION parse.json.out
 ## Input: a list of JSON objects resulting from a twitter query
@@ -202,84 +211,118 @@ parse.json.results <- function(in.json){
 parse.json.out <- function(infile, results.fields.desired,
                            unique.cand.id, num.cores=2){
 
-  ## First parse the JSON file to a list
-  ## Each element in the list contains the results of one query
-  ## list.json <- lapply(1:length(infile), function(x){
-  ##   #print(x)
-  ##   fromJSON(infile[[x]])
-
-  ## }
-  ##                     )
-
-
   registerDoMC(num.cores)
-
   list.json <- parse.json(infile)
 
-  list.results <- parse.json.results(list.json)
+  ## Generates (2012) this structure:
+  ## cand:results_page:results
 
-  print(paste("Total number of results", length(list.results)))
+  out <- foreach(cand.idx=1:length(list.json), .combine=rbind) %:%
+    foreach(page.idx=1:length(list.json[[cand.idx]]),
+            .combine=rbind,
+            .errorhandling="remove") %dopar%{
 
-  mat <- matrix(ncol=(length(results.fields.desired) + 1))
-  colnames(mat) <- c(results.fields.desired,
-                     "unique_cand_id"
-                     )
+          cand.id <- unique.cand.id[cand.idx]
+          results <- list.json[[cand.idx]][[page.idx]]$results
+          results.parsed <- foreach(x=results, .combine=rbind) %do% {
 
-  obs.counter <- 0
+            x[results.fields.desired]
 
-  ## Core routine that takes the parsed json object (now a list of
-  ## lists) and unlists it into a data frame with the desired fields
-  ## and the input fields for state and candidate.
+          }
+          results.parsed <- as.data.frame(results.parsed)
+          results.parsed$unique_cand_id <- cand.id
+          return(results.parsed)
 
-  mat <- foreach(i=1:length(list.results), .combine=rbind) %:%
-    foreach(z=1:length(list.results[[i]]), .combine=rbind) %:%
-      foreach(j=1:length(list.results[[i]][[z]]), .combine=rbind) %dopar% {
+    }
 
-        entry <- unlist(list.results[[i]][[z]][[j]])[results.fields.desired]
-        #print(length(entry))
-        #print(class(entry))
+  return(out)
 
-        if(is.null(entry)){
-          entry <- rep(NA, length(results.fields.desired))
-          out <- c(as.character(entry),
-                   unique.cand.id[i]
-                   )
-                                        #break
-        }else{
-          out <- c(as.character(entry),
-                   unique.cand.id[i]
-                   )
-          #print(length(out))
-        }
-
-                                        #obs.counter <-  obs.counter + 1
-                                        #print(paste("Formatted observation number:", obs.counter))
-        #print(out)
-                                        #as.character(out)
-        out
-      }
-                                        #print(paste("results matrix dim=",dim(mat)))
-
-
-
-  ## Convert to a data frame
-  mat <- as.data.frame(mat)    # HAS TOO MANY ROWS. NAmes vector longer that matrix height.
-  ## print(summary(mat))
-  ## print(names(mat))
-  names(mat) <- c(results.fields.desired,
-                  "unique_cand_id"
-                  )
-  rownames(mat) <- sapply(1:dim(mat)[1], function(x){
-
-    paste("row", x, sep="")
-
-  }
-                          )
-  mat.results <<- mat
-  ## End formatting of "results" data
-  #return(out.final)
-  return(mat.results)
 }
+
+## DEPRECATED SEPT 2012
+## parse.json.out <- function(infile, results.fields.desired,
+##                            unique.cand.id, num.cores=2){
+
+##   ## First parse the JSON file to a list
+##   ## Each element in the list contains the results of one query
+##   ## list.json <- lapply(1:length(infile), function(x){
+##   ##   #print(x)
+##   ##   fromJSON(infile[[x]])
+
+##   ## }
+##   ##                     )
+
+
+##   registerDoMC(num.cores)
+
+##   list.json <- parse.json(infile)
+
+##   list.results <- parse.json.results(list.json)
+
+##   print(paste("Total number of results", length(list.results)))
+
+##   mat <- matrix(ncol=(length(results.fields.desired) + 1))
+##   colnames(mat) <- c(results.fields.desired,
+##                      "unique_cand_id"
+##                      )
+
+##   obs.counter <- 0
+
+##   ## Core routine that takes the parsed json object (now a list of
+##   ## lists) and unlists it into a data frame with the desired fields
+##   ## and the input fields for state and candidate.
+
+##   mat <- foreach(i=1:length(list.results), .combine=rbind) %:%
+##     foreach(z=1:length(list.results[[i]]), .combine=rbind) %:%
+##       foreach(j=1:length(list.results[[i]][[z]]), .combine=rbind) %dopar% {
+
+##         entry <- unlist(list.results[[i]][[z]][[j]])[results.fields.desired]
+##         #print(length(entry))
+##         #print(class(entry))
+
+##         if(is.null(entry)){
+##           entry <- rep(NA, length(results.fields.desired))
+##           out <- c(as.character(entry),
+##                    unique.cand.id[i]
+##                    )
+##                                         #break
+##         }else{
+##           out <- c(as.character(entry),
+##                    unique.cand.id[i]
+##                    )
+##           #print(length(out))
+##         }
+
+##                                         #obs.counter <-  obs.counter + 1
+##                                         #print(paste("Formatted observation number:", obs.counter))
+##         #print(out)
+##                                         #as.character(out)
+##         out
+##       }
+##                                         #print(paste("results matrix dim=",dim(mat)))
+
+
+
+##   ## Convert to a data frame
+##   mat <- as.data.frame(mat)    # HAS TOO MANY ROWS. NAmes vector longer that matrix height.
+##   ## print(summary(mat))
+##   ## print(names(mat))
+##   names(mat) <- c(results.fields.desired,
+##                   "unique_cand_id"
+##                   )
+##   rownames(mat) <- sapply(1:dim(mat)[1], function(x){
+
+##     paste("row", x, sep="")
+
+##   }
+##                           )
+##   mat.results <<- mat
+##   ## End formatting of "results" data
+##   #return(out.final)
+##   return(mat.results)
+## }
+
+
 
 ## FUNCTION count.query.results
 ## Input: the "results" part of the json list containing one element for
@@ -485,21 +528,20 @@ get.twitter.url <- function(type, term, rpp, page, since.date,
     ## 502 Bad Gateway: Twitter is down or being upgraded.
     ## 503 Service Unavailable: The Twitter servers are up, but overloaded with requests. Try again later.
 
-    http.errors <- c("Not Modified", "Bad Request", "Unauthorized",
-                     "Forbidden", "Not Found", "Not Acceptable",
-                     "Enhance Your Calm", "Internal Server Error",
-                     "Bad Gateway", "Service Unavailable"
-                     )
-
+    known.errors <- c("DOCTYPE HTML PUBLIC",
+                      "whale.png"
+                      )
+    error.regex <- paste(known.errors,
+                         collapse="|"
+                         )
     ## Error handling for (in order) Twitter HTTP errors,
     ## the twitter Fail Whale,
     ## and CURL errors from RCURL
     ## Steadily increments the wait time between re-tries,
     ## as recommended in the twitter API documentation
     ## This is a hack.
-    while(grepl("DOCTYPE HTML PUBLIC", query.out) |
-          grepl("whale.png", query.out) |
-          grepl("Error in curlPerform", query.out)
+    while(any(grepl(error.regex, query.out)) |
+          class(query.out) == "try-error"
           )
       {
         print(query.out)

@@ -89,7 +89,8 @@ results.fields.desired <- c("profile_image_url",
 
 cron.filename <- paste("./data/cron_output/cron.json.list.",
                        Sys.Date(),
-                       ".RData"
+                       ".RData",
+                       sep=""
                        )
 save(file.today,
      file=cron.filename
