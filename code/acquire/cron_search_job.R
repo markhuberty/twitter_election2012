@@ -55,7 +55,7 @@ if(first.time==1)
   file.today <- search.twitter.pages(terms=pull.list,
                                      rpp=100,
                                      delay.interval=1,
-                                     since.date=Sys.Date()-1,
+                                     since.date=Sys.Date()-7,
                                      write.out=FALSE
                                      )
 
