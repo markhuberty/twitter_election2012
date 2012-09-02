@@ -6,7 +6,7 @@ require(foreach)
 require(rjson)
 require(RCurl)
 
-debug <- TRUE
+debug <- FALSE
 ## The master data. Only first.time is here
 load("./data/cron.input.data.RData")
 

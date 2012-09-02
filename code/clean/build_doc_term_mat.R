@@ -242,19 +242,27 @@ save(corpus, house.data,
 ## Generate the by-tweet doc-term matrices
 ## 1 for topic modeling
 ## 2 for prediction
-ngrams <- c(1,2)
-dictionaries <- list(tm.voteshare.dictionary,
-                     tm.winloss.dictionary,
-                     NULL
-                     )
-names(dictionaries) <- c("voteshare",
-                         "winloss",
-                         "topicmodel"
-                         )
+## Can do better here. Need a format that just provides the terms I
+## absolutly need.
+## Order of args: type, ngram(s), dictionary, 
+voteshare.properties <- list("voteshare", 2, tm.voteshare.dictionary)
+winloss.properties <- list("winloss", 2, tm.winloss.dictionary)
+topicmodel.properties <- list("topicmodel",1, NULL)
+names(voteshare.properties) <-
+  names(winloss.properties) <-
+  names(topicmodel.properties) <- c("type", "ngram", "dict")
 
-for(i in ngrams){
-  for(d in names(dictionaries)){
+properties.list <- list(voteshare.properties,
+                        winloss.properties,
+                        topicmodel.properties
+                        )
+names(properties.list) <- c("voteshare",
+                            "winloss",
+                            "topicmodel"
+                            )
 
+for(l in propreties.list){
+  for(n in properties.list$ngram){
     my.tokenizer <-
       function(x) NGramTokenizer(x, Weka_control(min = i, max = i))
 
@@ -262,15 +270,15 @@ for(i in ngrams){
     tdm.corpus <- DocumentTermMatrix(corpus,
                                      control=list(tokenize=my.tokenizer,
                                        weighting=weightTf,
-                                       dictionary=dictionaries[[d]])
+                                       dictionary=l$dict)
                                      )
 
     ## Generate the date-stamped file
     today <- Sys.Date()
     timestamp.file.name <- paste("./data/doc_term_mat/generic.tdm.",
-                                 i,
+                                 n,
                                  ".",
-                                 d,
+                                 l$type,
                                  ".",
                                  today,
                                  ".RData",
@@ -279,9 +287,9 @@ for(i in ngrams){
 
     ## Generate the generic file
     generic.file.name <- paste("./data/doc_term_mat/generic.tdm.",
-                               i,
+                               n,
                                ".",
-                               d,
+                               l$type,
                                ".RData",
                                sep=""
                                )

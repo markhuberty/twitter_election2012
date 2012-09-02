@@ -1,6 +1,7 @@
 require(Matrix)
 require(foreach)
-
+library(tm)
+library(doMC)
 
 ## New functions for scaling
 ## This set of functions defines scaling options for the
@@ -176,7 +177,9 @@ generate.sparse.tdm <- function(tdm,
                                 time.var=NULL,
                                 scale.fun=NULL,
                                 scale.params=NULL,
-                                sparse.filter=TRUE
+                                sparse.filter=TRUE,
+                                tfidf.filter=FALSE,
+                                tfidf.threshold=0.01
                                 ){
 
   sparse.corpus <- sparseMatrix(i=tdm$i,
@@ -185,12 +188,8 @@ generate.sparse.tdm <- function(tdm,
                                 dims=c(tdm$nrow,
                                   tdm$ncol)
                                 )
-
-  ## row.count <- length(unique(agg.fac))
-
-  ## col.sparseness <- colSums(sparse.corpus > 0) / row.count
-  print("Sparse matrix constructed")
   print(dim(sparse.corpus))
+  ## row.count <- length(unique(agg.fac))
 
   if(sparse.filter)
     {
@@ -203,6 +202,16 @@ generate.sparse.tdm <- function(tdm,
       print(dim(sparse.corpus))
     }
 
+  ## NOTE: faster to filter on sparseness first; dim reduction
+  ## helps a lot
+  if(tfidf.filter)
+    {
+      print("Filtering on tfidf")
+      sparse.corpus <- select.tfidf(sparse.corpus, tfidf.threshold, col.names)
+      col.names <- colnames(sparse.corpus)
+    }
+
+  
   if(scale)
     sparse.corpus <- scale.weights.by.time(time.var=time.var,
                                            sparse.mat=sparse.corpus,
@@ -254,15 +263,21 @@ generate.sparse.tdm <- function(tdm,
 weight.tfidf <- function(mat){
 
   doc.word.counts <- rowSums(mat)
+  docs <- nrow(mat)
+  word.doc.freqs <- colSums(mat > 0) + 1
+  idf <- log(docs / word.doc.freqs)
 
-  idf <- log(nrow(mat) / (colSums(mat > 0) + 1))
-
-  tf <- mat / doc.word.counts
-
-  tfidf <- t(t(tf)*idf)
-
-  colnames(tfidf) <- colnames(mat)
-  rownames(tfidf) <- rownames(mat)
+  tfidf <- sapply(1:ncol(mat), function(x){
+    this.col <- mat[,x]
+    idf <- idf[x]
+    tf <- this.col / doc.word.counts
+    out <- tf * idf
+    return(mean(out, na.rm=TRUE))
+        
+  })
+  ## idf <- log(nrow(mat) / (colSums(mat > 0) + 1))  
+  ## tf <- mat / doc.word.counts
+  ## tfidf <- t(t(tf)*idf)
   return(tfidf)
 
 }
@@ -273,19 +288,21 @@ weight.tfidf <- function(mat){
 ## Returns a doc-term matrix of terms whose mean tfidf
 ## was > a supplied threshold value
 
-select.tfidf <- function(mat, threshold){
+select.tfidf <- function(mat, threshold, col.names){
 
   stopifnot(threshold > 0)
-
-  mat.tfidf <- weight.tfidf(mat)
-
+  
+  mean.tfidf <- weight.tfidf(mat)
   ## Take averages by column
-
-  mean.tfidf <- colMeans(mat.tfidf)
+  print(summary(mean.tfidf))
 
   idx <- which(mean.tfidf > threshold)
+  
+  print("N terms passed idf filter:")
+  print(length(idx))
 
   mat.out <- mat[,idx]
+  colnames(mat.out) <- col.names[idx]
 
   return(mat.out)
 

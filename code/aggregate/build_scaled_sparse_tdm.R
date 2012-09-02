@@ -15,14 +15,16 @@ source("./code/util/twitter.R")
 ## or 1 + x^2
 scale.params <- list(NULL, c(1, 0), c(1, 0, 1, 2), c(0.08))
 scale.type <- c("scale.uniform", "scale.linear")
-purposes <- c("voteshare", "winloss", "topicmodel")
+purposes <- c("voteshare",
+              "winloss",
+              "topicmodel")
 type <- c("aggregate", "byweek")
 
 ## Generate the
 ngrams <- c(1,2)
 for(p in purposes){
   for(i in ngrams){
-
+    print(p)
     file.in <- paste("./data/doc_term_mat/generic.tdm.",
                      i,
                      ".",
@@ -61,21 +63,22 @@ for(p in purposes){
             tdm.sparse <-
               generate.sparse.tdm(tdm.corpus,
                                   agg.fac=agg.fac.list[[j]],
-                                  initial.threshold=0,
+                                  initial.threshold=4,
                                   final.threshold=0.01,
                                   col.names=col.names,
                                   scale=FALSE,
                                   time.var=as.Date(house.data$created_at),
                                   scale.fun="scale.uniform",
                                   scale.params=scale.params[[k]],
+                                  tfidf.filter=TRUE,
+                                  tfidf.threshold=0.001,
+                                  sparse.filter=TRUE
                                   )
-
+            col.names <- colnames(tdm.sparse)
+            print("matrix constructed, converting to dtm")
             ## Filter by tfidf for interest
-            tdm.sparse <- select.tfidf(tdm.sparse,
-                                       threshold=0.01
-                                       )
             tdm.sparse <- sparse.to.dtm(tdm.sparse)
-
+            
             filename <- paste("./data/doc_term_mat/tdm.sparse.",
                               i,
                               ".",
@@ -85,7 +88,7 @@ for(p in purposes){
                               ".RData",
                               sep=""
                               )
-
+            
             print(dim(tdm.sparse))
 
             save(house.data,

@@ -26,16 +26,17 @@ tdm.sparse <- tdm.sparse[which.nonzero,]
 ## Set the k value to maximize the log-lik of the model
 ## in held-out data
 seed <- 3423
-k.values <- seq(4, 30, 2)
+k.values <- seq(20, 40, 2)
 n.train <- floor(0.9 * nrow(tdm.sparse))
-sample.vec <- sample(1:nrow(tdm.sparse),
-                     n.train,
-                     replace=FALSE
-                     )
-train.data <- tdm.sparse[sample.vec, ]
-test.data <- tdm.sparse[-sample.vec, ]
-
+set.seed(seed)
 loglik.trial <- lapply(k.values, function(x){
+  sample.vec <- sample(1:nrow(tdm.sparse),
+                       n.train,
+                       replace=FALSE
+                       )
+  train.data <- tdm.sparse[sample.vec, ]
+  test.data <- tdm.sparse[-sample.vec, ]
+
   out <- LDA(train.data, k=x, control=list(seed=seed))
   predict.out <- LDA(train.data, model=out,
                      estimate.beta=FALSE
@@ -52,14 +53,17 @@ tm.lda.district <- LDA(tdm.sparse,
                        control=list(seed=seed)
                        )
 
-terms.lda.district <- terms(tm.lda.district, 5)
+terms.lda.district <- terms(tm.lda.district, 10)
 topic.labels <- apply(terms.lda.district,
                       2,
                       function(x) paste(x, collapse="|")
                       )
 
 ## Drop the "dummy" language here for decency's sake
+topic.labels <- str_replace_all(topic.labels, "speakerdummy", "house_speaker")
+topic.labels <- str_replace_all(topic.labels, "leaderdummy", "senate_leader")
 topic.labels <- str_replace_all(topic.labels, "dummy", "")
+
 topics.lda.district <- topics(tm.lda.district)
 
 df.district.topics <- cbind(rownames(tdm.sparse),
@@ -79,6 +83,16 @@ df.district.topics <- merge(df.district.topics,
                             all.y=FALSE
                             )
 df.district.topics$date <- Sys.Date()
+
+colClasses <- c("character",
+                "integer",
+                "character",
+                "character",
+                "integer",
+                "character",
+                "character",
+                "Date"
+                )
 
 df.district.topics$state_dist <-
   as.character(df.district.topics$state_dist)
