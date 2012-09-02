@@ -69,6 +69,11 @@ for(p in purposes){
                                   scale.fun="scale.uniform",
                                   scale.params=scale.params[[k]],
                                   )
+
+            ## Filter by tfidf for interest
+            tdm.sparse <- select.tfidf(tdm.sparse,
+                                       threshold=0.01
+                                       )
             tdm.sparse <- sparse.to.dtm(tdm.sparse)
 
             filename <- paste("./data/doc_term_mat/tdm.sparse.",
