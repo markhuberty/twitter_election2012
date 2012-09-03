@@ -1,0 +1,50 @@
+#+TITLE: Output data structure
+#+AUTHOR: Mark Huberty
+
+* Baseline data
+- In the primary =./data/= directory
+- =candidates.csv=: candidate data; =state_dist= is the 4-character
+  state:district code 
+- =districts.csv= district-level data, including incumbent party and
+  the NYT district partisan rating
+
+* Prediction data
+- In the =./predictions/= directory
+- =./predictions/vote_share= holds the vote share
+  prediction. =continuous.prediction.master.csv= provides the master
+  file with all predictions by date. Fieldnames are defined as:
+  - =state_district=: (character) the 4-character state-district code
+  - =dem_vote_share=: (float) the predicted Democratic vote share
+  - =prediction.date=: (character) the prediction date, formatted YYYY-MM-DD
+- =./predictions/win_loss= holds the equivalent win/loss data. The
+  master file is titled =binary.prediction.master.csv'. Fieldnames are
+  defined as:
+  - =state_district=: (character) the 4-character state-district code
+  - =prob.d.win=: (float) the predicted Democratic win probability
+  - =binary.d.win=: (integer) the 1/0 Democratic win outcome
+  - =prediction.date=: (character) the date of the prediction, formatted YYYY-MM-DD
+
+Both directories also contain time-stamped files for recordkeeping
+purposes. But the =master= files should be read for display purposes.
+
+* Topic model data
+- In the =./data/topic_models/= directory
+- The file =district.topic.unigrams.master.csv= holds the 1-gram based
+  topic model output at the district level. Fieldnames are defined as:
+  - =state_dist=: (character) the 4-character state-district index
+  - =topic.num=: (integer) the integer value of the topic assigned to that district
+  - =topic.label=: (character) the top 10 words assigned to that topic,
+    pipe-separated. As in =this|is|a|topic|=, etc.
+  - =state=: the state name
+  - =district=: (integer) the Congressional district
+  - =incumbent_party=: (character) the incumbent party in the district. One of
+    *D* or *R*. Note that
+    the district can have an incumbent party even if there's no
+    incumbent candidate
+  - =rating=: (character) the NYT partisan rating for the district
+  - =date=: (character) the date of the topic model construction
+
+Note that the number of topics can change on a day-to-day basis. We
+determine the topics from the data. As of 1 Sept 2012, the topic count
+is bounded in the 20-40 range. 
+
