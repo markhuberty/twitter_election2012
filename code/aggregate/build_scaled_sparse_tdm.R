@@ -13,138 +13,156 @@ source("./code/util/twitter.R")
 
 ## scale here equiv to either 0 + 1x (linear)
 ## or 1 + x^2
-scale.params <- list(NULL, c(1, 0), c(1, 0, 1, 2), c(0.08))
+
 scale.type <- c("scale.uniform", "scale.linear")
 purposes <- c("voteshare",
               "winloss",
               "topicmodel")
 type <- c("aggregate", "byweek")
 
-## Generate the
-ngrams <- c(1,2)
-for(p in purposes){
-  for(i in ngrams){
-    print(p)
-    file.in <- paste("./data/doc_term_mat/generic.tdm.",
-                     i,
-                     ".",
-                     p,
-                     ".RData",
-                     sep=""
-                     )
+## Generate the necessary params
+voteshare.agg.params <- list(purpose="voteshare",
+                             ngram=2,
+                             agg="aggregate",
+                             scale=TRUE,
+                             scale.type="scale.uniform",
+                             scale.params=NULL,
+                             initial.threshold=NULL,
+                             final.threshold=NULL,
+                             tfidf.threshold=NULL,
+                             tfidf.threshold=NULL,
+                             tfidf.filter=FALSE,
+                             sparse.filter=FALSE
+                             )
+winloss.agg.params <- list(purpose="winloss",
+                           ngram=2,
+                           agg="aggregate",
+                           scale=TRUE,
+                           scale.type="scale.linear",
+                           scale.params=c(1,0),
+                           initial.threshold=NULL,
+                           final.threshold=NULL,
+                           tfidf.threshold=NULL,
+                           tfidf.filter=FALSE,
+                           sparse.filter=FALSE
+                           )
+voteshare.byweek.params <- list(purpose="voteshare",
+                                ngram=2,
+                                agg="byweek",
+                                scale=TRUE,
+                                scale.type="scale.uniform",
+                                scale.params=NULL,
+                                initial.threshold=NULL,
+                                final.threshold=NULL,
+                                tfidf.threshold=NULL,
+                                tfidf.threshold=NULL,
+                                tfidf.filter=FALSE,
+                                sparse.filter=FALSE
+                                )
+winloss.byweek.params <- list(purpose="winloss",
+                              ngram=2,
+                              agg="byweek",
+                              scale=TRUE,
+                              scale.type="scale.linear",
+                              scale.params=c(1,0),
+                              initial.threshold=NULL,
+                              final.threshold=NULL,
+                              tfidf.threshold=NULL,
+                              tfidf.filter=FALSE,
+                              sparse.filter=FALSE
+                              )
+topicmodel.params <- list(purpose="topicmodel",
+                          ngram=1,
+                          agg="aggregate",
+                          scale=TRUE,
+                          scale.type="scale.uniform",
+                          scale.params=NULL,
+                          initial.threshold=4,
+                          final.threshold=0.01,
+                          tfidf.threshold=0.001,
+                          tfidf.filter=TRUE,
+                          sparse.filter=TRUE
+                          )
 
-    load(file.in)
-
-
-    agg.fac.wk <- paste(house.data$state_dist,
-                        house.data$tweet.age,
-                        sep="."
+properties.list <- list(voteshare.agg.params,
+                        winloss.agg.params,
+                        voteshare.byweek.params,
+                        winloss.byweek.params,
+                        topicmodel.params
                         )
 
-    agg.fac.dist <- house.data$state_dist
+for(l in properties.list){
 
+  print(l$purpose)
+  print(l$scale.type)
+  file.in <- paste("./data/doc_term_mat/generic.tdm.",
+                   l$ngram,
+                   ".",
+                   l$purpose,
+                   ".RData",
+                   sep=""
+                   )
 
-    ## Don't aggregate by week if scaling, doesn't make sense
-    agg.fac.list <- list(agg.fac.dist,
-                         agg.fac.wk
-                         )
-    scale.agg <- c(TRUE, FALSE)
+  load(file.in)
 
+  col.names <- unlist(tdm.corpus$dimnames[2])
 
-    col.names <- unlist(tdm.corpus$dimnames[2])
+  if(l$agg == "aggregate")
+    {
+      agg.fac <- house.data$state_dist
+    }else if(l$agg == "byweek"){
+      agg.fac <- paste(house.data$state_dist,
+                       house.data$tweet.age,
+                       sep="."
+                       )
+    }
+  
+      
+  tdm.sparse <-
+    generate.sparse.tdm(tdm.corpus,
+                        agg.fac=agg.fac,
+                        initial.threshold=l$initial.threshold,
+                        final.threshold=l$final.threshold,
+                        col.names=col.names,
+                        scale=l$scale,
+                        scale.fun=l$scale.type,
+                        scale.params=l$scale.params,
+                        time.var=as.Date(house.data$created_at),
+                        tfidf.filter=l$tfidf.filter,
+                        tfidf.threshold=l$tfidf.threshold,
+                        sparse.filter=l$sparse.filter
+                        )
+  print(rownames(tdm.sparse))
+  col.names <- colnames(tdm.sparse)
+  row.names <- rownames(tdm.sparse)
 
+  if(l$purpose=="topicmodel")
+    {
+      print("matrix constructed, converting to dtm")
+      tdm.sparse <- sparse.to.dtm(tdm.sparse)
+      print(tdm.sparse$dimnames)
+    }
 
-    for(j in 1:length(agg.fac.list))
-      { ## Agg levels
-
-        if(p=="topicmodel")
-          {
-
-            tdm.sparse <-
-              generate.sparse.tdm(tdm.corpus,
-                                  agg.fac=agg.fac.list[[j]],
-                                  initial.threshold=4,
-                                  final.threshold=0.01,
-                                  col.names=col.names,
-                                  scale=FALSE,
-                                  time.var=as.Date(house.data$created_at),
-                                  scale.fun="scale.uniform",
-                                  scale.params=scale.params[[k]],
-                                  tfidf.filter=TRUE,
-                                  tfidf.threshold=0.001,
-                                  sparse.filter=TRUE
-                                  )
-            col.names <- colnames(tdm.sparse)
-            print("matrix constructed, converting to dtm")
-            ## Filter by tfidf for interest
-            tdm.sparse <- sparse.to.dtm(tdm.sparse)
-            
-            filename <- paste("./data/doc_term_mat/tdm.sparse.",
-                              i,
-                              ".",
-                              p,
-                              ".",
-                              type[j],
-                              ".RData",
-                              sep=""
-                              )
-            
-            print(dim(tdm.sparse))
-
-            save(house.data,
-                 tdm.sparse,
-                 file=filename
-                 )
-
-            rm(tdm.sparse)
-            gc()
-
-
-          }else{
-
-            for(k in 1:length(scale.type))
-              { ## scaling types
-                tdm.sparse <-
-                  generate.sparse.tdm(tdm.corpus,
-                                      agg.fac=agg.fac.list[[j]],
-                                      initial.threshold=NULL,
-                                      final.threshold=NULL,
-                                      col.names=col.names,
-                                      scale=scale.agg[j],
-                                      time.var=as.Date(house.data$created_at),
-                                      scale.fun=scale.type[k],
-                                      scale.params=scale.params[[k]],
-                                      sparse.filter=FALSE
-                                      )
-
-                filename <- paste("./data/doc_term_mat/tdm.sparse.",
-                                  i,
-                                  ".",
-                                  p,
-                                  ".",
-                                  type[j],
-                                  ".",
-                                  scale.type[k],
-                                  ".RData",
-                                  sep=""
-                                  )
-
-                print(dim(tdm.sparse))
-
-                save(house.data,
-                     tdm.sparse,
-                     file=filename
-                     )
-
-                rm(tdm.sparse)
-                gc()
-
-              }
-          }
-      }
-
-  }
-  rm(house.data, tdm.corpus)
+  filename <- paste("./data/doc_term_mat/tdm.sparse.",
+                    l$ngram,
+                    ".",
+                    l$purpose,
+                    ".",
+                    l$agg,
+                    ".",
+                    l$scale.type,
+                    ".RData",
+                    sep=""
+                    )
+  
+  print(dim(tdm.sparse))
+  
+  save(house.data,
+       tdm.sparse,
+       file=filename
+       )
+  
+  rm(tdm.sparse)
   gc()
 
 }

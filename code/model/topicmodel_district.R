@@ -3,7 +3,7 @@ library(topicmodels)
 library(RWeka)
 library(stringr)
 
-load("./data/doc_term_mat/tdm.sparse.1.topicmodel.aggregate.RData")
+load("./data/doc_term_mat/tdm.sparse.1.topicmodel.aggregate.scale.uniform.RData")
 candidates <- read.csv("./data/candidates.final.2012.csv")
 districts <- read.csv("./data/districts.csv",
                       stringsAsFactors=FALSE
