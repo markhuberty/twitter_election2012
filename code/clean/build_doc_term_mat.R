@@ -262,17 +262,20 @@ names(properties.list) <- c("voteshare",
                             )
 
 for(l in properties.list){
-  for(n in properties.list$ngram){
-    my.tokenizer <-
-      function(x) NGramTokenizer(x, Weka_control(min = n, max = n))
+  for(n in l$ngram){
 
+    tokenizer.control <- Weka_control(min=n, max=n)
+    my.tokenizer <-
+      function(x) NGramTokenizer(x, tokenizer.control)
+    print(l)
+    print(n)
     ## Build up the corpus with the appropriate dictionary
     tdm.corpus <- DocumentTermMatrix(corpus,
                                      control=list(tokenize=my.tokenizer,
                                        weighting=weightTf,
                                        dictionary=l$dict)
                                      )
-
+    
     ## Generate the date-stamped file
     today <- Sys.Date()
     timestamp.file.name <- paste("./data/doc_term_mat/generic.tdm.",
@@ -293,7 +296,8 @@ for(l in properties.list){
                                ".RData",
                                sep=""
                                )
-
+    print(generic.file.name)
+    print(timestamp.file.name)
     ## Save the raw corpus as both a generic file and a date-stamped
     ## file for recordkeeping
     save(tdm.corpus,
