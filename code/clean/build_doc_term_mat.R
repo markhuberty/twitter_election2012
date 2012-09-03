@@ -261,10 +261,10 @@ names(properties.list) <- c("voteshare",
                             "topicmodel"
                             )
 
-for(l in propreties.list){
+for(l in properties.list){
   for(n in properties.list$ngram){
     my.tokenizer <-
-      function(x) NGramTokenizer(x, Weka_control(min = i, max = i))
+      function(x) NGramTokenizer(x, Weka_control(min = n, max = n))
 
     ## Build up the corpus with the appropriate dictionary
     tdm.corpus <- DocumentTermMatrix(corpus,
