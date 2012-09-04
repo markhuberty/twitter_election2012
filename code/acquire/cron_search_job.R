@@ -77,7 +77,7 @@ names(file.today) <- pull.list
 results.fields.desired <- c("profile_image_url",
                             "created_at",
                             "from_user",
-                            "metadata.result_type",
+                            #"metadata.result_type",
                             "to_user_id",
                             "text",
                             "id",
@@ -136,6 +136,7 @@ if(first.time==1)
   master.cron.file <- rbind(master.cron.file,
                             file.today.parsed.en
                             )
+  master.cron.file <- unique(master.cron.file)
 }
 #since.id <- max(file.today.parsed.en$id)
 
