@@ -157,7 +157,8 @@ corpus <- tolower(house.data$text)
 
 ## Hack out noisy results
 noise.indicator.terms <- c("kicker",
-                           "orleans"
+                           "orleans",
+                           "yankee"
                            )
 which.noise <- str_detect(house.data$text,
                           paste(noise.indicator.terms,
