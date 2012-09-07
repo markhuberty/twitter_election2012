@@ -4,6 +4,7 @@ library(foreach)
 library(glmnet)
 library(e1071)
 library(randomForest)
+library(reshape)
 
 source("./code/util/twitter.R")
 load("./algorithms/voteshare.linear.predictor.RData")
@@ -63,6 +64,8 @@ generic.outfile.name <-
 
 master.outfile.name <-
   "./predictions/vote_share/continuous.prediction.master.csv"
+master.outfile.wide.name <-
+  "./predictions/vote_share_continuous.prediction.master.wide.csv"
 master.outfile.timestamp <-
   paste("./predictions/vote_share/continuous.prediction.master",
         Sys.Date(),
@@ -91,13 +94,41 @@ if(file.exists(master.outfile.name))
     master.outfile <- rbind(master.csv,
                             outfile
                             )
+    master.outfile.melt <- melt(master.outfile,
+                                id.vars=c("state_district", "prediction.date")
+                                )
+    master.outfile.wide <- cast(master.outfile.melt,
+                                state_district ~ prediction.date,
+                                "mean",
+                                na.rm=TRUE
+                                )
+
     write.csv(master.outfile,
               file=master.outfile.name,
               row.names=FALSE
               )
+    write.csv(master.outfile.wide,
+              file=master.outfile.wide.name,
+              row.names=FALSE
+              )
   }else{
+    master.outfile.melt <- melt(outfile,
+                                id.vars=c("state_district", "prediction.date"),
+                                "mean",
+                                na.rm=TRUE
+                                )
+    master.outfile.wide <- cast(master.outfile.melt,
+                                state_district ~ prediction.date,
+                                "mean",
+                                na.rm=TRUE
+                                )
+
     write.csv(outfile,
               file=master.outfile.name,
+              row.names=FALSE
+              )
+    write.csv(master.outfile.wide,
+              file=master.outfile.wide.name,
               row.names=FALSE
               )
   }

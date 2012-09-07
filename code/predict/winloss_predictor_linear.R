@@ -4,6 +4,8 @@ library(foreach)
 library(glmnet)
 library(e1071)
 library(randomForest)
+library(reshape)
+
 
 source("./code/util/twitter.R")
 load("./algorithms/binary.linear.predictor.RData")
@@ -61,6 +63,7 @@ generic.outfile.name <-
                               )
 
 master.outfile.name <- "./predictions/win_loss/binary.prediction.master.csv"
+master.outfile.wide.name <- "./predictions/win_loss/binary.prediction.master.wide.csv"
 master.outfile.timestamp <-
   paste("./predictions/win_loss/binary.prediction.master",
         Sys.Date(),
@@ -89,13 +92,37 @@ if(file.exists(master.outfile.name))
     master.outfile <- rbind(master.csv,
                             outfile
                             )
+    master.outfile.melt <- melt(master.outfile,
+                                id.vars=c("state_district", "prediction.date")
+                                )
+    master.outfile.cast <- cast(master.outfile.melt,
+                                state_district ~ prediction.date + variable,
+                                "mean",
+                                na.rm=TRUE
+                                )
+    
     write.csv(master.outfile,
               file=master.outfile.name,
               row.names=FALSE
               )
+    write.csv(master.outfile.wide,
+              file=master.outfile.wide.name,
+              row.names=FALSE
+              )
   }else{
+    master.outfile.melt <- melt(outfile,
+                                id.vars=c("state_district", "prediction.date")
+                                )
+    master.outfile.wide <- cast(master.outfile.melt,
+                                state_district ~ prediction.date + variable
+                                )
+
     write.csv(outfile,
               file=master.outfile.name,
+              row.names=FALSE
+              )
+    write.csv(master.outfile.wide,
+              file=master.outfile.wide.name,
               row.names=FALSE
               )
   }
