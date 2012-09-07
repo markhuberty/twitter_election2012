@@ -14,7 +14,7 @@ def fix_party_names(input_party, party_name_dict):
 
 party_name_dict = {'D':['Dem[\.]*', 'DEM[\.]*', 'Democrat'],
                    'R':['Rep[\.]*', 'REP[\.]*', 'Republican',
-                        'GOP'],
+                    'GOP'],
                    'I':['NPD']
                    }
 

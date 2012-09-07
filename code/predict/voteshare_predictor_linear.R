@@ -65,7 +65,7 @@ generic.outfile.name <-
 master.outfile.name <-
   "./predictions/vote_share/continuous.prediction.master.csv"
 master.outfile.wide.name <-
-  "./predictions/vote_share_continuous.prediction.master.wide.csv"
+  "./predictions/vote_share/continuous.prediction.master.wide.csv"
 master.outfile.timestamp <-
   paste("./predictions/vote_share/continuous.prediction.master",
         Sys.Date(),
