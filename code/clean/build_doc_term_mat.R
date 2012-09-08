@@ -139,7 +139,8 @@ corpus <- tolower(house.data$text)
 print("Encoding fixed")
 
 ## Hack out noisy results
-noise.indicator.terms <- c("kicker",
+noise.indicator.terms <- c("mlb",
+                           "kicker",
                            "orleans",
                            "yankee",
                            "nfl",
