@@ -6,6 +6,9 @@
 
 
 
+print(options("encoding"))
+print(Sys.getlocale("LC_CTYPE"))
+
 library(tm)
 library(RWeka)
 library(foreach)
@@ -22,7 +25,7 @@ tm.winloss.dictionary <- Dictionary(tm.winloss.dictionary)
 
 ## Load the candidate data
 candidates <- read.csv("./data/candidates.final.2012.csv")
-
+print("Inputs loaded")
 ## This looks like:
 ## first.name
 ## last.name
@@ -76,6 +79,8 @@ tweet.age <- max(tweet.age) - tweet.age
 house.data$tweet.age <- tweet.age
 rm(tweet.age)
 
+print("Dates and ages formatted")
+
 house.data$unique_cand_id <-
   as.character(house.data$unique_cand_id)
 candidates$unique_cand_id <-
@@ -95,6 +100,8 @@ house.data <- merge(house.data,
                     all.x=TRUE,
                     all.y=FALSE
                     )
+
+print("Merge complete")
 
 ## Then make sure we are only looking at races with
 ## data for both candidates.
@@ -117,48 +124,28 @@ house.data <- house.data[st.dist %in% has.chal,]
 rm(idx.chal, st.dist, has.chal)
 gc()
 
-## Shouldn't need this stuff anymore
-## house.data <- house.data[,c("state",
-##                             "district",
-##                             "party",
-##                             "first.name.x",
-##                             "last.name.x",
-##                             "created.at.date",
-##                             "from_user_id",
-##                             "to_user_id",
-##                             "text",
-##                             "pctVote",
-##                             "d.victory",
-##                             "tweet.age",
-##                             "chal.idx"
-##                             )
-##                          ]
-
-## names(house.data) <- c("state",
-##                        "district",
-##                        "party",
-##                        "first.name",
-##                        "last.name",
-##                        "created.at.date",
-##                        "from.user.id",
-##                        "to.user.id",
-##                        "text",
-##                        "pctVote",
-##                        "d.victory",
-##                        "tweet.age",
-##                        "chal.idx"
-##                        )
+print("Challengers subsetted")
 
 
 ## Now clear out the junk in the tweets themselves
 ## To prevent an error when certain tweets have non-unicode-8 characters, encode to latin-1.
-Encoding(house.data$text) <- "latin1"
+#Encoding(house.data$text) <- "latin1"
+house.data$text <- iconv(house.data$text,
+                         "UTF-8",
+                         "ASCII",
+                         sub=" "
+                         )
 corpus <- tolower(house.data$text)
+print("Encoding fixed")
 
 ## Hack out noisy results
 noise.indicator.terms <- c("kicker",
                            "orleans",
-                           "yankee"
+                           "yankee",
+                           "nfl",
+                           "yankees",
+                           "baseball",
+                           "football"
                            )
 which.noise <- str_detect(house.data$text,
                           paste(noise.indicator.terms,
@@ -166,8 +153,12 @@ which.noise <- str_detect(house.data$text,
                                 )
                           )
 
+print("Tweet count before noise exclusion")
+print(nrow(house.data))
 corpus <- corpus[!which.noise]
 house.data <- house.data[!which.noise, ] # Added !
+print("Tweet count after noise exclusion")
+print(nrow(house.data))
 
 ## Process the corpus in stages to format names, offices
 ## Remove http://* and usernames

@@ -220,23 +220,49 @@ parse.json.out <- function(infile, results.fields.desired,
   out <- foreach(cand.idx=1:length(list.json), .combine=rbind) %:%
     foreach(page.idx=1:length(list.json[[cand.idx]]),
             .combine=rbind,
-            .errorhandling="remove") %dopar%{
+            .errorhandling="remove") %dopar% {
+              
+              cand.id <- unique.cand.id[cand.idx]
 
-          cand.id <- unique.cand.id[cand.idx]
-          results <- list.json[[cand.idx]][[page.idx]]$results
-          results.parsed <- foreach(x=results, .combine=rbind) %do% {
+              results <- list.json[[cand.idx]][[page.idx]]$results
 
-            x[results.fields.desired]
+              results.parsed <- foreach(x=results, .combine=rbind) %do% {
+                
+                this.result <- unlist(x)
 
-          }
-          results.parsed <- as.data.frame(results.parsed)
-          results.parsed$unique_cand_id <- cand.id
-          return(results.parsed)
+                this.out <- rep(NA, length(results.fields.desired))
+                names(this.out) <- results.fields.desired
+                for(f in 1:length(results.fields.desired))
+                  {
+                    if(results.fields.desired[f] %in% names(this.result))
+                      {
+                        idx <-
+                          which(names(this.result) == results.fields.desired[f])
+                        this.out[f] <- this.result[idx]
+                      }
+                  }
 
-    }
+                this.out["unique_cand_id"] <- cand.id
+                this.out
+              }
 
+              ## if(is.matrix(results.parsed))
+              ##   {
+              ##     print(class(results.parsed))
+              ##     print(nrow(results.parsed))
+              ##     results.parsed <- as.data.frame(results.parsed)
+                  
+              ##     results.parsed$unique_cand_id <- cand.id
+
+              ##   }else{
+              ##     print(class(results.parsed))
+              ##     results.parsed["unique_cand_id"] <- cand.id
+              ##   }
+              return(results.parsed)
+            }
+  out <- as.data.frame(out, stringsAsFactors=FALSE)
   return(out)
-
+  
 }
 
 ## DEPRECATED SEPT 2012
@@ -509,7 +535,10 @@ get.twitter.url <- function(type, term, rpp, page, since.date,
                                         #print(url)
                                         #out[[i]] <- try(getURL(url))
 
-    query.out <- try(getURL(url))
+    query.out <- try(getURL(url,
+                            .encoding=CE_UTF8
+                            )
+                     )
 
     ## Error handling for single requests
     ## Handles either HTTP error headers or the fail whale
@@ -549,10 +578,14 @@ get.twitter.url <- function(type, term, rpp, page, since.date,
 
         ## Scale the wait based on the error response chain
         Sys.sleep(5 + 5 * (error.counter - 1))
-        query.out <- try(getURL(url))
+        query.out <- try(getURL(url,
+                                .encoding="UTF-8"
+                                )
+                         )
 
       }
-
+    print(class(query.out))
+    print(Encoding(query.out))
     return(query.out)
 
   }

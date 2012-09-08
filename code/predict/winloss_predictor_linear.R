@@ -95,7 +95,7 @@ if(file.exists(master.outfile.name))
     master.outfile.melt <- melt(master.outfile,
                                 id.vars=c("state_district", "prediction.date")
                                 )
-    master.outfile.cast <- cast(master.outfile.melt,
+    master.outfile.wide <- cast(master.outfile.melt,
                                 state_district ~ prediction.date + variable,
                                 "mean",
                                 na.rm=TRUE
