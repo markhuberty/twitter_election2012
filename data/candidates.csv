@@ -282,15 +282,15 @@ LA03,LA,3,225,Louisiana,,none,none,none,none,none,none
 LA04,LA,4,226,Louisiana,,none,none,none,none,none,none
 LA05,LA,5,227,Louisiana,,none,none,none,none,none,none
 LA06,LA,6,228,Louisiana,,none,none,none,none,none,none
-MA01,MA,1,233,Massachusetts,2012-09-06,none,none,none,none,none,none
-MA02,MA,2,234,Massachusetts,2012-09-06,none,none,none,none,none,none
-MA03,MA,3,235,Massachusetts,2012-09-06,none,none,none,none,none,none
-MA04,MA,4,236,Massachusetts,2012-09-06,none,none,none,none,none,none
-MA05,MA,5,243,Massachusetts,2012-09-06,none,none,none,none,none,none
-MA06,MA,6,237,Massachusetts,2012-09-06,none,none,none,none,none,none
-MA07,MA,7,238,Massachusetts,2012-09-06,none,none,none,none,none,none
-MA08,MA,8,239,Massachusetts,2012-09-06,none,none,none,none,none,none
-MA09,MA,9,242,Massachusetts,2012-09-06,none,none,none,none,none,none
+MA01,MA,1,233,Massachusetts,,none,none,none,none,none,none
+MA02,MA,2,234,Massachusetts,,none,none,none,none,none,none
+MA03,MA,3,235,Massachusetts,,none,none,none,none,none,none
+MA04,MA,4,236,Massachusetts,,none,none,none,none,none,none
+MA05,MA,5,243,Massachusetts,,none,none,none,none,none,none
+MA06,MA,6,237,Massachusetts,,none,none,none,none,none,none
+MA07,MA,7,238,Massachusetts,,none,none,none,none,none,none
+MA08,MA,8,239,Massachusetts,,none,none,none,none,none,none
+MA09,MA,9,242,Massachusetts,,none,none,none,none,none,none
 MD01,MD,1,246,Maryland,,Andy Harris,R,True,Andy,Harris,MD01_R_Harris
 MD01,MD,1,246,Maryland,,Wendy Rosen,D,False,Wendy,Rosen,MD01_D_Rosen
 MD02,MD,2,247,Maryland,,Nancy Jacobs,R,False,Nancy,Jacobs,MD02_R_Jacobs
