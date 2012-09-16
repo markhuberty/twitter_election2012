@@ -146,13 +146,19 @@ noise.indicator.terms <- c("mlb",
                            "nfl",
                            "yankees",
                            "baseball",
-                           "football"
+                           "football",
+                           "orioles"
                            )
-which.noise <- str_detect(house.data$text,
-                          paste(noise.indicator.terms,
-                                collapse="|"
-                                )
-                          )
+noise.indicator.terms <- c(paste(" ", noise.indicator.terms, sep=""),
+                           paste(noise.indicator.terms, " ", sep="")
+                           )
+
+which.noise <- sapply(noise.indicator.terms,
+                      function(x) str_detect(corpus,
+                                             fixed(x)
+                                             )
+                      )
+which.noise <- rowSums(which.noise) > 0
 
 print("Tweet count before noise exclusion")
 print(nrow(house.data))
