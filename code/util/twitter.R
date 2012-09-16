@@ -437,7 +437,7 @@ get.twitter.url <- function(type, term, rpp, page, since.date,
                                         #out[[i]] <- try(getURL(url))
 
     query.out <- try(getURL(url,
-                            .encoding=CE_UTF8
+                            .encoding="UTF-8"
                             )
                      )
 
