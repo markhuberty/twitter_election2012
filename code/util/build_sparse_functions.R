@@ -134,6 +134,8 @@ aggregate.by <- function(fac, sparse.mat, binary=FALSE){
 
   unique.factor <- unique(fac)
 
+  ## Convert to triplet for efficiency
+  sparse.mat <- as(sparse.mat, "dgTmatrix")
   mat.out <- foreach(i=1:length(unique.factor), .combine="rbind") %do% {
 
     idx.factor <- which(fac == unique.factor[i])
@@ -152,6 +154,8 @@ aggregate.by <- function(fac, sparse.mat, binary=FALSE){
   if(binary)
     mat.out <- mat.out > 0
 
+  ## Convert back for consistency
+  mat.out <- as(mat.out, "dgCMatrix") 
   mat.out <- list(unique.factor, mat.out)
   return(mat.out)
 

@@ -136,6 +136,7 @@ if(first.time==1)
   master.cron.file <- rbind(master.cron.file,
                             file.today.parsed.en
                             )
+
   master.cron.file <- unique(master.cron.file)
 }
 #since.id <- max(file.today.parsed.en$id)
