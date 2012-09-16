@@ -91,6 +91,11 @@ if(file.exists(master.outfile.name))
                              "numeric",
                              "Date")
                            )
+
+    ## Discard prior predictions for this date
+    master.csv <-
+      master.csv[master.csv$prediction.date != Sys.Date(), ]
+    
     master.outfile <- rbind(master.csv,
                             outfile
                             )
