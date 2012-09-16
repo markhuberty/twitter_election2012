@@ -1,4 +1,5 @@
 
+# setwd(...)
 
 generateStats <- function(tweets=master.cron.file, plot=FALSE){
   
@@ -74,3 +75,7 @@ generateStats <- function(tweets=master.cron.file, plot=FALSE){
 }
 
 stats <- generateStats(master.cron.file, plot=FALSE)
+
+for(i in 1:length(stats)){
+  write.csv(stats[i], paste(names(stats)[i], ".csv", sep=""))
+}
