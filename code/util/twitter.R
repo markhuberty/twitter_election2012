@@ -1,4 +1,4 @@
-## Infrastructure code to grab the twitter stream
+# Infrastructure code to grab the twitter stream
 ## 2012 Congressional Election
 ## Mark Huberty
 ## Begun 27 May 2010
@@ -1376,7 +1376,10 @@ sparse.to.dtm <- function(sparseM, weighting=weightTf){
 generateStats <- function(tweets=master.cron.file, plot=FALSE){
   
   # Tweets per day
-  time <- strptime(unlist(tweets$created_at), format="%a, %d %b %Y %H:%M:%S +0000")
+  print(dim(tweets))
+  created.at.vec <- unlist(tweets$created_at)
+  print(class(created.at.vec))
+  time <- strptime(created.at.vec, format="%a, %d %b %Y %H:%M:%S +0000")
   time <- format(time, format="%m-%d-%y")
   per.day <- table(time)
   
@@ -1410,11 +1413,10 @@ generateStats <- function(tweets=master.cron.file, plot=FALSE){
                as.matrix(per.party.district) 
                # ,(per.day.district.party)
   )
-  names(info) <- c("Tweets per Day", "Tweets per District", "Tweets per Candidate",
-                   "Tweets per Candidate per day", "Tweets per Candidate per District",
-                   "Tweets per Party", "Tweets per Party per Day", "Tweets per Party Per District"
-                   # ,"Tweets per Day per District per Party"
-  )
+  names(info) <- c("tweets_per_day", "tweets_per_district", "tweets_per_candidate", "tweets_per_candidate_per_day",
+                   "tweets_per_candidate_per_district", "tweets_per_party", "tweets_per_party_per_day",
+                   "tweets_per_party_per_district"
+                   )
   
   
   if(plot==TRUE){

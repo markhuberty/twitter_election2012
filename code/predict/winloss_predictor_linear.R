@@ -103,7 +103,7 @@ if(file.exists(master.outfile.name))
                                 )
     master.outfile.wide <- cast(master.outfile.melt,
                                 state_district ~ prediction.date + variable,
-                                "mean",
+                                fun.aggregate="mean",
                                 na.rm=TRUE
                                 )
     
@@ -120,7 +120,8 @@ if(file.exists(master.outfile.name))
                                 id.vars=c("state_district", "prediction.date")
                                 )
     master.outfile.wide <- cast(master.outfile.melt,
-                                state_district ~ prediction.date + variable
+                                state_district ~ prediction.date + variable,
+                                fun.aggregate="mean"
                                 )
 
     write.csv(outfile,

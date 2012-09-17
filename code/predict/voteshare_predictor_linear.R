@@ -104,7 +104,7 @@ if(file.exists(master.outfile.name))
                                 )
     master.outfile.wide <- cast(master.outfile.melt,
                                 state_district ~ prediction.date,
-                                "mean",
+                                fun.aggregate="mean",
                                 na.rm=TRUE
                                 )
 
@@ -119,12 +119,12 @@ if(file.exists(master.outfile.name))
   }else{
     master.outfile.melt <- melt(outfile,
                                 id.vars=c("state_district", "prediction.date"),
-                                "mean",
+                                fun.aggregate="mean",
                                 na.rm=TRUE
                                 )
     master.outfile.wide <- cast(master.outfile.melt,
                                 state_district ~ prediction.date,
-                                "mean",
+                                fun.aggregate="mean",
                                 na.rm=TRUE
                                 )
 
