@@ -137,7 +137,7 @@ for(l in properties.list){
                         scale=l$scale,
                         scale.fun=l$scale.type,
                         scale.params=l$scale.params,
-                        time.var=time.var
+                        time.var=time.var,
                         tfidf.filter=l$tfidf.filter,
                         tfidf.threshold=l$tfidf.threshold,
                         sparse.filter=l$sparse.filter
@@ -176,3 +176,4 @@ for(l in properties.list){
   gc()
 
 }
+print("Aggregation complete")
