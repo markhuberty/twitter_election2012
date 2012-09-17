@@ -115,7 +115,7 @@ scale.weights.by.time <- function(time.var,
 
   ## Scale with the weight function
   scale.factor <- fun(x, scale.params)
-
+  scale.factor <- as(scale.factor, "sparseVector")
   print("Scaling factor computed")
 
   sparse.mat <- sparse.mat * scale.factor
@@ -131,7 +131,7 @@ scale.weights.by.time <- function(time.var,
 ## presence rather than frequency
 ## Returns a doc-term matrix with unique(fac) rows, and the factor labels
 aggregate.by <- function(fac, sparse.mat, binary=FALSE){
-
+  print("Aggregating")
   unique.factor <- unique(fac)
 
   ## Convert to triplet for efficiency
