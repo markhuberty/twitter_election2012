@@ -116,8 +116,18 @@ for(l in properties.list){
                        sep="."
                        )
     }
+
+  time.var <- as.Date(house.data$created_at)
+  if(l$purpose=="topicmodel")
+    {
+      ## Only model the last 5 days worth of stuff
+      period.min <- Sys.Date() - 5
+      in.period <- time.var >= period.min
+      agg.fac <- agg.fac[in.period]
+      tdm.corpus <- tdm.corpus[in.period]
+      time.var <- time.var[in.period]
+    }
   
-      
   tdm.sparse <-
     generate.sparse.tdm(tdm.corpus,
                         agg.fac=agg.fac,
@@ -127,7 +137,7 @@ for(l in properties.list){
                         scale=l$scale,
                         scale.fun=l$scale.type,
                         scale.params=l$scale.params,
-                        time.var=as.Date(house.data$created_at),
+                        time.var=time.var,
                         tfidf.filter=l$tfidf.filter,
                         tfidf.threshold=l$tfidf.threshold,
                         sparse.filter=l$sparse.filter
@@ -166,3 +176,4 @@ for(l in properties.list){
   gc()
 
 }
+print("Aggregation complete")
