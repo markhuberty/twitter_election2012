@@ -2,6 +2,7 @@ require(Matrix)
 require(foreach)
 library(tm)
 library(doMC)
+library(inline) ## for Rcpp
 
 ## New functions for scaling
 ## This set of functions defines scaling options for the
@@ -83,7 +84,7 @@ scale.sigmoid <- function(vec, params){
 
 scale.uniform <- function(vec, params=NULL){
 
-  return(vec)
+  return(rep(1, length(vec)))
 
 }
 
@@ -99,11 +100,32 @@ scale.uniform <- function(vec, params=NULL){
 ## scale.params: a vector of parameters for the scaling
 ## function--see the function def for the order of arguments
 
+## Inline C code for scaling. Cannot do column multiplication
+## b/c of memory issues. This inlines C code to do it fast w/
+## minimal memory consumption.
+## Note the indexing nuance: i is a 0-based triplet row index vector
+## from Matrix; normally would need to add 1 but scale_vec indexed
+## starting at 0 inside the C code. So this is fine.
+rcpp.scale.src <- "
+  int row_idx;
+  for(int row=0; row < *nrow; row++) {
+
+   row_idx = i[row];
+   x[row] = x[row] * scale_vec[row_idx];
+
+}"
+rcpp.scale.sig <- signature(i="integer", nrow="integer", x="numeric", scale_vec="numeric")
+c.scale <- cfunction(sig=rcpp.scale.sig,
+                     body=rcpp.scale.src,
+                     convention=".C"
+                     )
+
 scale.weights.by.time <- function(time.var,
                                   sparse.mat,
                                   scale.fun="scale.linear",
                                   scale.params=c(1,0)
                                   ){
+  ## Convert the matrix for efficiency
 
   stopifnot(length(time.var) == nrow(sparse.mat))
 
@@ -112,14 +134,27 @@ scale.weights.by.time <- function(time.var,
 
   ## Get the weight function
   fun <- match.fun(scale.fun)
-
+  
   ## Scale with the weight function
   scale.factor <- fun(x, scale.params)
-  scale.factor <- as(scale.factor, "sparseVector")
   print("Scaling factor computed")
-
-  sparse.mat <- sparse.mat * scale.factor
-
+  ## Define the RCPP function
+  
+  sparse.mat <- as(sparse.mat, "dgTMatrix")
+  ## print(length(sparse.mat@x))
+  scaled.values <- c.scale(sparse.mat@i, length(sparse.mat@i), sparse.mat@x, scale.factor)$x
+  ## print(length(scaled.values))
+  sparse.mat@x <- scaled.values
+  sparse.mat <- as(sparse.mat, "dgCMatrix")
+  
+  ## Rejigger this so it isn't a memory hog
+  ## for(i in 1:nrow(sparse.mat))
+  ##   {
+  ##     sparse.mat[i,] <- sparse.mat[i, ] * scale.factor[i]
+  ##     sparse.mat <- drop0(sparse.mat)
+  ##   }
+  print("Scaling complete")
+  print(class(sparse.mat))
   return(sparse.mat)
 
 
@@ -135,7 +170,7 @@ aggregate.by <- function(fac, sparse.mat, binary=FALSE){
   unique.factor <- unique(fac)
 
   ## Convert to triplet for efficiency
-  sparse.mat <- as(sparse.mat, "dgTmatrix")
+  sparse.mat <- as(sparse.mat, "dgTMatrix")
   mat.out <- foreach(i=1:length(unique.factor), .combine="rbind") %do% {
 
     idx.factor <- which(fac == unique.factor[i])

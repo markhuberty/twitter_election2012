@@ -142,7 +142,7 @@ for(l in properties.list){
                         tfidf.threshold=l$tfidf.threshold,
                         sparse.filter=l$sparse.filter
                         )
-  print(rownames(tdm.sparse))
+  ## print(rownames(tdm.sparse))
   col.names <- colnames(tdm.sparse)
   row.names <- rownames(tdm.sparse)
 
@@ -150,7 +150,7 @@ for(l in properties.list){
     {
       print("matrix constructed, converting to dtm")
       tdm.sparse <- sparse.to.dtm(tdm.sparse)
-      print(tdm.sparse$dimnames)
+      ## print(tdm.sparse$dimnames)
     }
 
   filename <- paste("./data/doc_term_mat/tdm.sparse.",
