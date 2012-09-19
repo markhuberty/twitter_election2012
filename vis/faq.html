@@ -31,15 +31,22 @@
 		</header><!-- /#banner -->
 
 <section id="content" class="body">
-<div id="vt_faq_overview">
-<p><span style="padding-right:10px;">Content:</span><span style="padding-right:10px;"><a href="#vt_faq_data">Data and Sources</a></span><span style="padding-right:10px;"><a href="#vt_faq_algorithm">Algorithms</a></span><span style="padding-right:10px;"><a href="#faq_vt_topic_models">Topic Models</a></span><span style="padding-right:10px;"><a href="#faq_vt_other">Other</a></span></p>
-	
+  <div id="vt_faq_overview">
+    <p><span style="padding-right:10px;">Content:</span><span style="padding-right:10px;"><a href="#vt_faq_data">Data and Sources</a></span><span style="padding-right:10px;"><a href="#vt_faq_algorithm">Algorithms</a></span><span style="padding-right:10px;"><a href="#faq_vt_topic_models">Topic Models</a></span><span style="padding-right:10px;"><a href="#faq_vt_other">Other</a></span></p>
+    
 
 	
-  <h2><a name="intro">Introduction</h2>
+    <h2><a name="intro">Introduction</a></h2>
     <ol>
-    <li>What is <a href=""></a>Voting with your tweet</a> trying to
-    do?  </li>
+      <li>What is Voting with your tweet trying to
+      do</li>
+      <p class="vt_answer">This is first and foremost
+      an <i>experiment</i> in trying to see how well we can use
+      social media to generate election predictions across
+      cycles. The FAQ below covers many of the aspects of how we are
+      doing this, why it might work, and why it could fail completely.</p>
+      
+
     <li>How do you predict who will win in each district?</li>
     <p class="vt_answer"> We mine the Twitter data feed each night for tweets that mentioned
     each Congressional candidate in the prior 24 hours. We add those
@@ -55,13 +62,18 @@
     <li>This seems dubious. Should I trust your predictions?</li>
     <p class="vt_answer"><b> Probably not!</b> Voting with your Tweet is an experiment. We
     think this might work (we even think we might know
-    exactly why it will work). But we could fail spectacularly!M</p>
+    exactly why it will work). But we could fail spectacularly!</p>
+
     <li>If I shouldn't trust the predictions, then why are you doing
     this?</li>
+    <p class="vt_answer">As we said in the beginning, this is mostly an experiment. Lots of
+    papers have tried to predict elections after the fact. Doing this
+    publicly is as much a commitment mechanism for us as anything else.</p>
 
     <li> Who else is doing this kind of thing?</li>
 
-    <p class="vt_answer">Lots of people. See these papers if you are interested:</p>
+    <p class="vt_answer">Predicting elections with Twitter is a
+    popular thing to do. See these papers if you are interested:</p>
     <ul class="vt_answer">
       
       <li><a href="http://www.aaai.org/ocs/index.php/ICWSM/ICWSM10/paper/viewPDFInterstitial/1536/1842">O'Connor, Balasubramanyan, Routledge, and Smith</a>. From Tweets to polls: Linking text sentiment to public opinion time series. In <i>Proceedings of the International AAAI Conference on Weblogs and Social Media</i>, pages 122–129, 2010.</li>
@@ -69,12 +81,15 @@
       Characters Reflect the Political Landscape. <i>Social Science
       Computer Review</i>. 2010.</li>
       <li><a href="http://www.scribd.com/doc/31208748/Tweetminster-Predicts-Findings">Tweetminster</a>. Is word of mouth correlated to General
-      Election results? The results are in. 2010.</li>    clean up the data feed along the way
-      clean up the data feed along the way    
+      Election results? The results are in. 2010.</li>    
     </ul>
+    
+    <p class="vt_answer">Additionally, Twitter itself is running a <a href="">Presidential election
+    sentiment index</a>.</p>
 
     <li>Should I trust them?</li>
-    <p class="vt_answer">Maybe, maybe not. As Daniel Gayo-Avello of the University of Oviedo (Spain) has <a href="http://arxiv.org/abs/1204.6441">pointed</a> <a href="http://arxiv.org/pdf/1206.5851.pdf">out</a>, 
+    <p class="vt_answer">Maybe, maybe not. These papers are all very
+    smart. But as Daniel Gayo-Avello of the University of Oviedo (Spain) has <a href="http://arxiv.org/abs/1204.6441">pointed</a> <a href="http://arxiv.org/pdf/1206.5851.pdf">out</a>, 
     most of these papers (and <a href="http://markhuberty.berkeley.edu/files/twitter_paper.pdf.zip">Mark's technical report</a>)
     were <i>retrospective</i>. They looked at elections after they'd
     already happened, rather than trying to predict elections before
@@ -185,13 +200,13 @@
       <p class="vt_answer">We can now do real math on this matrix. The <a href="https://github.com/ecpolley/SuperLearner">SuperLearner</a> is what's called an ensemble machine learning algorithm: it takes a bunch of different algorithms (like random forests, support vector machines, lasso regression, and others) and uses each to try and predict the elections on their own. It then combines all of these algorithms together by weighting their individual predictions. In practice, this can result in a synthetic prediction algorithm that's more accurate than the more accurate single algorithm. 
       </p>
       
-      <p class="vt_answer">All of this work was done with the R statistical programming
-      language. If you are really curious, the code is all
+      <p class="vt_answer">All of this work was done with the <a href="http://r-project.org">R statistical programming
+      language</a>. If you are really curious, the code is all
       on <a href="http://github.com/markhuberty/twitter_election2012">Github</a>.</p>
 
       <li>So how does the finished algorithm actually work?</li>
 
-      <p class="vt_answer">We think the finished algorithm works like this: first, it
+      <p class="vt_answer">We <i>think</i> the finished algorithm works like this: first, it
       identifies from the language in a candidate's tweets whether
       they are the incumbent or challenger. Since incumbents win
       about 85% of the time, this provides a good baseline. It then
@@ -221,17 +236,28 @@
         <li>What do those <a href="">"topics"</a> mean?</li>
         <p class="vt_answer">    The topics are an attempt to learn from the Twitter stream what topics are most important to each Congressional district. We represent them as the top 5 terms that "best" represent the topic in each district. </p>
         <li>Where do those "topics" come from?</li>
-        <p class="vt_answer">    We generate the topics from the same term-frequency data that we use for the election predictions. <a href="http://en.wikipedia.org/wiki/Topic_model">Topic models</a> are a class of machine learning models that try to learn how text aggregates into categories by looking at the distribution of words in lots of documents. In our case, those documents are the sets of messages mentioning each candidate, or both candidates in a Congressional district. For a good non-technical summary of topic modeling, see <a href="http://www.cs.princeton.edu/~blei/papers/Blei2012.pdf">this paper</a> by Dave Blei. </p>
+        <p class="vt_answer">    We generate the topics from the same
+          term-frequency data that we use for the election
+          predictions. <a href="http://en.wikipedia.org/wiki/Topic_model">Topic
+            models</a> are a class of machine learning models that try to
+          infer similarities among texts by looking at the distribution of words in lots of documents. In our case, those documents are the sets of messages mentioning each candidate, or both candidates in a Congressional district. For a good non-technical summary of topic modeling, see <a href="http://www.cs.princeton.edu/~blei/papers/Blei2012.pdf">this paper</a> by Dave Blei. </p>
+        <li>How often are the topics regenerated</li>
+        <p class="vt_answer">We generate the topics daily, using the last five days of
+          messages for each candidate. If we just used today's messages,
+          we might miss candidates or districts with low daily twitter
+          volumes. Alternatively, if we used all the data we had,
+          eventually the old data would swamp the new and the topics
+          would change very little.</p> 
         <li>Do these topics actually mean anything?</li>
-        <p class="vt_answer">    Yes and no. Topic models have been very successful in doing things like categorizing magazine articles, tracking how the discussion of different scientific topics changed over time, or even helping to measure and predict <a href="">who votes for what</a> in the US Congress. But they are ultimately just a statistical construct based on the probability that terms occur together often in multiple documents. </p>
-  </ol>
+        <p class="vt_answer"> Yes and no. Topic models have been very successful in doing things like categorizing magazine articles, tracking how the discussion of different scientific topics changed over time, or even helping to measure and predict <a href="">who votes for what</a> in the US Congress. But they are ultimately just a statistical construct based on the probability that terms occur together often in multiple documents. </p>
+      </ol>
 </div>
 
 <div id="faq_vt_other">
-<h2><a href="other"></a>Other <span style="font-size:.5em;"><a href="#">Top</a></span></h2>
+  <h2><a href="other"></a>Other <span style="font-size:.5em;"><a href="#">Top</a></span></h2>
   <ol>
     <li>Who's this "we"?</li>
-<p class="vt_answer">    <a href="http://markhuberty.berkeley.edu">Mark Huberty</a> wrote the original code and paper predicting the 2010 elections. He's the one who's got egg on his face if this all falls flat! <a href="">Len DeGroot</a> built the web front-end and all of the interactive data visualization front-end. <a href="">Hillary Sanders</a> did the background work preparing for the 2012 election, including the thankless task of cross-checking all the names. She also keeps the query jobs running, and generally keeps us all sane.</p>
+    <p class="vt_answer"><a href="http://markhuberty.berkeley.edu">Mark Huberty</a> wrote the original code and paper predicting the 2010 elections. He's the one who's got egg on his face if this all falls flat! <a href="">Len DeGroot</a> built the web front-end and all of the interactive data visualization front-end. <a href="">Hillary Sanders</a> did the background work preparing for the 2012 election, including the thankless task of cross-checking all the names. She also keeps the query jobs running, and generally keeps us all sane.</p>
   </ol>
 </div>
 </section><!-- /#content -->
