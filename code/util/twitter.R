@@ -1364,6 +1364,33 @@ sparse.to.dtm <- function(sparseM, weighting=weightTf){
 }
 
 
+
+# Three functions called by generateStats
+dim1.to.json <- function(freq){
+  l <- as.list(freq)
+  j <- toJSON(l)
+  return(j)
+}
+
+dim2.to.json <- function(freq){
+  l <- lapply(1:nrow(freq), FUN=function(x){as.list(freq[x,])})
+  names(l) <- rownames(freq)
+  j <- toJSON(l)
+  return(j)
+}
+
+dim3.to.json <- function(freq){
+  l <- list()
+  for(i in 1:(dim(freq)[3])){
+    l[[i]] <- lapply(1:nrow(freq), FUN=function(x){as.list(freq[x, ,i])})
+    names(l[[i]]) <- rownames(freq)
+  }
+  names(l) <- as.character(dimnames(freq)[3][[1]])
+  j <- toJSON(l)
+  return(j)
+}
+
+
 ##' A little function to generate some summary statistics on tweets. 
 ##' @title generateStats
 ##' @param tweets The master.cron.file, i.e. the big dataframe of collected tweets
@@ -1376,75 +1403,61 @@ sparse.to.dtm <- function(sparseM, weighting=weightTf){
 generateStats <- function(tweets=master.cron.file, plot=FALSE){
   
   # Tweets per day
-  print(dim(tweets))
   created.at.vec <- unlist(tweets$created_at)
-  print(class(created.at.vec))
   time <- strptime(created.at.vec, format="%a, %d %b %Y %H:%M:%S +0000")
   time <- format(time, format="%m-%d-%y")
   per.day <- table(time)
+  per.day <- dim1.to.json(per.day)
   
   # Tweets per district
   district <- substr(tweets$unique_cand_id, 1,4)
   per.district <- table(district)
+  per.district <- dim1.to.json(per.district)
   
   # Tweets per candidate
   per.cand <- table(tweets$unique_cand_id)
+  per.cand <- dim1.to.json(per.cand)
+  
   # Tweets per candidate per day
   per.cand.day <- table(tweets$unique_cand_id, time)
+  per.cand.day <- dim2.to.json(per.cand.day)
+  
   # Tweets per candidate per district
   per.cand.district <- table(tweets$unique_cand_id, district)
+  per.cand.district <- dim2.to.json(per.cand.district)
   
   # Tweets per party
   party <- substr(tweets$unique_cand_id, 6,6)
   per.party <- table(party)
+  per.party <- dim1.to.json(party)
   per.party.day <- table(party, time)
+  per.party.day <- dim2.to.json(per.party.day)
+  
   # Tweets per party per district 
   per.party.district <- table(party, district)
-  # Tweets per party per day per district
-  # per.day.district.party <- table(time, district, party)
+  per.party.district <- dim2.to.json(per.party.district)
   
-  info <- list(as.matrix(per.day),
-               as.matrix(per.district),
-               as.matrix(per.cand),
-               as.matrix(per.cand.day),
-               as.matrix(per.cand.district),
-               as.matrix(per.party),
-               as.matrix(per.party.day),
-               as.matrix(per.party.district) 
-               # ,(per.day.district.party)
+  # Tweets per party per day per district
+  per.day.district.party <- table(time, district, party)
+  per.day.district.party <- dim3.to.json(per.day.district.party)
+  
+  info <- list((per.day),
+               (per.district),
+               (per.cand),
+               (per.cand.day),
+               (per.cand.district),
+               (per.party),
+               (per.party.day),
+               (per.party.district),
+               (per.day.district.party)
   )
+  
   names(info) <- c("tweets_per_day", "tweets_per_district", "tweets_per_candidate", "tweets_per_candidate_per_day",
                    "tweets_per_candidate_per_district", "tweets_per_party", "tweets_per_party_per_day",
-                   "tweets_per_party_per_district"
-                   )
+                   "tweets_per_party_per_district")
   
-  
-  if(plot==TRUE){
-    par(ask=TRUE)
-    
-    barplot(t(info[[1]]), col="lightblue", cex.names=.8, las=2, main="Tweets per Day", ylab="# of Tweets")
-    abline(h=mean(info[[1]]), lwd=2, col="cornflowerblue")
-    
-    barplot(t(info[[2]]), col="lightblue", axisnames=FALSE, main="Tweets per District", cex.axis=.7,
-            ylab="# of Tweets", xlab="Districts")
-    abline(h=mean(info[[2]]), lwd=2, col="cornflowerblue")
-    
-    barplot(t(info[[3]]), col="lightblue", axisnames=FALSE, main="Tweets per Candidate", cex.axis=.8,
-            ylab="# of Tweets", xlab="Candidates")
-    abline(h=mean(info[[3]]), lwd=2, col="cornflowerblue")
-    
-    barplot(as.vector(t(info[[6]])), col=c("blue", "white", "red"), cex.names=1, 
-            main="Total Tweets per Party", cex.axis=.7, ylab="# of Tweets", names.arg=c("D","I","R"))
-    
-    barplot(info[[7]], col=c("blue", "white", "red"), cex.names=.8, las=2, main="Tweets per Party Per Day",
-            ylab="# of Tweets")
-    
-    barplot(info[[8]], col=c("blue", "white", "red"), border=c("blue", "white", "red"), axisnames=FALSE,
-            main="Tweets per District Per Party", xlab="Districts", ylab="# of Tweets")
-    
-    par(ask=FALSE)
-  }
   
   return(info)
 }
+
 
