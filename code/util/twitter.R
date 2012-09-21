@@ -1461,3 +1461,59 @@ generateStats <- function(tweets=master.cron.file, plot=FALSE){
 }
 
 
+
+##' @title make.word.stats
+##' @param word.dtm Document Term Matrix of word counts by candidate. Rows=words,
+##' columns = candidates.
+##' @param words The dataframe of words from opinionfinder. If NULL, pos.or.neg may
+##' not be left NULL.
+##' @param pos.or.neg An optional vector signifying if word i in the ith row of the 
+##' word.dtm matrix is a positive (1), neutral (0), or negative word (-1). This may
+##' be left NULL, but if it is, you must pass the the variable words to the function
+##' (opinionfinder wordlist).
+##' @param  x.y.sqeeze The power to which the denominator of the x and y axis values 
+##' should be raised. The lower the number, the more your bubbles will approximate
+##' a rhombus shape on your graph. The higher the number, the further away large 
+##' word-count bubbles will appear on your graph.
+##' @return A dataframe, with columns denoting the word, x-axis value, y-axis value,
+##' wordcount, and party.
+##' @author Hillary Sanders
+make.word.stats <- function(word.dtm=NULL, words=NULL, pos.or.neg=NULL,
+                            x.y.sqeeze=.5){
+  
+  if(is.null(pos.or.neg)){
+    pos.or.neg <- sapply(rownames(word.dtm), FUN=function(x){
+      words$priorpolarity[which(x == words$word1)][1] # Note: repeated words, need to handle.
+    })
+    pos.or.neg <- as.character(pos.or.neg)
+    pos.or.neg <- gsub("negative", -1, pos.or.neg)
+    pos.or.neg <- gsub("positive", 1, pos.or.neg)
+    pos.or.neg <- gsub("nuetral", 0, pos.or.neg)
+    pos.or.neg <- gsub("both", 0, pos.or.neg)
+    pos.or.neg <- as.numeric(pos.or.neg) 
+  }
+  
+  dcount <- rowSums(word.dtm[ ,grep( "_D_", colnames(word.dtm))])
+  rcount <- rowSums(word.dtm[ ,grep( "_R_", colnames(word.dtm))])
+  
+  x.axis <- as.numeric(pos.or.neg*dcount/((dcount+rcount)^x.y.sqeeze))
+  y.axis <- as.numeric(pos.or.neg*rcount/((dcount+rcount)^x.y.sqeeze))
+  x.axis <- as.numeric(gsub(NaN, 0, x.axis))
+  y.axis <- as.numeric(gsub(NaN, 0, y.axis))
+  
+  word <- rep(rownames(word.dtm), 2)
+  party <- c(rep("R", length(rcount)), rep("D", length(dcount)))
+  
+  counts <- data.frame(word,
+                       rep(x.axis, 2),
+                       rep(y.axis, 2),
+                       rep(pos.or.neg, 2)*c(rcount, dcount),
+                       party)
+  colnames(counts) <- c("word", "x", "y", "count", "party")
+  
+  counts <- counts[order(abs(counts$count), decreasing=TRUE), ]
+  counts <- counts[order(counts$word), ]
+  
+  return(counts)
+}
+
