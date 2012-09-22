@@ -10,6 +10,11 @@ library(gdata)
 candidates <- read.csv("./data/candidates.csv",
                        stringsAsFactors=FALSE)
 
+# csv save makes "00"s into "0"s.
+candidates$district <- as.factor(sapply(candidates$district, FUN=function(x){if(x=="0"){ x <- "00"}
+                                                                             return(x)}))
+
+
 party.district.count <- table(candidates$state_dist, candidates$party)
 unopposed <- which(apply(party.district.count, 1, function(x) any(x == 0)))
 
@@ -25,11 +30,10 @@ write.csv(candidates.twoparty,
 cand.to.merge <- candidates.twoparty[,c("state_dist",
                                         "state_id",
                                         "district",
+                                        "state",
                                         "name",
                                         "party",
-                                        "incumbent",
-                                        "first_name",
-                                        "last_name"
+                                        "incumbent"
                                         )
                                      ]                              
 cand.to.merge$incumbent <- as.character(cand.to.merge$incumbent)
@@ -39,11 +43,12 @@ cand.melt <- melt(cand.to.merge,
                   id.vars=c("state_dist",
                     "state_id",
                     "district",
+                    "state",
                     "party"
                     )
                   )
 cand.cast <- cast(cand.melt,
-                  state_dist + state_id + district~
+                  state_dist + state_id + district + state~
                   party * variable
                   )
 
@@ -61,6 +66,8 @@ cand.cast <- cand.cast[,!(names(cand.cast) %in% c("R_incumbent",
                                                   )
                           )
                        ]
+
+
 
 ## Write out and exit
 write.csv(cand.cast, file="./data/candidates_wide.csv", row.names=FALSE)

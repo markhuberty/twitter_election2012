@@ -1373,7 +1373,7 @@ sparse.to.dtm <- function(sparseM, weighting=weightTf){
 ##' @return A list of named matrices, each a particular description of the tweets. e.g.
 ##' number of tweets per party per district.
 ##' @author Hillary Sanders
-generateStats <- function(tweets=master.cron.file, plot=FALSE){
+generateStats <- function(tweets=master.cron.file){
   
   # Tweets per day
   print(dim(tweets))
@@ -1416,35 +1416,161 @@ generateStats <- function(tweets=master.cron.file, plot=FALSE){
   names(info) <- c("tweets_per_day", "tweets_per_district", "tweets_per_candidate", "tweets_per_candidate_per_day",
                    "tweets_per_candidate_per_district", "tweets_per_party", "tweets_per_party_per_day",
                    "tweets_per_party_per_district"
-                   )
-  
-  
-  if(plot==TRUE){
-    par(ask=TRUE)
-    
-    barplot(t(info[[1]]), col="lightblue", cex.names=.8, las=2, main="Tweets per Day", ylab="# of Tweets")
-    abline(h=mean(info[[1]]), lwd=2, col="cornflowerblue")
-    
-    barplot(t(info[[2]]), col="lightblue", axisnames=FALSE, main="Tweets per District", cex.axis=.7,
-            ylab="# of Tweets", xlab="Districts")
-    abline(h=mean(info[[2]]), lwd=2, col="cornflowerblue")
-    
-    barplot(t(info[[3]]), col="lightblue", axisnames=FALSE, main="Tweets per Candidate", cex.axis=.8,
-            ylab="# of Tweets", xlab="Candidates")
-    abline(h=mean(info[[3]]), lwd=2, col="cornflowerblue")
-    
-    barplot(as.vector(t(info[[6]])), col=c("blue", "white", "red"), cex.names=1, 
-            main="Total Tweets per Party", cex.axis=.7, ylab="# of Tweets", names.arg=c("D","I","R"))
-    
-    barplot(info[[7]], col=c("blue", "white", "red"), cex.names=.8, las=2, main="Tweets per Party Per Day",
-            ylab="# of Tweets")
-    
-    barplot(info[[8]], col=c("blue", "white", "red"), border=c("blue", "white", "red"), axisnames=FALSE,
-            main="Tweets per District Per Party", xlab="Districts", ylab="# of Tweets")
-    
-    par(ask=FALSE)
+  )
+  return(info)
+}
+
+
+# Three functions called by generateStats_JSON
+dim1.to.json <- function(freq){
+  l <- as.list(freq)
+  j <- toJSON(l)
+  return(j)
+}
+
+dim2.to.json <- function(freq){
+  l <- lapply(1:nrow(freq), FUN=function(x){as.list(freq[x,])})
+  names(l) <- rownames(freq)
+  j <- toJSON(l)
+  return(j)
+}
+
+dim3.to.json <- function(freq){
+  l <- list()
+  for(i in 1:(dim(freq)[3])){
+    l[[i]] <- lapply(1:nrow(freq), FUN=function(x){as.list(freq[x, ,i])})
+    names(l[[i]]) <- rownames(freq)
   }
+  names(l) <- as.character(dimnames(freq)[3][[1]])
+  j <- toJSON(l)
+  return(j)
+}
+
+
+##' A little function to generate some summary statistics on tweets. 
+##' @title generateStats
+##' @param tweets The master.cron.file, i.e. the big dataframe of collected tweets
+##' thus far.
+##' @param plot Logical - should a few graphs be made to visualize the summary stats?
+##' Defaults to FALSE.
+##' @return A list of named matrices, each a particular description of the tweets. e.g.
+##' number of tweets per party per district.
+##' @author Hillary Sanders
+generateStats_JSON <- function(tweets=master.cron.file, plot=FALSE){
+  
+  # Tweets per day
+  created.at.vec <- unlist(tweets$created_at)
+  time <- strptime(created.at.vec, format="%a, %d %b %Y %H:%M:%S +0000")
+  time <- format(time, format="%m-%d-%y")
+  per.day <- table(time)
+  per.day <- dim1.to.json(per.day)
+  
+  # Tweets per district
+  district <- substr(tweets$unique_cand_id, 1,4)
+  per.district <- table(district)
+  per.district <- dim1.to.json(per.district)
+  
+  # Tweets per candidate
+  per.cand <- table(tweets$unique_cand_id)
+  per.cand <- dim1.to.json(per.cand)
+  
+  # Tweets per candidate per day
+  per.cand.day <- table(tweets$unique_cand_id, time)
+  per.cand.day <- dim2.to.json(per.cand.day)
+  
+  # Tweets per candidate per district
+  per.cand.district <- table(tweets$unique_cand_id, district)
+  per.cand.district <- dim2.to.json(per.cand.district)
+  
+  # Tweets per party
+  party <- substr(tweets$unique_cand_id, 6,6)
+  per.party <- table(party)
+  per.party <- dim1.to.json(party)
+  per.party.day <- table(party, time)
+  per.party.day <- dim2.to.json(per.party.day)
+  
+  # Tweets per party per district 
+  per.party.district <- table(party, district)
+  per.party.district <- dim2.to.json(per.party.district)
+  
+  # Tweets per party per day per district
+  per.day.district.party <- table(time, district, party)
+  per.day.district.party <- dim3.to.json(per.day.district.party)
+  
+  info <- list((per.day),
+               (per.district),
+               (per.cand),
+               (per.cand.day),
+               (per.cand.district),
+               (per.party),
+               (per.party.day),
+               (per.party.district),
+               (per.day.district.party)
+  )
+  
+  names(info) <- c("tweets_per_day", "tweets_per_district", "tweets_per_candidate", "tweets_per_candidate_per_day",
+                   "tweets_per_candidate_per_district", "tweets_per_party", "tweets_per_party_per_day",
+                   "tweets_per_party_per_district")
+  
   
   return(info)
 }
+
+
+
+##' @title make.word.stats
+##' @param word.dtm Document Term Matrix of word counts by candidate. Rows=words,
+##' columns = candidates.
+##' @param words The dataframe of words from opinionfinder. If NULL, pos.or.neg may
+##' not be left NULL.
+##' @param pos.or.neg An optional vector signifying if word i in the ith row of the 
+##' word.dtm matrix is a positive (1), neutral (0), or negative word (-1). This may
+##' be left NULL, but if it is, you must pass the the variable words to the function
+##' (opinionfinder wordlist).
+##' @param  x.y.sqeeze The power to which the denominator of the x and y axis values 
+##' should be raised. The lower the number, the more your bubbles will approximate
+##' a rhombus shape on your graph. The higher the number, the further away large 
+##' word-count bubbles will appear on your graph.
+##' @return A dataframe, with columns denoting the word, x-axis value, y-axis value,
+##' wordcount, and party.
+##' @author Hillary Sanders
+make.word.stats <- function(word.dtm=NULL, words=NULL, pos.or.neg=NULL,
+                            x.y.sqeeze=.5){
+  
+  if(is.null(pos.or.neg)){
+    pos.or.neg <- sapply(rownames(word.dtm), FUN=function(x){
+      words$priorpolarity[which(x == words$word1)][1] # Note: repeated words, need to handle.
+    })
+    pos.or.neg <- as.character(pos.or.neg)
+    pos.or.neg <- gsub("negative", -1, pos.or.neg)
+    pos.or.neg <- gsub("positive", 1, pos.or.neg)
+    pos.or.neg <- gsub("nuetral", 0, pos.or.neg)
+    pos.or.neg <- gsub("both", 0, pos.or.neg)
+    pos.or.neg <- as.numeric(pos.or.neg) 
+  }
+  
+  dcount <- rowSums(word.dtm[ ,grep( "_D_", colnames(word.dtm))])
+  rcount <- rowSums(word.dtm[ ,grep( "_R_", colnames(word.dtm))])
+  
+  x.axis <- as.numeric(pos.or.neg*dcount/((dcount+rcount)^x.y.sqeeze))
+  y.axis <- as.numeric(pos.or.neg*rcount/((dcount+rcount)^x.y.sqeeze))
+  x.axis <- as.numeric(gsub(NaN, 0, x.axis))
+  y.axis <- as.numeric(gsub(NaN, 0, y.axis))
+  
+  word <- rep(rownames(word.dtm), 2)
+  party <- c(rep("R", length(rcount)), rep("D", length(dcount)))
+  
+  counts <- data.frame(word,
+                       rep(x.axis, 2),
+                       rep(y.axis, 2),
+                       rep(pos.or.neg, 2)*c(rcount, dcount),
+                       party)
+  colnames(counts) <- c("word", "x", "y", "count", "party")
+  
+  counts <- counts[order(abs(counts$count), decreasing=TRUE), ]
+  counts <- counts[order(counts$word), ]
+  
+  return(counts)
+}
+
 
