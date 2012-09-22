@@ -1364,8 +1364,64 @@ sparse.to.dtm <- function(sparseM, weighting=weightTf){
 }
 
 
+##' A little function to generate some summary statistics on tweets. 
+##' @title generateStats
+##' @param tweets The master.cron.file, i.e. the big dataframe of collected tweets
+##' thus far.
+##' @param plot Logical - should a few graphs be made to visualize the summary stats?
+##' Defaults to FALSE.
+##' @return A list of named matrices, each a particular description of the tweets. e.g.
+##' number of tweets per party per district.
+##' @author Hillary Sanders
+generateStats <- function(tweets=master.cron.file){
+  
+  # Tweets per day
+  print(dim(tweets))
+  created.at.vec <- unlist(tweets$created_at)
+  print(class(created.at.vec))
+  time <- strptime(created.at.vec, format="%a, %d %b %Y %H:%M:%S +0000")
+  time <- format(time, format="%m-%d-%y")
+  per.day <- table(time)
+  
+  # Tweets per district
+  district <- substr(tweets$unique_cand_id, 1,4)
+  per.district <- table(district)
+  
+  # Tweets per candidate
+  per.cand <- table(tweets$unique_cand_id)
+  # Tweets per candidate per day
+  per.cand.day <- table(tweets$unique_cand_id, time)
+  # Tweets per candidate per district
+  per.cand.district <- table(tweets$unique_cand_id, district)
+  
+  # Tweets per party
+  party <- substr(tweets$unique_cand_id, 6,6)
+  per.party <- table(party)
+  per.party.day <- table(party, time)
+  # Tweets per party per district 
+  per.party.district <- table(party, district)
+  # Tweets per party per day per district
+  # per.day.district.party <- table(time, district, party)
+  
+  info <- list(as.matrix(per.day),
+               as.matrix(per.district),
+               as.matrix(per.cand),
+               as.matrix(per.cand.day),
+               as.matrix(per.cand.district),
+               as.matrix(per.party),
+               as.matrix(per.party.day),
+               as.matrix(per.party.district) 
+               # ,(per.day.district.party)
+  )
+  names(info) <- c("tweets_per_day", "tweets_per_district", "tweets_per_candidate", "tweets_per_candidate_per_day",
+                   "tweets_per_candidate_per_district", "tweets_per_party", "tweets_per_party_per_day",
+                   "tweets_per_party_per_district"
+  )
+  return(info)
+}
 
-# Three functions called by generateStats
+
+# Three functions called by generateStats_JSON
 dim1.to.json <- function(freq){
   l <- as.list(freq)
   j <- toJSON(l)
@@ -1400,7 +1456,7 @@ dim3.to.json <- function(freq){
 ##' @return A list of named matrices, each a particular description of the tweets. e.g.
 ##' number of tweets per party per district.
 ##' @author Hillary Sanders
-generateStats <- function(tweets=master.cron.file, plot=FALSE){
+generateStats_JSON <- function(tweets=master.cron.file, plot=FALSE){
   
   # Tweets per day
   created.at.vec <- unlist(tweets$created_at)
@@ -1516,4 +1572,5 @@ make.word.stats <- function(word.dtm=NULL, words=NULL, pos.or.neg=NULL,
   
   return(counts)
 }
+
 
