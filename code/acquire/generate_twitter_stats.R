@@ -7,5 +7,5 @@ stats <- generateStats(tweets=master.cron.file)
 
 for(i in 1:length(stats)){
   write.csv(stats[[i]], paste("./data/summary_stats/", names(stats)[i], ".csv", sep=""),
-            rownames=TRUE)
+            row.names=TRUE)
 }
