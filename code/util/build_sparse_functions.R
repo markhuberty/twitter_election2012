@@ -26,10 +26,10 @@ scale.linear <- function(vec, params){
 
   m <- params[1]
   b <- params[2]
+  max.scale <- params[3]
 
   vec.scale <- m * vec + b
-
-  vec.scale <- vec.scale / max(vec.scale)
+  #vec.scale <- vec.scale / max.scale
 
   return(vec.scale)
 
@@ -130,23 +130,24 @@ scale.weights.by.time <- function(time.var,
   stopifnot(length(time.var) == nrow(sparse.mat))
 
   ## Transform the time var into a 1:n index
+  ## Note that this is weird b/c of how the weights are totally
+  ## unstable
+  scale.period <- as.integer(as.Date("2012-11-06")) - min(as.integer(time.var))
   x <- as.integer(time.var) - min(as.integer(time.var)) + 1
+  x <- x / scale.period
 
-  ## Get the weight function
-  fun <- match.fun(scale.fun)
-  
   ## Scale with the weight function
   scale.factor <- fun(x, scale.params)
   print("Scaling factor computed")
   ## Define the RCPP function
-  
+
   sparse.mat <- as(sparse.mat, "dgTMatrix")
   ## print(length(sparse.mat@x))
   scaled.values <- c.scale(sparse.mat@i, length(sparse.mat@i), sparse.mat@x, scale.factor)$x
   ## print(length(scaled.values))
   sparse.mat@x <- scaled.values
   sparse.mat <- as(sparse.mat, "dgCMatrix")
-  
+
   ## Rejigger this so it isn't a memory hog
   ## for(i in 1:nrow(sparse.mat))
   ##   {
@@ -190,7 +191,7 @@ aggregate.by <- function(fac, sparse.mat, binary=FALSE){
     mat.out <- mat.out > 0
 
   ## Convert back for consistency
-  mat.out <- as(mat.out, "dgCMatrix") 
+  mat.out <- as(mat.out, "dgCMatrix")
   mat.out <- list(unique.factor, mat.out)
   return(mat.out)
 
@@ -250,7 +251,7 @@ generate.sparse.tdm <- function(tdm,
       col.names <- colnames(sparse.corpus)
     }
 
-  
+
   if(scale)
     sparse.corpus <- scale.weights.by.time(time.var=time.var,
                                            sparse.mat=sparse.corpus,
@@ -312,9 +313,9 @@ weight.tfidf <- function(mat){
     tf <- this.col / doc.word.counts
     out <- tf * idf
     return(mean(out, na.rm=TRUE))
-        
+
   })
-  ## idf <- log(nrow(mat) / (colSums(mat > 0) + 1))  
+  ## idf <- log(nrow(mat) / (colSums(mat > 0) + 1))
   ## tf <- mat / doc.word.counts
   ## tfidf <- t(t(tf)*idf)
   return(tfidf)
@@ -330,13 +331,13 @@ weight.tfidf <- function(mat){
 select.tfidf <- function(mat, threshold, col.names){
 
   stopifnot(threshold > 0)
-  
+
   mean.tfidf <- weight.tfidf(mat)
   ## Take averages by column
   print(summary(mean.tfidf))
 
   idx <- which(mean.tfidf > threshold)
-  
+
   print("N terms passed idf filter:")
   print(length(idx))
 
