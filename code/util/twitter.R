@@ -1378,7 +1378,6 @@ generateStats <- function(tweets=master.cron.file){
   # Tweets per day
   print(dim(tweets))
   created.at.vec <- unlist(tweets$created_at)
-  print(class(created.at.vec))
   time <- strptime(created.at.vec, format="%a, %d %b %Y %H:%M:%S +0000")
   time <- format(time, format="%m-%d-%y")
   per.day <- table(time)

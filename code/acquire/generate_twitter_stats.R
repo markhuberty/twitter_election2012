@@ -6,7 +6,6 @@ load("./data/cron_output/master.cron.file.RData")
 stats <- generateStats(tweets=master.cron.file)
 
 for(i in 1:length(stats)){
-  write.csv(stats[[i]], paste("./data/summary_stats/", names(stats)[i], ".csv", sep=""))
+  write.csv(stats[[i]], paste("./data/summary_stats/", names(stats)[i], ".csv", sep=""),
+            row.names=TRUE)
 }
-
-
