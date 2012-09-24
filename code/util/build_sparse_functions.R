@@ -26,7 +26,7 @@ scale.linear <- function(vec, params){
 
   m <- params[1]
   b <- params[2]
-  max.scale <- params[3]
+
 
   vec.scale <- m * vec + b
   #vec.scale <- vec.scale / max.scale
@@ -52,7 +52,7 @@ scale.quad <- function(vec, params){
 
   vec.scale <- a + b * vec + c * vec^n
 
-  vec.scale <- vec.scale / max(vec.scale)
+  #vec.scale <- vec.scale / max(vec.scale)
 
   return(vec.scale)
 
@@ -76,7 +76,7 @@ scale.sigmoid <- function(vec, params){
 
   vec.scale <- 1 / (1 + exp(-a * (vec - mid.point)))
 
-  vec.scale <- vec.scale / max(vec.scale)
+  #vec.scale <- vec.scale / max(vec.scale)
 
   return(vec.scale)
 
@@ -132,7 +132,8 @@ scale.weights.by.time <- function(time.var,
   ## Transform the time var into a 1:n index
   ## Note that this is weird b/c of how the weights are totally
   ## unstable
-  scale.period <- as.integer(as.Date("2012-11-06")) - min(as.integer(time.var))
+  scale.period <-
+    as.integer(as.Date("2012-11-06")) - min(as.integer(time.var))
   x <- as.integer(time.var) - min(as.integer(time.var)) + 1
   x <- x / scale.period
 
