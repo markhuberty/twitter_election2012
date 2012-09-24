@@ -154,3 +154,13 @@ print(paste("Cron job for ", Sys.Date(), "completed"))
 print(paste("Size of today's matrix:", dim(file.today.parsed.en)))
 print(paste("Size of master file:", dim(master.cron.file)))
 sink()
+
+
+## Add onto summary stats files
+source("./code/acquire/generate_twitter_stats.R")
+
+## Add onto list of file-names
+file.names <- read.csv("./data/file_names.csv")
+file.names <- rbind(file.names, paste("vote-share-", Sys.Date(), sep=""))
+write.csv(file, "./data/file_names.csv", row.names=FALSE)
+
