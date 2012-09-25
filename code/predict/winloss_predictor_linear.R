@@ -26,6 +26,11 @@ if(length(which.nonzero) > 0)
 
 ## Retitle columns with generic names to handle a
 ## superlearner bug that hates spaces in colnames
+
+## First sort the columns by the name vector used to generate the
+## predictor
+corpus.district.tdm.mat <- corpus.district.tdm.mat[,orig.names]
+
 orig.names <- colnames(corpus.district.tdm.mat)
 new.names <- paste("V", 1:ncol(corpus.district.tdm.mat), sep="")
 colnames(corpus.district.tdm.mat) <- new.names
