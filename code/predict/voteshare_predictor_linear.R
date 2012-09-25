@@ -29,8 +29,10 @@ new.names <- paste("V", 1:ncol(corpus.district.tdm.mat), sep="")
 colnames(corpus.district.tdm.mat) <- new.names
 rm(new.names)
 
-## Scaled the data so columns are all mean=0, sd=1
-corpus.district.tdm.mat.scale <- scale(corpus.district.tdm.mat)
+## Scaled the data so rows sum to 1
+corpus.district.tdm.mat.scale <-
+  corpus.district.tdm.mat / rowSums(corpus.district.tdm.mat)
+corpus.district.tdm.mat.scale <- as.matrix(corpus.district.tdm.mat.scale)
 corpus.district.tdm.mat.scale[is.nan(corpus.district.tdm.mat.scale)] <- 0
 
 ## Get the out-of-sample prediction accuracy estimates
