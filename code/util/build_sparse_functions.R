@@ -137,6 +137,7 @@ scale.weights.by.time <- function(time.var,
   x <- as.integer(time.var) - min(as.integer(time.var)) + 1
   x <- x / scale.period
 
+  fun <- match.fun(scale.fun)
   ## Scale with the weight function
   scale.factor <- fun(x, scale.params)
   print("Scaling factor computed")
