@@ -1019,6 +1019,43 @@ compute.rating <- function(labels,
 
 }
 
+##' Very similar to the other compute.rating function (above), just puts voteshare or win/loss
+##' probabilities into bins, and outputs that vector.
+##' @title compute.rating
+##' @param prediction.master.wide Either binary.prediction.master.wide or 
+##' continuous.prediction.master.wide. 
+##' @param voteshare Logical: Is the prediction.master.wide file describing democrat
+##' voteshare predictions or binary win-loss probabilities?
+##' @param cutpoint intervals The breaks in [0,1] used to create the bins. For voteshare,
+##' the default is c( 0,.45, .49, .51, .55, 1); binary: c(0, .4, .49, .51, .6, 1).
+##' @param labels Labels for the bins. Default is c("Very Unlikely", "Unlikely",
+##'  "Tossup", "Likely", "Very Likely")
+##' @param n The number of most recent predictions to average over when calculating the
+##' voteshare or win/loss probability to be binned.
+##' @return A vector of bin assignments for each district (character vector).
+compute.rating <- function(prediction.master.wide,
+                           voteshare=TRUE,
+                           cutpoint.intervals=NULL,
+                           labels=NULL,
+                           n=min(5, ncol(prediction.master.wide))
+){
+  if(is.null(cutpoint.intervals)){
+    if(voteshare==FALSE){
+      cutpoint.intervals <- c(0, .4, .49, .51, .6, 1)
+    } else {
+      cutpoint.intervals <- c( 0,.45, .49, .51, .55, 1)
+    }
+  }
+  
+  ncols <- ncol(prediction.master.wide)
+  predictions <- rowMeans(prediction.master.wide[ ,(ncols-n):ncols], na.rm=TRUE)
+  
+  if(is.null(labels)){ labels <- c("Very Unlikely", "Unlikely", "Tossup", "Likely", "Very Likely") }
+  
+  bins <- cut(prediction, breaks=cutpoint.intervals, labels=labels, include.lowest=TRUE)
+  
+  return(bins)
+}
 
 
 
