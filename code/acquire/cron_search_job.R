@@ -158,9 +158,3 @@ sink()
 
 ## Add onto summary stats files
 source("./code/acquire/generate_twitter_stats.R")
-
-## Add onto list of file-names
-file.names <- read.csv("./data/file_names.csv")
-file.names <- rbind(file.names, paste("vote-share-", Sys.Date(), sep=""))
-write.csv(file, "./data/file_names.csv", row.names=FALSE)
-

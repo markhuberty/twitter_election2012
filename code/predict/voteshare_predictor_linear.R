@@ -87,6 +87,18 @@ write.csv(outfile,
           row.names=FALSE
           )
 
+## Write out a JSON version of the same
+json.name <- gsub("csv", "json", generic.outfile.name)
+prediction.results.toJSON(outfile$state_district,
+                          outfile$dem_vote_share,
+                          json.name
+                          )
+
+## Add the filename to the list of voteshare outputs
+sink("./predictions/win_loss/voteshare_filenames.txt", append=TRUE)
+cat(json.name)
+sink()
+
 
 ## Load the master, concatenate, and save
 outfile$prediction.date <- Sys.Date()
@@ -103,7 +115,7 @@ if(file.exists(master.outfile.name))
     ## Discard prior predictions for this date
     master.csv <-
       master.csv[master.csv$prediction.date != Sys.Date(), ]
-    
+
     master.outfile <- rbind(master.csv,
                             outfile
                             )

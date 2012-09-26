@@ -122,13 +122,13 @@ parse.json.out <- function(infile, results.fields.desired,
     foreach(page.idx=1:length(list.json[[cand.idx]]),
             .combine=rbind,
             .errorhandling="remove") %dopar% {
-              
+
               cand.id <- unique.cand.id[cand.idx]
 
               results <- list.json[[cand.idx]][[page.idx]]$results
 
               results.parsed <- foreach(x=results, .combine=rbind) %do% {
-                
+
                 this.result <- unlist(x)
 
                 this.out <- rep(NA, length(results.fields.desired))
@@ -152,7 +152,7 @@ parse.json.out <- function(infile, results.fields.desired,
               ##     print(class(results.parsed))
               ##     print(nrow(results.parsed))
               ##     results.parsed <- as.data.frame(results.parsed)
-                  
+
               ##     results.parsed$unique_cand_id <- cand.id
 
               ##   }else{
@@ -163,7 +163,7 @@ parse.json.out <- function(infile, results.fields.desired,
             }
   out <- as.data.frame(out, stringsAsFactors=FALSE)
   return(out)
-  
+
 }
 
 ## DEPRECATED SEPT 2012
@@ -977,7 +977,7 @@ aggregate.to.district.wk <- function(corpus, cand.data){
 ## FUNCTION compute.rating
 ## Computes a "confidence rating" on the binary prediction based on
 ## the computed link values (continuous on [0,1], and the assumption
-## of a 0.5 cutpoint. 
+## of a 0.5 cutpoint.
 ## Inputs:
 ##  prob.d.win: the win probabilities
 ##  periods: the time stamps for each prediction
@@ -993,10 +993,10 @@ compute.rating <- function(labels,
 
   if(is.null(cutpoint.intervals))
     cutpoint.intervals <- c(-0.5, -0.05, -0.01, 0.01, 0.05, 0.5)
-  
+
   periods.to.use <- sort(unique(periods),
                          decreasing=TRUE)[1:n.periods]
-  
+
   df <- data.frame(labels, prob.d.win, periods)
   df <- df[df$periods %in% periods.to.use, ]
 
@@ -1022,8 +1022,8 @@ compute.rating <- function(labels,
 ##' Very similar to the other compute.rating function (above), just puts voteshare or win/loss
 ##' probabilities into bins, and outputs that vector.
 ##' @title compute.rating
-##' @param prediction.master.wide Either binary.prediction.master.wide or 
-##' continuous.prediction.master.wide. 
+##' @param prediction.master.wide Either binary.prediction.master.wide or
+##' continuous.prediction.master.wide.
 ##' @param voteshare Logical: Is the prediction.master.wide file describing democrat
 ##' voteshare predictions or binary win-loss probabilities?
 ##' @param cutpoint intervals The breaks in [0,1] used to create the bins. For voteshare,
@@ -1046,14 +1046,14 @@ compute.rating <- function(prediction.master.wide,
       cutpoint.intervals <- c( 0,.45, .49, .51, .55, 1)
     }
   }
-  
+
   ncols <- ncol(prediction.master.wide)
   predictions <- rowMeans(prediction.master.wide[ ,(ncols-n):ncols], na.rm=TRUE)
-  
+
   if(is.null(labels)){ labels <- c("Very Unlikely", "Unlikely", "Tossup", "Likely", "Very Likely") }
-  
+
   bins <- cut(prediction, breaks=cutpoint.intervals, labels=labels, include.lowest=TRUE)
-  
+
   return(bins)
 }
 
@@ -1401,7 +1401,7 @@ sparse.to.dtm <- function(sparseM, weighting=weightTf){
 }
 
 
-##' A little function to generate some summary statistics on tweets. 
+##' A little function to generate some summary statistics on tweets.
 ##' @title generateStats
 ##' @param tweets The master.cron.file, i.e. the big dataframe of collected tweets
 ##' thus far.
@@ -1411,34 +1411,34 @@ sparse.to.dtm <- function(sparseM, weighting=weightTf){
 ##' number of tweets per party per district.
 ##' @author Hillary Sanders
 generateStats <- function(tweets=master.cron.file){
-  
+
   # Tweets per day
   print(dim(tweets))
   created.at.vec <- unlist(tweets$created_at)
   time <- strptime(created.at.vec, format="%a, %d %b %Y %H:%M:%S +0000")
   time <- format(time, format="%m-%d-%y")
   per.day <- table(time)
-  
+
   # Tweets per district
   district <- substr(tweets$unique_cand_id, 1,4)
   per.district <- table(district)
-  
+
   # Tweets per candidate
   per.cand <- table(tweets$unique_cand_id)
   # Tweets per candidate per day
   per.cand.day <- table(tweets$unique_cand_id, time)
   # Tweets per candidate per district
   per.cand.district <- table(tweets$unique_cand_id, district)
-  
+
   # Tweets per party
   party <- substr(tweets$unique_cand_id, 6,6)
   per.party <- table(party)
   per.party.day <- table(party, time)
-  # Tweets per party per district 
+  # Tweets per party per district
   per.party.district <- table(party, district)
   # Tweets per party per day per district
   # per.day.district.party <- table(time, district, party)
-  
+
   info <- list(as.matrix(per.day),
                as.matrix(per.district),
                as.matrix(per.cand),
@@ -1446,7 +1446,7 @@ generateStats <- function(tweets=master.cron.file){
                as.matrix(per.cand.district),
                as.matrix(per.party),
                as.matrix(per.party.day),
-               as.matrix(per.party.district) 
+               as.matrix(per.party.district)
                # ,(per.day.district.party)
   )
   names(info) <- c("tweets_per_day", "tweets_per_district", "tweets_per_candidate", "tweets_per_candidate_per_day",
@@ -1483,7 +1483,7 @@ dim3.to.json <- function(freq){
 }
 
 
-##' A little function to generate some summary statistics on tweets. 
+##' A little function to generate some summary statistics on tweets.
 ##' @title generateStats
 ##' @param tweets The master.cron.file, i.e. the big dataframe of collected tweets
 ##' thus far.
@@ -1493,46 +1493,46 @@ dim3.to.json <- function(freq){
 ##' number of tweets per party per district.
 ##' @author Hillary Sanders
 generateStats_JSON <- function(tweets=master.cron.file, plot=FALSE){
-  
+
   # Tweets per day
   created.at.vec <- unlist(tweets$created_at)
   time <- strptime(created.at.vec, format="%a, %d %b %Y %H:%M:%S +0000")
   time <- format(time, format="%m-%d-%y")
   per.day <- table(time)
   per.day <- dim1.to.json(per.day)
-  
+
   # Tweets per district
   district <- substr(tweets$unique_cand_id, 1,4)
   per.district <- table(district)
   per.district <- dim1.to.json(per.district)
-  
+
   # Tweets per candidate
   per.cand <- table(tweets$unique_cand_id)
   per.cand <- dim1.to.json(per.cand)
-  
+
   # Tweets per candidate per day
   per.cand.day <- table(tweets$unique_cand_id, time)
   per.cand.day <- dim2.to.json(per.cand.day)
-  
+
   # Tweets per candidate per district
   per.cand.district <- table(tweets$unique_cand_id, district)
   per.cand.district <- dim2.to.json(per.cand.district)
-  
+
   # Tweets per party
   party <- substr(tweets$unique_cand_id, 6,6)
   per.party <- table(party)
   per.party <- dim1.to.json(party)
   per.party.day <- table(party, time)
   per.party.day <- dim2.to.json(per.party.day)
-  
-  # Tweets per party per district 
+
+  # Tweets per party per district
   per.party.district <- table(party, district)
   per.party.district <- dim2.to.json(per.party.district)
-  
+
   # Tweets per party per day per district
   per.day.district.party <- table(time, district, party)
   per.day.district.party <- dim3.to.json(per.day.district.party)
-  
+
   info <- list((per.day),
                (per.district),
                (per.cand),
@@ -1543,12 +1543,12 @@ generateStats_JSON <- function(tweets=master.cron.file, plot=FALSE){
                (per.party.district),
                (per.day.district.party)
   )
-  
+
   names(info) <- c("tweets_per_day", "tweets_per_district", "tweets_per_candidate", "tweets_per_candidate_per_day",
                    "tweets_per_candidate_per_district", "tweets_per_party", "tweets_per_party_per_day",
                    "tweets_per_party_per_district")
-  
-  
+
+
   return(info)
 }
 
@@ -1559,20 +1559,20 @@ generateStats_JSON <- function(tweets=master.cron.file, plot=FALSE){
 ##' columns = candidates.
 ##' @param words The dataframe of words from opinionfinder. If NULL, pos.or.neg may
 ##' not be left NULL.
-##' @param pos.or.neg An optional vector signifying if word i in the ith row of the 
+##' @param pos.or.neg An optional vector signifying if word i in the ith row of the
 ##' word.dtm matrix is a positive (1), neutral (0), or negative word (-1). This may
 ##' be left NULL, but if it is, you must pass the the variable words to the function
 ##' (opinionfinder wordlist).
-##' @param  x.y.sqeeze The power to which the denominator of the x and y axis values 
+##' @param  x.y.sqeeze The power to which the denominator of the x and y axis values
 ##' should be raised. The lower the number, the more your bubbles will approximate
-##' a rhombus shape on your graph. The higher the number, the further away large 
+##' a rhombus shape on your graph. The higher the number, the further away large
 ##' word-count bubbles will appear on your graph.
 ##' @return A dataframe, with columns denoting the word, x-axis value, y-axis value,
 ##' wordcount, and party.
 ##' @author Hillary Sanders
 make.word.stats <- function(word.dtm=NULL, words=NULL, pos.or.neg=NULL,
                             x.y.sqeeze=.5){
-  
+
   if(is.null(pos.or.neg)){
     pos.or.neg <- sapply(rownames(word.dtm), FUN=function(x){
       words$priorpolarity[which(x == words$word1)][1] # Note: repeated words, need to handle.
@@ -1582,31 +1582,51 @@ make.word.stats <- function(word.dtm=NULL, words=NULL, pos.or.neg=NULL,
     pos.or.neg <- gsub("positive", 1, pos.or.neg)
     pos.or.neg <- gsub("nuetral", 0, pos.or.neg)
     pos.or.neg <- gsub("both", 0, pos.or.neg)
-    pos.or.neg <- as.numeric(pos.or.neg) 
+    pos.or.neg <- as.numeric(pos.or.neg)
   }
-  
+
   dcount <- rowSums(word.dtm[ ,grep( "_D_", colnames(word.dtm))])
   rcount <- rowSums(word.dtm[ ,grep( "_R_", colnames(word.dtm))])
-  
+
   x.axis <- as.numeric(pos.or.neg*dcount/((dcount+rcount)^x.y.sqeeze))
   y.axis <- as.numeric(pos.or.neg*rcount/((dcount+rcount)^x.y.sqeeze))
   x.axis <- as.numeric(gsub(NaN, 0, x.axis))
   y.axis <- as.numeric(gsub(NaN, 0, y.axis))
-  
+
   word <- rep(rownames(word.dtm), 2)
   party <- c(rep("R", length(rcount)), rep("D", length(dcount)))
-  
+
   counts <- data.frame(word,
                        rep(x.axis, 2),
                        rep(y.axis, 2),
                        rep(pos.or.neg, 2)*c(rcount, dcount),
                        party)
   colnames(counts) <- c("word", "x", "y", "count", "party")
-  
+
   counts <- counts[order(abs(counts$count), decreasing=TRUE), ]
   counts <- counts[order(counts$word), ]
-  
+
   return(counts)
 }
 
 
+##' Generates json-encoded prediction results for use in web vis
+##' @title prediction.results.toJSON
+##' @param districts the district identifier
+##' @param predictions the prediction values
+##' @param filename a filename to write the JSON string
+##' @return Returns silently.
+##' @author Mark Huberty
+prediction.results.toJSON <- function(districts,
+                                      predictions,
+                                      filename){
+
+  json.vec <- predictions
+  names(json.vec) <- districts
+  json.string <- toJSON(json.vec)
+  sink(filename)
+  cat(json.string)
+  sink()
+  return(TRUE)
+
+}

@@ -83,6 +83,18 @@ write.csv(outfile,
           row.names=FALSE
           )
 
+## Write out the JSON version
+json.name <- gsub("csv", "json", generic.outfile.name)
+prediction.results.toJSON(outfile$state_district,
+                          outfile$binary.d.win,
+                          json.name
+                          )
+
+## Add the json name to the filename list
+sink("./predictions/win_loss/binary_filenames.txt", append=TRUE)
+cat(json.name)
+sink()
+
 
 ## Load the master, concatenate, and save
 outfile$prediction.date <- Sys.Date()
@@ -97,11 +109,11 @@ if(file.exists(master.outfile.name))
                              "Date")
                            )
 
-    ## Discard prior predictions for this date. 
+    ## Discard prior predictions for this date.
     master.csv <-
       master.csv[master.csv$prediction.date != Sys.Date(), ]
 
-    
+
     master.outfile <- rbind(master.csv,
                             outfile
                             )
@@ -113,7 +125,7 @@ if(file.exists(master.outfile.name))
                                 fun.aggregate="mean",
                                 na.rm=TRUE
                                 )
-    
+
     write.csv(master.outfile,
               file=master.outfile.name,
               row.names=FALSE
