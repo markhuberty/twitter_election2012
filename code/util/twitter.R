@@ -974,51 +974,6 @@ aggregate.to.district.wk <- function(corpus, cand.data){
 }
 
 
-## FUNCTION compute.rating
-## Computes a "confidence rating" on the binary prediction based on
-## the computed link values (continuous on [0,1], and the assumption
-## of a 0.5 cutpoint.
-## Inputs:
-##  prob.d.win: the win probabilities
-##  periods: the time stamps for each prediction
-##  n.periods: the number of periods over which to smooth the
-##    probabilities
-##  sd.threshold: the breakpoints to use; cannot include 0, must be
-##    symmetric around 0
-compute.rating <- function(labels,
-                           prob.d.win,
-                           periods,
-                           n.periods=5,
-                           cutpoint.intervals=NULL){
-
-  if(is.null(cutpoint.intervals))
-    cutpoint.intervals <- c(-0.5, -0.05, -0.01, 0.01, 0.05, 0.5)
-
-  periods.to.use <- sort(unique(periods),
-                         decreasing=TRUE)[1:n.periods]
-
-  df <- data.frame(labels, prob.d.win, periods)
-  df <- df[df$periods %in% periods.to.use, ]
-
-  ## Summarize by label over periods
-  df.summary <- ddply(df, .(labels),
-                      function(x){mean(x$prob.d.win, na.rm=TRUE)}
-                      )
-  names(df.summary) <- c("state_dist", "mean.prob.d.win")
-  ## sd.prob <- sd(df.summary$mean.prob.d.win, na.rm=TRUE)
-  ## mean.prob <- mean(df.summary$mean.prob.d.win, na.rm=TRUE)
-  rating.cutpoints <- 0.5 + cutpoint.intervals
-
-  ratings <- cut(df.summary$mean.prob.d.win,
-                 breaks=rating.cutpoints,
-                 labels=FALSE,
-                 include.lowest=TRUE
-                 )
-  print(rating.cutpoints)
-  return(data.frame(df.summary$state_dist, ratings))
-
-}
-
 ##' Very similar to the other compute.rating function (above), just puts voteshare or win/loss
 ##' probabilities into bins, and outputs that vector.
 ##' @title compute.rating
@@ -1037,22 +992,34 @@ compute.rating <- function(prediction.master.wide,
                            voteshare=TRUE,
                            cutpoint.intervals=NULL,
                            labels=NULL,
-                           n=min(5, ncol(prediction.master.wide))
+                           n.periods=5,
+                           label.type="integer"
 ){
+
+  n.periods <- min(n.periods, ncol(prediction.master.wide))
+
   if(is.null(cutpoint.intervals)){
     if(voteshare==FALSE){
-      cutpoint.intervals <- c(0, .4, .49, .51, .6, 1)
+      cutpoint.intervals <- c(0, 45, 49, 51, 55, 100)
     } else {
-      cutpoint.intervals <- c( 0,.45, .49, .51, .55, 1)
+      cutpoint.intervals <- c(0, 0.45, 0.49, 0.51, 0.55, 1)
     }
   }
 
   ncols <- ncol(prediction.master.wide)
-  predictions <- rowMeans(prediction.master.wide[ ,(ncols-n):ncols], na.rm=TRUE)
+  colrange <- (ncols - n.periods + 1):ncols
+  predictions <- rowMeans(prediction.master.wide[ , colrange], na.rm=TRUE)
 
-  if(is.null(labels)){ labels <- c("Very Unlikely", "Unlikely", "Tossup", "Likely", "Very Likely") }
+  if(is.null(labels)){
+    labels <- c("Strong R", "Likely R", "Tossup", "Likely D", "Strong D")
+  }
 
-  bins <- cut(prediction, breaks=cutpoint.intervals, labels=labels, include.lowest=TRUE)
+  stopifnot(length(cutpoint.intervals) == (length(labels) + 1))
+
+  if(label.type == "integer")
+    labels <- 1:length(labels)
+
+  bins <- cut(predictions, breaks=cutpoint.intervals, labels=labels, include.lowest=TRUE)
 
   return(bins)
 }

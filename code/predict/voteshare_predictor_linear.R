@@ -158,3 +158,22 @@ if(file.exists(master.outfile.name))
               row.names=FALSE
               )
   }
+
+## Generate ratings based on voteshare
+voteshare.ratings <- compute.rating(master.outfile.wide,
+                                    voteshare=TRUE,
+                                    cutpoint.intervals=c(0, 45, 49,
+                                      51, 55, 100),
+                                    labels=NULL,
+                                    n.periods=5,
+                                    label.type="integer"
+                                    )
+
+rating.filename <- paste("./predictions/vote_share/voteshare_rating_",
+                         today,
+                         ".json"
+                         )
+prediction.results.toJSON(master.outfile.wide$state_district,
+                          voteshare.ratings,
+                          rating.filename
+                          )

@@ -153,3 +153,23 @@ if(file.exists(master.outfile.name))
               row.names=FALSE
               )
   }
+
+
+## Generate ratings based on win probability
+winloss.ratings <- compute.rating(master.outfile.wide[, grepl("prob.d.win")],
+                                  voteshare=TRUE,
+                                  cutpoint.intervals=c(0, 0.45, 0.49,
+                                    0.51, 0.55, 1),
+                                  labels=NULL,
+                                  n.periods=5,
+                                  label.type="integer"
+                                  )
+
+rating.filename <- paste("./predictions/win_loss/winloss_rating_",
+                         today,
+                         ".json"
+                         )
+prediction.results.toJSON(master.outfile.wide$state_district,
+                          winloss.ratings,
+                          rating.filename
+                          )
