@@ -95,8 +95,9 @@ prediction.results.toJSON(outfile$state_district,
                           )
 
 ## Add the filename to the list of voteshare outputs
-sink("./predictions/win_loss/voteshare_filenames.txt", append=TRUE)
-cat(json.name)
+sink("./predictions/vote_share/voteshare_filenames.txt", append=TRUE)
+cat(gsub("./predictions/vote_share/", "", json.name))
+cat("\n")
 sink()
 
 
