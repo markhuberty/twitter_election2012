@@ -91,7 +91,7 @@ prediction.results.toJSON(outfile$state_district,
                           )
 
 ## Add the json name to the filename list
-sink("./predictions/win_loss/binary_filenames.txt", append=TRUE)
+sink("./predictions/win_loss/binary_filenames.csv", append=TRUE)
 cat(gsub("./predictions/win_loss/", "", json.name))
 cat("\n")
 sink()
