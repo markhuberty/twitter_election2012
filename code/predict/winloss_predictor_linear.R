@@ -167,7 +167,8 @@ winloss.ratings <- compute.rating(master.outfile.wide[, grepl("prob.d.win")],
 
 rating.filename <- paste("./predictions/win_loss/winloss_rating_",
                          today,
-                         ".json"
+                         ".json",
+                         sep=""
                          )
 prediction.results.toJSON(master.outfile.wide$state_district,
                           winloss.ratings,

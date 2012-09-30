@@ -171,7 +171,8 @@ voteshare.ratings <- compute.rating(master.outfile.wide,
 
 rating.filename <- paste("./predictions/vote_share/voteshare_rating_",
                          today,
-                         ".json"
+                         ".json",
+                         sep=""
                          )
 prediction.results.toJSON(master.outfile.wide$state_district,
                           voteshare.ratings,
