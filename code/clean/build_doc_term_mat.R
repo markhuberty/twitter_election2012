@@ -350,5 +350,19 @@ for(l in properties.list){
          file=master.corpus.filename
          )
 
+    timestamp.master.corpus.filename <-
+    paste("./data/doc_term_mat/generic.tdm.master.",
+          n,
+          ".",
+          l$type,
+          ".",
+          today,
+          ".RData",
+          sep=""
+          )
+    save(tdm.corpus,
+         house.data,
+         file=timestamp.master.corpus.filename
+         )
   }
 }
