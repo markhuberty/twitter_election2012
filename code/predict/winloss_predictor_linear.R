@@ -156,7 +156,7 @@ if(file.exists(master.outfile.name))
 
 
 ## Generate ratings based on win probability
-winloss.ratings <- compute.rating(master.outfile.wide[, grepl("prob.d.win")],
+winloss.ratings <- compute.rating(master.outfile.wide[, grepl("prob.d.win", colnames(master.outfile.wide))],
                                   voteshare=TRUE,
                                   cutpoint.intervals=c(0, 0.45, 0.49,
                                     0.51, 0.55, 1),
