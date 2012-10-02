@@ -16,7 +16,10 @@ library(foreach)
 source("./code/util/twitter.R")
 
 ## Load the master cron file
-load("./data/cron_output/master.cron.file.RData")
+##load("./data/cron_output/master.cron.file.RData")
+load("./data/cron_output/cron.file.daily.latest.RData")
+master.cron.file <- file.today.parsed.en
+rm(file.today.parsed.en)
 ## Load the dictionaries for doc-term matrix construction
 load("./data/tm_winloss_dict.RData")
 load("./data/tm_voteshare_dict.RData")
@@ -222,10 +225,9 @@ corpus <- tm_map(corpus, stripWhitespace)
 corpus <- tm_map(corpus, removeWords, stopwords("english"))
 corpus <- tm_map(corpus, removePunctuation)
 
-## Then turn into a doc-term matrix
-
-generic.filename <- "./data/doc_term_mat/generic.corpus.RData"
-timestamp.filename <- paste("./data/doc_term_mat/generic.corpus.",
+## Save the daily output for recordkeeping
+generic.filename <- "./data/doc_term_mat/generic.corpus.daily.latest.RData"
+timestamp.filename <- paste("./data/doc_term_mat/generic.corpus.daily.",
                             Sys.Date(),
                             ".RData",
                             sep=""
@@ -239,12 +241,18 @@ save(corpus, house.data,
     )
 
 
+## Then turn in to a doc-term matrix
+## and append the new data to the master files for each
+## model class
+
+
+
 ## Generate the by-tweet doc-term matrices
 ## 1 for topic modeling
 ## 2 for prediction
 ## Can do better here. Need a format that just provides the terms I
 ## absolutly need.
-## Order of args: type, ngram(s), dictionary, 
+## Order of args: type, ngram(s), dictionary,
 voteshare.properties <- list("voteshare", 2, tm.voteshare.dictionary)
 winloss.properties <- list("winloss", 2, tm.winloss.dictionary)
 topicmodel.properties <- list("topicmodel",1, NULL)
@@ -260,22 +268,51 @@ names(properties.list) <- c("voteshare",
                             "winloss",
                             "topicmodel"
                             )
-
+house.data.temp <- house.data
 for(l in properties.list){
   for(n in l$ngram){
 
     tokenizer.control <- Weka_control(min=n, max=n)
     my.tokenizer <-
       function(x) NGramTokenizer(x, tokenizer.control)
-    print(l)
+    print(l$type)
     print(n)
     ## Build up the corpus with the appropriate dictionary
-    tdm.corpus <- DocumentTermMatrix(corpus,
-                                     control=list(tokenize=my.tokenizer,
-                                       weighting=weightTf,
-                                       dictionary=l$dict)
-                                     )
-    
+    tdm.daily.corpus <- DocumentTermMatrix(corpus,
+                                           control=list(tokenize=my.tokenizer,
+                                             weighting=weightTf,
+                                             dictionary=l$dict)
+                                           )
+
+    ## Load up the master corpus for that version
+    master.corpus.filename <-
+      paste("./data/doc_term_mat/generic.tdm.master.",
+            n,
+            ".",
+            l$type,
+            ".RData",
+            sep=""
+            )
+    load(master.corpus.filename)
+
+    ## Append. Note this is done the weird way b/c the
+    ## c() method described in tm() dumps columns if they contain no
+    ## values. Bad for the predictors later on.
+    if(l$type == "topicmodel")
+      {
+
+        tdm.corpus <- c(tdm.corpus, tdm.daily.corpus)
+
+      }else{
+        tdm.corpus <- rbind(tdm.corpus,
+                            tdm.daily.corpus
+                            )
+        tdm.corpus <- as.DocumentTermMatrix(tdm.corpus, weighting=weightTf)
+      }
+    house.data <- rbind(house.data, house.data.temp)
+    print(dim(tdm.corpus))
+    print(dim(house.data))
+
     ## Generate the date-stamped file
     today <- Sys.Date()
     timestamp.file.name <- paste("./data/doc_term_mat/generic.tdm.",
@@ -300,13 +337,18 @@ for(l in properties.list){
     print(timestamp.file.name)
     ## Save the raw corpus as both a generic file and a date-stamped
     ## file for recordkeeping
-    save(tdm.corpus,
-         house.data,
+    save(tdm.daily.corpus,
+         house.data.temp,
          file=generic.file.name
          )
-    save(tdm.corpus,
-         house.data,
+    save(tdm.daily.corpus,
+         house.data.temp,
          file=timestamp.file.name
          )
+    save(tdm.corpus,
+         house.data,
+         file=master.corpus.filename
+         )
+
   }
 }

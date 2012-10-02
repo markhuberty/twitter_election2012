@@ -125,6 +125,12 @@ save(file.today.parsed.en,
        )
      )
 
+## Save the latest file as a generic for use in building up the
+## incremental master in the clean code.
+save(file.today.parsed.en,
+     file="./data/cron_output/cron.file.daily.latest.RData"
+     )
+
 ## Write to the master file
 if(first.time==1)
 {

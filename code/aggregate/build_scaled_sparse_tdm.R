@@ -95,7 +95,7 @@ for(l in properties.list){
 
   print(l$purpose)
   print(l$scale.type)
-  file.in <- paste("./data/doc_term_mat/generic.tdm.",
+  file.in <- paste("./data/doc_term_mat/generic.tdm.master.",
                    l$ngram,
                    ".",
                    l$purpose,
@@ -104,7 +104,6 @@ for(l in properties.list){
                    )
 
   load(file.in)
-
   col.names <- unlist(tdm.corpus$dimnames[2])
 
   if(l$agg == "aggregate")
@@ -127,7 +126,7 @@ for(l in properties.list){
       tdm.corpus <- tdm.corpus[in.period]
       time.var <- time.var[in.period]
     }
-  
+
   tdm.sparse <-
     generate.sparse.tdm(tdm.corpus,
                         agg.fac=agg.fac,
@@ -164,14 +163,14 @@ for(l in properties.list){
                     ".RData",
                     sep=""
                     )
-  
+
   print(dim(tdm.sparse))
-  
+
   save(house.data,
        tdm.sparse,
        file=filename
        )
-  
+
   rm(tdm.sparse)
   gc()
 
