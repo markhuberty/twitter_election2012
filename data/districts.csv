@@ -1,436 +1,1 @@
-state_dist,state,district,incumbent_party,rating
-IA04,Iowa,4,R,Leaning Republican
-IA02,Iowa,2,D,Solid Democratic
-IA03,Iowa,3,R,Tossup
-IA01,Iowa,1,D,Solid Democratic
-SC06,South Carolina,6,D,Solid Democratic
-SC07,South Carolina,7,,Solid Republican
-SC04,South Carolina,4,R,Solid Republican
-SC05,South Carolina,5,R,Solid Republican
-SC02,South Carolina,2,R,Solid Republican
-SC03,South Carolina,3,R,Solid Republican
-SC01,South Carolina,1,R,Solid Republican
-OR03,Oregon,3,D,Solid Democratic
-OR02,Oregon,2,R,Solid Republican
-OR01,Oregon,1,D,Solid Democratic
-OR05,Oregon,5,D,Leaning Democratic
-OR04,Oregon,4,D,Solid Democratic
-SD01,South Dakota,1,R,Solid Republican
-CA39,California,39,R,Solid Republican
-TX31,Texas,31,R,Solid Republican
-TX30,Texas,30,D,Solid Democratic
-TX33,Texas,33,,Solid Democratic
-TX32,Texas,32,R,Solid Republican
-WA09,Washington,9,none,Solid Democratic
-TX35,Texas,35,D,Solid Democratic
-TX34,Texas,34,,Solid Democratic
-TX36,Texas,36,,Solid Republican
-WV03,West Virginia,3,D,Leaning Democratic
-WV02,West Virginia,2,R,Solid Republican
-WV01,West Virginia,1,R,Solid Republican
-WA10,Washington,10,none,Leaning Democratic
-VA09,Virginia,9,R,Solid Republican
-VA08,Virginia,8,D,Solid Democratic
-VA07,Virginia,7,R,Solid Republican
-VA06,Virginia,6,R,Solid Republican
-VA05,Virginia,5,R,Solid Republican
-VA04,Virginia,4,R,Solid Republican
-VA03,Virginia,3,D,Solid Democratic
-VA02,Virginia,2,R,Leaning Republican
-VA01,Virginia,1,R,Solid Republican
-OH09,Ohio,9,D,Solid Democratic
-OH08,Ohio,8,R,Solid Republican
-TX11,Texas,11,R,Solid Republican
-TX10,Texas,10,R,Solid Republican
-TX17,Texas,17,R,Solid Republican
-TX16,Texas,16,,Solid Democratic
-TX15,Texas,15,D,Solid Democratic
-TX14,Texas,14,,Solid Republican
-OH01,Ohio,1,R,Solid Republican
-OH03,Ohio,3,,Solid Democratic
-OH02,Ohio,2,,Solid Republican
-OH05,Ohio,5,R,Solid Republican
-OH04,Ohio,4,R,Solid Republican
-OH07,Ohio,7,R,Leaning Republican
-OH06,Ohio,6,R,Tossup
-CA40,California,40,D,Solid Democratic
-CA41,California,41,,Tossup
-CA42,California,42,R,Solid Republican
-CA43,California,43,D,Solid Democratic
-CA44,California,44,D,Solid Democratic
-CA45,California,45,R,Solid Republican
-CA46,California,46,D,Solid Democratic
-CA47,California,47,,Leaning Democratic
-CA48,California,48,R,Solid Republican
-CA49,California,49,R,Solid Republican
-PA12,Pennsylvania,12,D,Tossup
-PA13,Pennsylvania,13,D,Solid Democratic
-PA10,Pennsylvania,10,R,Solid Republican
-PA11,Pennsylvania,11,R,Solid Republican
-PA16,Pennsylvania,16,R,Solid Republican
-PA17,Pennsylvania,17,,Solid Democratic
-PA14,Pennsylvania,14,D,Solid Democratic
-PA15,Pennsylvania,15,R,Solid Republican
-PA18,Pennsylvania,18,R,Solid Republican
-CA19,California,19,D,Solid Democratic
-CA18,California,18,D,Solid Democratic
-CA17,California,17,D,Solid Democratic
-CA16,California,16,D,Leaning Democratic
-CA15,California,15,D,Solid Democratic
-CA14,California,14,D,Solid Democratic
-CA13,California,13,D,Solid Democratic
-CA12,California,12,D,Solid Democratic
-CA11,California,11,D,Solid Democratic
-CA10,California,10,R,Leaning Republican
-MI08,Michigan,8,none,Solid Republican
-MI09,Michigan,9,none,Solid Democratic
-MI02,Michigan,2,none,Solid Republican
-MI03,Michigan,3,none,Leaning Republican
-MI01,Michigan,1,none,Tossup
-MI06,Michigan,6,none,Solid Republican
-MI07,Michigan,7,none,Leaning Republican
-MI04,Michigan,4,none,Solid Republican
-MI05,Michigan,5,none,Solid Democratic
-WI08,Wisconsin,8,none,Leaning Republican
-WI01,Wisconsin,1,none,Solid Republican
-WI02,Wisconsin,2,none,Solid Democratic
-WI03,Wisconsin,3,none,Solid Democratic
-WI04,Wisconsin,4,none,Solid Democratic
-WI05,Wisconsin,5,none,Solid Republican
-WI06,Wisconsin,6,none,Solid Republican
-WI07,Wisconsin,7,none,Leaning Republican
-RI02,Rhode Island,2,none,Solid Democratic
-RI01,Rhode Island,1,none,Leaning Democratic
-ND01,North Dakota,1,,Solid Republican
-VT01,Vermont,1,none,Solid Democratic
-NY25,New York,25,D,Leaning Democratic
-FL02,Florida,2,none,Leaning Republican
-NY27,New York,27,D,Tossup
-NY26,New York,26,D,Solid Democratic
-NY21,New York,21,D,Leaning Democratic
-NY20,New York,20,D,Solid Democratic
-NY23,New York,23,R,Leaning Republican
-FL03,Florida,3,none,Solid Republican
-DE01,Delaware,1,none,Solid Democratic
-FL01,Florida,1,none,Solid Republican
-FL06,Florida,6,none,Solid Republican
-NY11,New York,11,R,Tossup
-FL04,Florida,4,none,Solid Republican
-FL05,Florida,5,none,Solid Democratic
-NM03,New Mexico,3,D,Solid Democratic
-NM02,New Mexico,2,R,Solid Republican
-NM01,New Mexico,1,,Leaning Democratic
-CT02,Connecticut,2,none,Solid Democratic
-MS01,Mississippi,1,R,Solid Republican
-MS02,Mississippi,2,D,Solid Democratic
-MS03,Mississippi,3,R,Solid Republican
-MS04,Mississippi,4,R,Solid Republican
-TX27,Texas,27,R,Solid Republican
-TX24,Texas,24,R,Solid Republican
-FL08,Florida,8,none,Solid Republican
-FL09,Florida,9,none,Leaning Democratic
-NY18,New York,18,R,Leaning Republican
-NY19,New York,19,R,Leaning Republican
-NY14,New York,14,D,Solid Democratic
-NY15,New York,15,D,Solid Democratic
-NY16,New York,16,D,Solid Democratic
-NY17,New York,17,D,Solid Democratic
-NY10,New York,10,D,Solid Democratic
-FL07,Florida,7,none,Solid Republican
-NY12,New York,12,D,Solid Democratic
-NY13,New York,13,D,Solid Democratic
-WY01,Wyoming,1,none,Solid Republican
-TX28,Texas,28,D,Solid Democratic
-TX29,Texas,29,D,Solid Democratic
-NC12,North Carolina,12,D,Solid Democratic
-NC13,North Carolina,13,,Leaning Republican
-NC10,North Carolina,10,R,Solid Republican
-NC11,North Carolina,11,,Leaning Republican
-TX22,Texas,22,R,Solid Republican
-TX23,Texas,23,R,Leaning Republican
-TX20,Texas,20,,Solid Democratic
-TX21,Texas,21,R,Solid Republican
-CA53,California,53,D,Solid Democratic
-CA52,California,52,R,Tossup
-CA51,California,51,,Solid Democratic
-CA50,California,50,R,Solid Republican
-IN09,Indiana,9,R,Solid Republican
-IN08,Indiana,8,R,Leaning Republican
-IN01,Indiana,1,D,Solid Democratic
-IN03,Indiana,3,R,Solid Republican
-IN02,Indiana,2,,Solid Democratic
-IN05,Indiana,5,,Solid Republican
-IN04,Indiana,4,R,Solid Republican
-IN07,Indiana,7,D,Solid Democratic
-IN06,Indiana,6,,Solid Republican
-ID02,Idaho,2,R,Solid Republican
-ID01,Idaho,1,R,Solid Republican
-NJ04,New Jersey,4,R,Solid Republican
-NJ05,New Jersey,5,R,Solid Republican
-NJ06,New Jersey,6,D,Solid Democratic
-NJ07,New Jersey,7,R,Solid Republican
-CT05,Connecticut,5,none,Tossup
-NJ01,New Jersey,1,D,Solid Democratic
-NJ02,New Jersey,2,R,Solid Republican
-NJ03,New Jersey,3,R,Leaning Republican
-NJ08,New Jersey,8,D,Solid Democratic
-NJ09,New Jersey,9,D,Solid Democratic
-PA09,Pennsylvania,9,R,Solid Republican
-PA08,Pennsylvania,8,R,Leaning Republican
-PA05,Pennsylvania,5,R,Solid Republican
-PA04,Pennsylvania,4,,Solid Republican
-PA07,Pennsylvania,7,R,Leaning Republican
-PA06,Pennsylvania,6,R,Leaning Republican
-PA01,Pennsylvania,1,D,Solid Democratic
-PA03,Pennsylvania,3,R,Solid Republican
-PA02,Pennsylvania,2,D,Solid Democratic
-MI14,Michigan,14,none,Solid Democratic
-CA28,California,28,D,Solid Democratic
-CA29,California,29,,Solid Democratic
-MI11,Michigan,11,none,Leaning Republican
-MI10,Michigan,10,none,Solid Republican
-MI13,Michigan,13,none,Solid Democratic
-MI12,Michigan,12,none,Solid Democratic
-CA22,California,22,R,Solid Republican
-CA23,California,23,R,Solid Republican
-CA20,California,20,D,Solid Democratic
-CA21,California,21,,Leaning Republican
-CA26,California,26,,Leaning Democratic
-CA27,California,27,D,Solid Democratic
-CA24,California,24,D,Leaning Democratic
-CA25,California,25,R,Solid Republican
-NJ12,New Jersey,12,D,Solid Democratic
-NJ10,New Jersey,10,,Solid Democratic
-HI01,Hawaii,1,none,Solid Democratic
-HI02,Hawaii,2,none,Solid Democratic
-TN06,Tennessee,6,none,Solid Republican
-TN07,Tennessee,7,none,Solid Republican
-TN04,Tennessee,4,none,Solid Republican
-TN05,Tennessee,5,none,Solid Democratic
-TN02,Tennessee,2,none,Solid Republican
-TN03,Tennessee,3,none,Solid Republican
-TN01,Tennessee,1,none,Solid Republican
-TN08,Tennessee,8,none,Solid Republican
-TN09,Tennessee,9,none,Solid Democratic
-GA01,Georgia,1,none,Solid Republican
-GA02,Georgia,2,none,Solid Democratic
-GA03,Georgia,3,none,Solid Republican
-GA04,Georgia,4,none,Solid Democratic
-GA05,Georgia,5,none,Solid Democratic
-GA06,Georgia,6,none,Solid Republican
-GA07,Georgia,7,none,Solid Republican
-GA08,Georgia,8,none,Solid Republican
-GA09,Georgia,9,none,Solid Republican
-MD08,Maryland,8,D,Solid Democratic
-MD07,Maryland,7,D,Solid Democratic
-MD06,Maryland,6,R,Leaning Democratic
-MD05,Maryland,5,D,Solid Democratic
-MD04,Maryland,4,D,Solid Democratic
-MD03,Maryland,3,D,Solid Democratic
-MD02,Maryland,2,D,Solid Democratic
-MD01,Maryland,1,R,Solid Republican
-AZ05,Arizona,5,none,Solid Republican
-AZ04,Arizona,4,none,Solid Republican
-AZ07,Arizona,7,none,Solid Democratic
-AZ06,Arizona,6,none,Solid Republican
-AZ01,Arizona,1,none,Tossup
-AZ03,Arizona,3,none,Solid Democratic
-AZ02,Arizona,2,none,Tossup
-AZ09,Arizona,9,none,Leaning Democratic
-AZ08,Arizona,8,none,Solid Republican
-TX26,Texas,26,R,Solid Republican
-CO02,Colorado,2,D,Solid Democratic
-CO03,Colorado,3,R,Leaning Republican
-CO01,Colorado,1,D,Solid Democratic
-CO06,Colorado,6,R,Leaning Republican
-CO07,Colorado,7,D,Solid Democratic
-CO04,Colorado,4,R,Solid Republican
-CO05,Colorado,5,R,Solid Republican
-AL03,Alabama,3,R,Solid Republican
-AL02,Alabama,2,R,Solid Republican
-AL01,Alabama,1,R,Solid Republican
-AL07,Alabama,7,D,Solid Democratic
-AL06,Alabama,6,R,Solid Republican
-AL05,Alabama,5,R,Solid Republican
-AL04,Alabama,4,R,Solid Republican
-MA02,Massachusetts,2,none,Solid Democratic
-MA03,Massachusetts,3,none,Solid Democratic
-MA01,Massachusetts,1,none,Solid Democratic
-MA06,Massachusetts,6,none,Leaning Democratic
-MA07,Massachusetts,7,none,Solid Democratic
-MA04,Massachusetts,4,none,Solid Democratic
-MA05,Massachusetts,5,none,Solid Democratic
-MA08,Massachusetts,8,none,Solid Democratic
-MA09,Massachusetts,9,none,Solid Democratic
-TX25,Texas,25,,Solid Republican
-MT01,Montana,1,,Solid Republican
-MN05,Minnesota,5,none,Solid Democratic
-MN04,Minnesota,4,none,Solid Democratic
-MN07,Minnesota,7,none,Solid Democratic
-MN06,Minnesota,6,none,Solid Republican
-MN01,Minnesota,1,none,Solid Democratic
-MN03,Minnesota,3,none,Solid Republican
-MN02,Minnesota,2,none,Leaning Republican
-MN08,Minnesota,8,none,Tossup
-NY24,New York,24,R,Tossup
-TX13,Texas,13,R,Solid Republican
-NY09,New York,9,D,Solid Democratic
-NY08,New York,8,,Solid Democratic
-NY07,New York,7,D,Solid Democratic
-NY06,New York,6,,Solid Democratic
-NY05,New York,5,D,Solid Democratic
-NY04,New York,4,D,Solid Democratic
-NY03,New York,3,D,Solid Democratic
-NY02,New York,2,R,Solid Republican
-NY01,New York,1,D,Tossup
-NC05,North Carolina,5,R,Solid Republican
-NC04,North Carolina,4,D,Solid Democratic
-NC07,North Carolina,7,D,Leaning Democratic
-NC06,North Carolina,6,R,Solid Republican
-NC01,North Carolina,1,D,Solid Democratic
-NC03,North Carolina,3,R,Solid Republican
-NC02,North Carolina,2,R,Solid Republican
-NC09,North Carolina,9,,Solid Republican
-NC08,North Carolina,8,D,Tossup
-IL18,Illinois,18,R,Solid Republican
-IL10,Illinois,10,R,Leaning Democratic
-IL11,Illinois,11,R,Leaning Democratic
-IL12,Illinois,12,,Tossup
-IL13,Illinois,13,,Leaning Republican
-IL14,Illinois,14,R,Solid Republican
-IL15,Illinois,15,R,Solid Republican
-IL16,Illinois,16,R,Solid Republican
-IL17,Illinois,17,R,Leaning Democratic
-TX19,Texas,19,R,Solid Republican
-TX18,Texas,18,D,Solid Democratic
-FL15,Florida,15,none,Solid Republican
-FL14,Florida,14,none,Solid Democratic
-FL17,Florida,17,none,Solid Republican
-FL16,Florida,16,none,Leaning Republican
-FL11,Florida,11,none,Solid Republican
-FL10,Florida,10,none,Leaning Republican
-FL13,Florida,13,none,Solid Republican
-FL12,Florida,12,none,Solid Republican
-FL19,Florida,19,none,Solid Republican
-FL18,Florida,18,none,Leaning Republican
-MO04,Missouri,4,none,Solid Republican
-MO05,Missouri,5,none,Solid Democratic
-MO06,Missouri,6,none,Solid Republican
-KS04,Kansas,4,none,Solid Republican
-KS02,Kansas,2,none,Solid Republican
-KS03,Kansas,3,none,Solid Republican
-NJ11,New Jersey,11,R,Solid Republican
-KS01,Kansas,1,none,Solid Republican
-AK01,Alaska,1,none,Solid Republican
-IL06,Illinois,6,R,Solid Republican
-IL05,Illinois,5,D,Solid Democratic
-IL04,Illinois,4,D,Solid Democratic
-LA01,Louisiana,1,none,Solid Republican
-LA03,Louisiana,3,none,Solid Republican
-LA02,Louisiana,2,none,Solid Democratic
-LA05,Louisiana,5,none,Solid Republican
-LA04,Louisiana,4,none,Solid Republican
-LA06,Louisiana,6,none,Solid Republican
-OK02,Oklahoma,2,,Solid Republican
-OK03,Oklahoma,3,R,Solid Republican
-OK01,Oklahoma,1,,Solid Republican
-OK04,Oklahoma,4,R,Solid Republican
-OK05,Oklahoma,5,R,Solid Republican
-CT01,Connecticut,1,none,Solid Democratic
-WA02,Washington,2,none,Solid Democratic
-WA03,Washington,3,none,Solid Republican
-WA04,Washington,4,none,Solid Republican
-WA05,Washington,5,none,Solid Republican
-WA06,Washington,6,none,Solid Democratic
-WA07,Washington,7,none,Solid Democratic
-FL24,Florida,24,none,Solid Democratic
-FL25,Florida,25,none,Solid Republican
-FL26,Florida,26,none,Tossup
-FL27,Florida,27,none,Solid Republican
-FL20,Florida,20,none,Solid Democratic
-FL21,Florida,21,none,Solid Democratic
-FL22,Florida,22,none,Leaning Democratic
-FL23,Florida,23,none,Solid Democratic
-GA13,Georgia,13,none,Solid Democratic
-GA12,Georgia,12,none,Tossup
-GA11,Georgia,11,none,Solid Republican
-GA10,Georgia,10,none,Solid Republican
-GA14,Georgia,14,none,Solid Republican
-VA10,Virginia,10,R,Solid Republican
-VA11,Virginia,11,R,Solid Democratic
-CT04,Connecticut,4,none,Solid Democratic
-TX01,Texas,1,R,Solid Republican
-TX02,Texas,2,R,Solid Republican
-TX03,Texas,3,R,Solid Republican
-TX04,Texas,4,R,Solid Republican
-TX05,Texas,5,R,Solid Republican
-TX06,Texas,6,R,Solid Republican
-TX07,Texas,7,R,Solid Republican
-OH16,Ohio,16,D,Tossup
-TX09,Texas,9,D,Solid Democratic
-OH14,Ohio,14,R,Solid Republican
-OH15,Ohio,15,R,Solid Republican
-OH12,Ohio,12,R,Solid Republican
-OH13,Ohio,13,D,Solid Democratic
-OH10,Ohio,10,R,Solid Republican
-OH11,Ohio,11,D,Solid Democratic
-CA35,California,35,D,Solid Democratic
-CA34,California,34,D,Solid Democratic
-CA37,California,37,D,Solid Democratic
-CA36,California,36,R,Leaning Republican
-CA31,California,31,R,Solid Republican
-CA30,California,30,D,Solid Democratic
-CA33,California,33,D,Solid Democratic
-CA32,California,32,D,Solid Democratic
-NV01,Nevada,1,,Solid Democratic
-NV02,Nevada,2,R,Solid Republican
-NV03,Nevada,3,R,Leaning Republican
-NV04,Nevada,4,,Leaning Democratic
-CA38,California,38,D,Solid Democratic
-ME02,Maine,2,D,Solid Democratic
-ME01,Maine,1,D,Solid Democratic
-WA01,Washington,1,none,Leaning Democratic
-CT03,Connecticut,3,none,Solid Democratic
-WA08,Washington,8,none,Solid Republican
-NH02,New Hampshire,2,none,Tossup
-NH01,New Hampshire,1,none,Leaning Republican
-KY04,Kentucky,4,,Solid Republican
-KY05,Kentucky,5,R,Solid Republican
-KY06,Kentucky,6,D,Leaning Democratic
-KY01,Kentucky,1,R,Solid Republican
-KY02,Kentucky,2,R,Solid Republican
-KY03,Kentucky,3,D,Solid Democratic
-UT04,Utah,4,D,Tossup
-UT03,Utah,3,R,Solid Republican
-UT02,Utah,2,,Solid Republican
-UT01,Utah,1,R,Solid Republican
-TX12,Texas,12,R,Solid Republican
-AR04,Arkansas,4,,Solid Republican
-AR01,Arkansas,1,R,Solid Republican
-AR03,Arkansas,3,R,Solid Republican
-AR02,Arkansas,2,R,Solid Republican
-NE03,Nebraska,3,R,Solid Republican
-NE02,Nebraska,2,R,Solid Republican
-NE01,Nebraska,1,R,Solid Republican
-CA08,California,8,,Solid Republican
-CA09,California,9,D,Leaning Democratic
-CA04,California,4,R,Solid Republican
-CA05,California,5,D,Solid Democratic
-CA06,California,6,D,Solid Democratic
-CA07,California,7,R,Tossup
-CA01,California,1,,Solid Republican
-CA02,California,2,,Solid Democratic
-CA03,California,3,D,Leaning Democratic
-IL09,Illinois,9,D,Solid Democratic
-IL08,Illinois,8,R,Leaning Democratic
-MO08,Missouri,8,none,Solid Republican
-IL03,Illinois,3,D,Solid Democratic
-IL02,Illinois,2,D,Solid Democratic
-IL01,Illinois,1,D,Solid Democratic
-MO07,Missouri,7,none,Solid Republican
-IL07,Illinois,7,D,Solid Democratic
-MO01,Missouri,1,none,Solid Democratic
-MO02,Missouri,2,none,Solid Republican
-MO03,Missouri,3,none,Solid Republican
-TX08,Texas,8,R,Solid Republican
-NY22,New York,22,R,Leaning Republican
+state_dist,state,district,incumbent_party,ratingAK00,Alaska,0,none,Solid RepublicanAL01,Alabama,1,R,Solid RepublicanAL02,Alabama,2,R,Solid RepublicanAL03,Alabama,3,R,Solid RepublicanAL04,Alabama,4,R,Solid RepublicanAL05,Alabama,5,R,Solid RepublicanAL06,Alabama,6,R,Solid RepublicanAL07,Alabama,7,D,Solid DemocraticAR01,Arkansas,1,R,Solid RepublicanAR02,Arkansas,2,R,Solid RepublicanAR03,Arkansas,3,R,Solid RepublicanAR04,Arkansas,4,,Solid RepublicanAZ01,Arizona,1,none,TossupAZ02,Arizona,2,none,TossupAZ03,Arizona,3,none,Solid DemocraticAZ04,Arizona,4,none,Solid RepublicanAZ05,Arizona,5,none,Solid RepublicanAZ06,Arizona,6,none,Solid RepublicanAZ07,Arizona,7,none,Solid DemocraticAZ08,Arizona,8,none,Solid RepublicanAZ09,Arizona,9,none,Leaning DemocraticCA01,California,1,,Solid RepublicanCA02,California,2,,Solid DemocraticCA03,California,3,D,Leaning DemocraticCA04,California,4,R,Solid RepublicanCA05,California,5,D,Solid DemocraticCA06,California,6,D,Solid DemocraticCA07,California,7,R,TossupCA08,California,8,,Solid RepublicanCA09,California,9,D,Leaning DemocraticCA10,California,10,R,Leaning RepublicanCA11,California,11,D,Solid DemocraticCA12,California,12,D,Solid DemocraticCA13,California,13,D,Solid DemocraticCA14,California,14,D,Solid DemocraticCA15,California,15,D,Solid DemocraticCA16,California,16,D,Leaning DemocraticCA17,California,17,D,Solid DemocraticCA18,California,18,D,Solid DemocraticCA19,California,19,D,Solid DemocraticCA20,California,20,D,Solid DemocraticCA21,California,21,,Leaning RepublicanCA22,California,22,R,Solid RepublicanCA23,California,23,R,Solid RepublicanCA24,California,24,D,Leaning DemocraticCA25,California,25,R,Solid RepublicanCA26,California,26,,Leaning DemocraticCA27,California,27,D,Solid DemocraticCA28,California,28,D,Solid DemocraticCA29,California,29,,Solid DemocraticCA30,California,30,D,Solid DemocraticCA31,California,31,R,Solid RepublicanCA32,California,32,D,Solid DemocraticCA33,California,33,D,Solid DemocraticCA34,California,34,D,Solid DemocraticCA35,California,35,D,Solid DemocraticCA36,California,36,R,Leaning RepublicanCA37,California,37,D,Solid DemocraticCA38,California,38,D,Solid DemocraticCA39,California,39,R,Solid RepublicanCA40,California,40,D,Solid DemocraticCA41,California,41,,TossupCA42,California,42,R,Solid RepublicanCA43,California,43,D,Solid DemocraticCA44,California,44,D,Solid DemocraticCA45,California,45,R,Solid RepublicanCA46,California,46,D,Solid DemocraticCA47,California,47,,Leaning DemocraticCA48,California,48,R,Solid RepublicanCA49,California,49,R,Solid RepublicanCA50,California,50,R,Solid RepublicanCA51,California,51,,Solid DemocraticCA52,California,52,R,TossupCA53,California,53,D,Solid DemocraticCO01,Colorado,1,D,Solid DemocraticCO02,Colorado,2,D,Solid DemocraticCO03,Colorado,3,R,Leaning RepublicanCO04,Colorado,4,R,Solid RepublicanCO05,Colorado,5,R,Solid RepublicanCO06,Colorado,6,R,Leaning RepublicanCO07,Colorado,7,D,Solid DemocraticCT01,Connecticut,1,none,Solid DemocraticCT02,Connecticut,2,none,Solid DemocraticCT03,Connecticut,3,none,Solid DemocraticCT04,Connecticut,4,none,Solid DemocraticCT05,Connecticut,5,none,TossupDE00,Delaware,0,none,Solid DemocraticFL01,Florida,1,none,Solid RepublicanFL02,Florida,2,none,Leaning RepublicanFL03,Florida,3,none,Solid RepublicanFL04,Florida,4,none,Solid RepublicanFL05,Florida,5,none,Solid DemocraticFL06,Florida,6,none,Solid RepublicanFL07,Florida,7,none,Solid RepublicanFL08,Florida,8,none,Solid RepublicanFL09,Florida,9,none,Leaning DemocraticFL10,Florida,10,none,Leaning RepublicanFL11,Florida,11,none,Solid RepublicanFL12,Florida,12,none,Solid RepublicanFL13,Florida,13,none,Solid RepublicanFL14,Florida,14,none,Solid DemocraticFL15,Florida,15,none,Solid RepublicanFL16,Florida,16,none,Leaning RepublicanFL17,Florida,17,none,Solid RepublicanFL18,Florida,18,none,Leaning RepublicanFL19,Florida,19,none,Solid RepublicanFL20,Florida,20,none,Solid DemocraticFL21,Florida,21,none,Solid DemocraticFL22,Florida,22,none,Leaning DemocraticFL23,Florida,23,none,Solid DemocraticFL24,Florida,24,none,Solid DemocraticFL25,Florida,25,none,Solid RepublicanFL26,Florida,26,none,TossupFL27,Florida,27,none,Solid RepublicanGA01,Georgia,1,none,Solid RepublicanGA02,Georgia,2,none,Solid DemocraticGA03,Georgia,3,none,Solid RepublicanGA04,Georgia,4,none,Solid DemocraticGA05,Georgia,5,none,Solid DemocraticGA06,Georgia,6,none,Solid RepublicanGA07,Georgia,7,none,Solid RepublicanGA08,Georgia,8,none,Solid RepublicanGA09,Georgia,9,none,Solid RepublicanGA10,Georgia,10,none,Solid RepublicanGA11,Georgia,11,none,Solid RepublicanGA12,Georgia,12,none,TossupGA13,Georgia,13,none,Solid DemocraticGA14,Georgia,14,none,Solid RepublicanHI01,Hawaii,1,none,Solid DemocraticHI02,Hawaii,2,none,Solid DemocraticIA01,Iowa,1,D,Solid DemocraticIA02,Iowa,2,D,Solid DemocraticIA03,Iowa,3,R,TossupIA04,Iowa,4,R,Leaning RepublicanID01,Idaho,1,R,Solid RepublicanID02,Idaho,2,R,Solid RepublicanIL01,Illinois,1,D,Solid DemocraticIL02,Illinois,2,D,Solid DemocraticIL03,Illinois,3,D,Solid DemocraticIL04,Illinois,4,D,Solid DemocraticIL05,Illinois,5,D,Solid DemocraticIL06,Illinois,6,R,Solid RepublicanIL07,Illinois,7,D,Solid DemocraticIL08,Illinois,8,R,Leaning DemocraticIL09,Illinois,9,D,Solid DemocraticIL10,Illinois,10,R,Leaning DemocraticIL11,Illinois,11,R,Leaning DemocraticIL12,Illinois,12,,TossupIL13,Illinois,13,,Leaning RepublicanIL14,Illinois,14,R,Solid RepublicanIL15,Illinois,15,R,Solid RepublicanIL16,Illinois,16,R,Solid RepublicanIL17,Illinois,17,R,Leaning DemocraticIL18,Illinois,18,R,Solid RepublicanIN01,Indiana,1,D,Solid DemocraticIN02,Indiana,2,,Solid DemocraticIN03,Indiana,3,R,Solid RepublicanIN04,Indiana,4,R,Solid RepublicanIN05,Indiana,5,,Solid RepublicanIN06,Indiana,6,,Solid RepublicanIN07,Indiana,7,D,Solid DemocraticIN08,Indiana,8,R,Leaning RepublicanIN09,Indiana,9,R,Solid RepublicanKS01,Kansas,1,none,Solid RepublicanKS02,Kansas,2,none,Solid RepublicanKS03,Kansas,3,none,Solid RepublicanKS04,Kansas,4,none,Solid RepublicanKY01,Kentucky,1,R,Solid RepublicanKY02,Kentucky,2,R,Solid RepublicanKY03,Kentucky,3,D,Solid DemocraticKY04,Kentucky,4,,Solid RepublicanKY05,Kentucky,5,R,Solid RepublicanKY06,Kentucky,6,D,Leaning DemocraticLA01,Louisiana,1,none,Solid RepublicanLA02,Louisiana,2,none,Solid DemocraticLA03,Louisiana,3,none,Solid RepublicanLA04,Louisiana,4,none,Solid RepublicanLA05,Louisiana,5,none,Solid RepublicanLA06,Louisiana,6,none,Solid RepublicanMA01,Massachusetts,1,none,Solid DemocraticMA02,Massachusetts,2,none,Solid DemocraticMA03,Massachusetts,3,none,Solid DemocraticMA04,Massachusetts,4,none,Solid DemocraticMA05,Massachusetts,5,none,Solid DemocraticMA06,Massachusetts,6,none,Leaning DemocraticMA07,Massachusetts,7,none,Solid DemocraticMA08,Massachusetts,8,none,Solid DemocraticMA09,Massachusetts,9,none,Solid DemocraticMD01,Maryland,1,R,Solid RepublicanMD02,Maryland,2,D,Solid DemocraticMD03,Maryland,3,D,Solid DemocraticMD04,Maryland,4,D,Solid DemocraticMD05,Maryland,5,D,Solid DemocraticMD06,Maryland,6,R,Leaning DemocraticMD07,Maryland,7,D,Solid DemocraticMD08,Maryland,8,D,Solid DemocraticME01,Maine,1,D,Solid DemocraticME02,Maine,2,D,Solid DemocraticMI01,Michigan,1,none,TossupMI02,Michigan,2,none,Solid RepublicanMI03,Michigan,3,none,Leaning RepublicanMI04,Michigan,4,none,Solid RepublicanMI05,Michigan,5,none,Solid DemocraticMI06,Michigan,6,none,Solid RepublicanMI07,Michigan,7,none,Leaning RepublicanMI08,Michigan,8,none,Solid RepublicanMI09,Michigan,9,none,Solid DemocraticMI10,Michigan,10,none,Solid RepublicanMI11,Michigan,11,none,Leaning RepublicanMI12,Michigan,12,none,Solid DemocraticMI13,Michigan,13,none,Solid DemocraticMI14,Michigan,14,none,Solid DemocraticMN01,Minnesota,1,none,Solid DemocraticMN02,Minnesota,2,none,Leaning RepublicanMN03,Minnesota,3,none,Solid RepublicanMN04,Minnesota,4,none,Solid DemocraticMN05,Minnesota,5,none,Solid DemocraticMN06,Minnesota,6,none,Solid RepublicanMN07,Minnesota,7,none,Solid DemocraticMN08,Minnesota,8,none,TossupMO01,Missouri,1,none,Solid DemocraticMO02,Missouri,2,none,Solid RepublicanMO03,Missouri,3,none,Solid RepublicanMO04,Missouri,4,none,Solid RepublicanMO05,Missouri,5,none,Solid DemocraticMO06,Missouri,6,none,Solid RepublicanMO07,Missouri,7,none,Solid RepublicanMO08,Missouri,8,none,Solid RepublicanMS01,Mississippi,1,R,Solid RepublicanMS02,Mississippi,2,D,Solid DemocraticMS03,Mississippi,3,R,Solid RepublicanMS04,Mississippi,4,R,Solid RepublicanMT00,Montana,0,,Solid RepublicanNC01,North Carolina,1,D,Solid DemocraticNC02,North Carolina,2,R,Solid RepublicanNC03,North Carolina,3,R,Solid RepublicanNC04,North Carolina,4,D,Solid DemocraticNC05,North Carolina,5,R,Solid RepublicanNC06,North Carolina,6,R,Solid RepublicanNC07,North Carolina,7,D,Leaning DemocraticNC08,North Carolina,8,D,TossupNC09,North Carolina,9,,Solid RepublicanNC10,North Carolina,10,R,Solid RepublicanNC11,North Carolina,11,,Leaning RepublicanNC12,North Carolina,12,D,Solid DemocraticNC13,North Carolina,13,,Leaning RepublicanND00,North Dakota,0,,Solid RepublicanNE01,Nebraska,1,R,Solid RepublicanNE02,Nebraska,2,R,Solid RepublicanNE03,Nebraska,3,R,Solid RepublicanNH01,New Hampshire,1,none,Leaning RepublicanNH02,New Hampshire,2,none,TossupNJ01,New Jersey,1,D,Solid DemocraticNJ02,New Jersey,2,R,Solid RepublicanNJ03,New Jersey,3,R,Leaning RepublicanNJ04,New Jersey,4,R,Solid RepublicanNJ05,New Jersey,5,R,Solid RepublicanNJ06,New Jersey,6,D,Solid DemocraticNJ07,New Jersey,7,R,Solid RepublicanNJ08,New Jersey,8,D,Solid DemocraticNJ09,New Jersey,9,D,Solid DemocraticNJ10,New Jersey,10,,Solid DemocraticNJ11,New Jersey,11,R,Solid RepublicanNJ12,New Jersey,12,D,Solid DemocraticNM01,New Mexico,1,,Leaning DemocraticNM02,New Mexico,2,R,Solid RepublicanNM03,New Mexico,3,D,Solid DemocraticNV01,Nevada,1,,Solid DemocraticNV02,Nevada,2,R,Solid RepublicanNV03,Nevada,3,R,Leaning RepublicanNV04,Nevada,4,,Leaning DemocraticNY01,New York,1,D,TossupNY02,New York,2,R,Solid RepublicanNY03,New York,3,D,Solid DemocraticNY04,New York,4,D,Solid DemocraticNY05,New York,5,D,Solid DemocraticNY06,New York,6,,Solid DemocraticNY07,New York,7,D,Solid DemocraticNY08,New York,8,,Solid DemocraticNY09,New York,9,D,Solid DemocraticNY10,New York,10,D,Solid DemocraticNY11,New York,11,R,TossupNY12,New York,12,D,Solid DemocraticNY13,New York,13,D,Solid DemocraticNY14,New York,14,D,Solid DemocraticNY15,New York,15,D,Solid DemocraticNY16,New York,16,D,Solid DemocraticNY17,New York,17,D,Solid DemocraticNY18,New York,18,R,Leaning RepublicanNY19,New York,19,R,Leaning RepublicanNY20,New York,20,D,Solid DemocraticNY21,New York,21,D,Leaning DemocraticNY22,New York,22,R,Leaning RepublicanNY23,New York,23,R,Leaning RepublicanNY24,New York,24,R,TossupNY25,New York,25,D,Leaning DemocraticNY26,New York,26,D,Solid DemocraticNY27,New York,27,D,TossupOH01,Ohio,1,R,Solid RepublicanOH02,Ohio,2,,Solid RepublicanOH03,Ohio,3,,Solid DemocraticOH04,Ohio,4,R,Solid RepublicanOH05,Ohio,5,R,Solid RepublicanOH06,Ohio,6,R,TossupOH07,Ohio,7,R,Leaning RepublicanOH08,Ohio,8,R,Solid RepublicanOH09,Ohio,9,D,Solid DemocraticOH10,Ohio,10,R,Solid RepublicanOH11,Ohio,11,D,Solid DemocraticOH12,Ohio,12,R,Solid RepublicanOH13,Ohio,13,D,Solid DemocraticOH14,Ohio,14,R,Solid RepublicanOH15,Ohio,15,R,Solid RepublicanOH16,Ohio,16,D,TossupOK01,Oklahoma,1,,Solid RepublicanOK02,Oklahoma,2,,Solid RepublicanOK03,Oklahoma,3,R,Solid RepublicanOK04,Oklahoma,4,R,Solid RepublicanOK05,Oklahoma,5,R,Solid RepublicanOR01,Oregon,1,D,Solid DemocraticOR02,Oregon,2,R,Solid RepublicanOR03,Oregon,3,D,Solid DemocraticOR04,Oregon,4,D,Solid DemocraticOR05,Oregon,5,D,Leaning DemocraticPA01,Pennsylvania,1,D,Solid DemocraticPA02,Pennsylvania,2,D,Solid DemocraticPA03,Pennsylvania,3,R,Solid RepublicanPA04,Pennsylvania,4,,Solid RepublicanPA05,Pennsylvania,5,R,Solid RepublicanPA06,Pennsylvania,6,R,Leaning RepublicanPA07,Pennsylvania,7,R,Leaning RepublicanPA08,Pennsylvania,8,R,Leaning RepublicanPA09,Pennsylvania,9,R,Solid RepublicanPA10,Pennsylvania,10,R,Solid RepublicanPA11,Pennsylvania,11,R,Solid RepublicanPA12,Pennsylvania,12,D,TossupPA13,Pennsylvania,13,D,Solid DemocraticPA14,Pennsylvania,14,D,Solid DemocraticPA15,Pennsylvania,15,R,Solid RepublicanPA16,Pennsylvania,16,R,Solid RepublicanPA17,Pennsylvania,17,,Solid DemocraticPA18,Pennsylvania,18,R,Solid RepublicanRI01,Rhode Island,1,none,Leaning DemocraticRI02,Rhode Island,2,none,Solid DemocraticSC01,South Carolina,1,R,Solid RepublicanSC02,South Carolina,2,R,Solid RepublicanSC03,South Carolina,3,R,Solid RepublicanSC04,South Carolina,4,R,Solid RepublicanSC05,South Carolina,5,R,Solid RepublicanSC06,South Carolina,6,D,Solid DemocraticSC07,South Carolina,7,,Solid RepublicanSD00,South Dakota,0,R,Solid RepublicanTN01,Tennessee,1,none,Solid RepublicanTN02,Tennessee,2,none,Solid RepublicanTN03,Tennessee,3,none,Solid RepublicanTN04,Tennessee,4,none,Solid RepublicanTN05,Tennessee,5,none,Solid DemocraticTN06,Tennessee,6,none,Solid RepublicanTN07,Tennessee,7,none,Solid RepublicanTN08,Tennessee,8,none,Solid RepublicanTN09,Tennessee,9,none,Solid DemocraticTX01,Texas,1,R,Solid RepublicanTX02,Texas,2,R,Solid RepublicanTX03,Texas,3,R,Solid RepublicanTX04,Texas,4,R,Solid RepublicanTX05,Texas,5,R,Solid RepublicanTX06,Texas,6,R,Solid RepublicanTX07,Texas,7,R,Solid RepublicanTX08,Texas,8,R,Solid RepublicanTX09,Texas,9,D,Solid DemocraticTX10,Texas,10,R,Solid RepublicanTX11,Texas,11,R,Solid RepublicanTX12,Texas,12,R,Solid RepublicanTX13,Texas,13,R,Solid RepublicanTX14,Texas,14,,Solid RepublicanTX15,Texas,15,D,Solid DemocraticTX16,Texas,16,,Solid DemocraticTX17,Texas,17,R,Solid RepublicanTX18,Texas,18,D,Solid DemocraticTX19,Texas,19,R,Solid RepublicanTX20,Texas,20,,Solid DemocraticTX21,Texas,21,R,Solid RepublicanTX22,Texas,22,R,Solid RepublicanTX23,Texas,23,R,Leaning RepublicanTX24,Texas,24,R,Solid RepublicanTX25,Texas,25,,Solid RepublicanTX26,Texas,26,R,Solid RepublicanTX27,Texas,27,R,Solid RepublicanTX28,Texas,28,D,Solid DemocraticTX29,Texas,29,D,Solid DemocraticTX30,Texas,30,D,Solid DemocraticTX31,Texas,31,R,Solid RepublicanTX32,Texas,32,R,Solid RepublicanTX33,Texas,33,,Solid DemocraticTX34,Texas,34,,Solid DemocraticTX35,Texas,35,D,Solid DemocraticTX36,Texas,36,,Solid RepublicanUT01,Utah,1,R,Solid RepublicanUT02,Utah,2,,Solid RepublicanUT03,Utah,3,R,Solid RepublicanUT04,Utah,4,D,TossupVA01,Virginia,1,R,Solid RepublicanVA02,Virginia,2,R,Leaning RepublicanVA03,Virginia,3,D,Solid DemocraticVA04,Virginia,4,R,Solid RepublicanVA05,Virginia,5,R,Solid RepublicanVA06,Virginia,6,R,Solid RepublicanVA07,Virginia,7,R,Solid RepublicanVA08,Virginia,8,D,Solid DemocraticVA09,Virginia,9,R,Solid RepublicanVA10,Virginia,10,R,Solid RepublicanVA11,Virginia,11,R,Solid DemocraticVT00,Vermont,0,none,Solid DemocraticWA01,Washington,1,none,Leaning DemocraticWA02,Washington,2,none,Solid DemocraticWA03,Washington,3,none,Solid RepublicanWA04,Washington,4,none,Solid RepublicanWA05,Washington,5,none,Solid RepublicanWA06,Washington,6,none,Solid DemocraticWA07,Washington,7,none,Solid DemocraticWA08,Washington,8,none,Solid RepublicanWA09,Washington,9,none,Solid DemocraticWA10,Washington,10,none,Leaning DemocraticWI01,Wisconsin,1,none,Solid RepublicanWI02,Wisconsin,2,none,Solid DemocraticWI03,Wisconsin,3,none,Solid DemocraticWI04,Wisconsin,4,none,Solid DemocraticWI05,Wisconsin,5,none,Solid RepublicanWI06,Wisconsin,6,none,Solid RepublicanWI07,Wisconsin,7,none,Leaning RepublicanWI08,Wisconsin,8,none,Leaning RepublicanWV01,West Virginia,1,R,Solid RepublicanWV02,West Virginia,2,R,Solid RepublicanWV03,West Virginia,3,D,Leaning DemocraticWY00,Wyoming,0,none,Solid Republican
