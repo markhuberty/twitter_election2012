@@ -1384,44 +1384,53 @@ generateStats <- function(tweets=master.cron.file){
   created.at.vec <- unlist(tweets$created_at)
   time <- strptime(created.at.vec, format="%a, %d %b %Y %H:%M:%S +0000")
   time <- format(time, format="%m-%d-%y")
-  per.day <- table(time)
+  per.day <- as.matrix(table(time))
+  colnames(per.day) <- c("Total")
 
   # Tweets per district
   district <- substr(tweets$unique_cand_id, 1,4)
-  per.district <- table(district)
+  per.district <- as.matrix(table(district))
 
   # Tweets per candidate
-  per.cand <- table(tweets$unique_cand_id)
+  per.cand <- as.matrix(table(tweets$unique_cand_id))
   # Tweets per candidate per day
-  per.cand.day <- table(tweets$unique_cand_id, time)
+  per.cand.day <- as.matrix(table(tweets$unique_cand_id, time))
   # Tweets per candidate per district
-  per.cand.district <- table(tweets$unique_cand_id, district)
+  per.cand.district <- as.matrix(table(tweets$unique_cand_id, district))
 
   # Tweets per party
   party <- substr(tweets$unique_cand_id, 6,6)
-  per.party <- table(party)
-  per.party.day <- table(party, time)
+  per.party <- as.matrix(table(party))
+  per.party.day <- as.matrix(table(party, time, dnn=c("", "")))
+  rownames(per.party.day) <- c("Democratic", "Republican")
+  per.party.day <- t(per.party.day)
+  per.party.day <- (per.party.day/rowSums(per.party.day))*100
+  per.party.day <- round(per.party.day, digits=0)
+  
   # Tweets per party per district
-  per.party.district <- table(party, district)
+  per.party.district <- as.matrix(table(party, district))
   # Tweets per party per day per district
   # per.day.district.party <- table(time, district, party)
 
-  info <- list(as.matrix(per.day),
-               as.matrix(per.district),
-               as.matrix(per.cand),
-               as.matrix(per.cand.day),
-               as.matrix(per.cand.district),
-               as.matrix(per.party),
-               as.matrix(per.party.day),
-               as.matrix(per.party.district)
+  info <- list((per.day),
+               (per.district),
+               (per.cand),
+               (per.cand.day),
+               (per.cand.district),
+               (per.party),
+               (per.party.day),
+               (per.party.district)
                # ,(per.day.district.party)
   )
+
+  
   names(info) <- c("tweets_per_day", "tweets_per_district", "tweets_per_candidate", "tweets_per_candidate_per_day",
                    "tweets_per_candidate_per_district", "tweets_per_party", "tweets_per_party_per_day",
                    "tweets_per_party_per_district"
   )
   return(info)
 }
+
 
 
 # Three functions called by generateStats_JSON
@@ -1461,61 +1470,63 @@ dim3.to.json <- function(freq){
 ##' @author Hillary Sanders
 generateStats_JSON <- function(tweets=master.cron.file, plot=FALSE){
 
-  # Tweets per day
-  created.at.vec <- unlist(tweets$created_at)
-  time <- strptime(created.at.vec, format="%a, %d %b %Y %H:%M:%S +0000")
-  time <- format(time, format="%m-%d-%y")
-  per.day <- table(time)
-  per.day <- dim1.to.json(per.day)
+#   # Tweets per day
+#   created.at.vec <- unlist(tweets$created_at)
+#   time <- strptime(created.at.vec, format="%a, %d %b %Y %H:%M:%S +0000")
+#   time <- format(time, format="%m-%d-%y")
+#   per.day <- table(time)
+#   per.day <- dim1.to.json(per.day)
 
   # Tweets per district
   district <- substr(tweets$unique_cand_id, 1,4)
   per.district <- table(district)
   per.district <- dim1.to.json(per.district)
 
-  # Tweets per candidate
-  per.cand <- table(tweets$unique_cand_id)
-  per.cand <- dim1.to.json(per.cand)
+#   # Tweets per candidate
+#   per.cand <- table(tweets$unique_cand_id)
+#   per.cand <- dim1.to.json(per.cand)
+# 
+#   # Tweets per candidate per day
+#   per.cand.day <- table(tweets$unique_cand_id, time)
+#   per.cand.day <- dim2.to.json(per.cand.day)
+# 
+#   # Tweets per candidate per district
+#   per.cand.district <- table(tweets$unique_cand_id, district)
+#   per.cand.district <- dim2.to.json(per.cand.district)
+# 
+#   # Tweets per party
+#   party <- substr(tweets$unique_cand_id, 6,6)
+#   per.party <- table(party)
+#   per.party <- dim1.to.json(party)
+#   per.party.day <- table(party, time)
+#   per.party.day <- dim2.to.json(per.party.day)
+# 
+#   # Tweets per party per district
+#   per.party.district <- table(party, district)
+#   per.party.district <- dim2.to.json(per.party.district)
+# 
+#   # Tweets per party per day per district
+#   per.day.district.party <- table(time, district, party)
+#   per.day.district.party <- dim3.to.json(per.day.district.party)
+# 
+#   info <- list((per.day),
+#                (per.district),
+#                (per.cand),
+#                (per.cand.day),
+#                (per.cand.district),
+#                (per.party),
+#                (per.party.day),
+#                (per.party.district),
+#                (per.day.district.party)
+#   )
+# 
+#   names(info) <- c("tweets_per_day", "tweets_per_district", "tweets_per_candidate", "tweets_per_candidate_per_day",
+#                    "tweets_per_candidate_per_district", "tweets_per_party", "tweets_per_party_per_day",
+#                    "tweets_per_party_per_district")
 
-  # Tweets per candidate per day
-  per.cand.day <- table(tweets$unique_cand_id, time)
-  per.cand.day <- dim2.to.json(per.cand.day)
-
-  # Tweets per candidate per district
-  per.cand.district <- table(tweets$unique_cand_id, district)
-  per.cand.district <- dim2.to.json(per.cand.district)
-
-  # Tweets per party
-  party <- substr(tweets$unique_cand_id, 6,6)
-  per.party <- table(party)
-  per.party <- dim1.to.json(party)
-  per.party.day <- table(party, time)
-  per.party.day <- dim2.to.json(per.party.day)
-
-  # Tweets per party per district
-  per.party.district <- table(party, district)
-  per.party.district <- dim2.to.json(per.party.district)
-
-  # Tweets per party per day per district
-  per.day.district.party <- table(time, district, party)
-  per.day.district.party <- dim3.to.json(per.day.district.party)
-
-  info <- list((per.day),
-               (per.district),
-               (per.cand),
-               (per.cand.day),
-               (per.cand.district),
-               (per.party),
-               (per.party.day),
-               (per.party.district),
-               (per.day.district.party)
-  )
-
-  names(info) <- c("tweets_per_day", "tweets_per_district", "tweets_per_candidate", "tweets_per_candidate_per_day",
-                   "tweets_per_candidate_per_district", "tweets_per_party", "tweets_per_party_per_day",
-                   "tweets_per_party_per_district")
-
-
+  # Len just wants the per_district file to be in JSON.
+  info <- per.district
+  
   return(info)
 }
 
