@@ -14,7 +14,11 @@ idx.drop <- which(colnames(tdm.sparse) %in%
                   c("congressman",
                     "congresswoman",
                     "rep",
-                    "candidate"
+                    "candidate",
+                    "rcanddummy",
+                    "dcanddummy",
+                    "roppdummy",
+                    "doppdummy"
                     )
                   )
 tdm.sparse <- tdm.sparse[,-idx.drop]
