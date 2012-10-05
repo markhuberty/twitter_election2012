@@ -294,6 +294,11 @@ for(l in properties.list){
             sep=""
             )
     load(master.corpus.filename)
+    ## Check and drop duplicates
+    house.data <- rbind(house.data, house.data.temp)
+    dup.idx <- duplicated(house.data)
+    house.data <- house.data[-dup.idx, ]
+    tdm.daily.corpus <- tdm.daily.corpus[-dup.idx, ]
 
     ## Append. Note this is done the weird way b/c the
     ## c() method described in tm() dumps columns if they contain no
@@ -309,7 +314,7 @@ for(l in properties.list){
                             )
         tdm.corpus <- as.DocumentTermMatrix(tdm.corpus, weighting=weightTf)
       }
-    house.data <- rbind(house.data, house.data.temp)
+
     print(dim(tdm.corpus))
     print(dim(house.data))
 
