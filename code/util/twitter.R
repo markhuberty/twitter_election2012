@@ -1372,12 +1372,13 @@ sparse.to.dtm <- function(sparseM, weighting=weightTf){
 ##' @title generateStats
 ##' @param tweets The master.cron.file, i.e. the big dataframe of collected tweets
 ##' thus far.
+##' @param candidate.id.names The correspondence table between the unique_cand_id and the full candidate name
 ##' @param plot Logical - should a few graphs be made to visualize the summary stats?
 ##' Defaults to FALSE.
 ##' @return A list of named matrices, each a particular description of the tweets. e.g.
 ##' number of tweets per party per district.
 ##' @author Hillary Sanders
-generateStats <- function(tweets=master.cron.file){
+generateStats <- function(tweets=master.cron.file, candidate.id.names){
 
   # Tweets per day
   print(dim(tweets))
@@ -1393,6 +1394,17 @@ generateStats <- function(tweets=master.cron.file){
 
   # Tweets per candidate
   per.cand <- as.matrix(table(tweets$unique_cand_id))
+  per.cand <- cbind(rownames(per.cand), per.cand)
+  colnames(per.cand) <- c("NAMEID", "TOTAL")
+  per.cand <- merge(candidate.id.names, per.cand,
+                    by.x="unique_cand_id",
+                    by.y="NAMEID",
+                    all=TRUE
+                    )
+  per.cand$TOTAL <- as.integer(as.character(per.cand$TOTAL))
+  per.cand$TOTAL[is.na(per.cand$TOTAL)] <- 0
+  per.cand <- per.cand[,c("name", "TOTAL")]
+  names(per.cand) <- c("NAME", "TOTAL")
   # Tweets per candidate per day
   per.cand.day <- as.matrix(table(tweets$unique_cand_id, time))
   # Tweets per candidate per district
