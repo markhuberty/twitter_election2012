@@ -151,7 +151,9 @@ noise.indicator.terms <- c("mlb",
                            "baseball",
                            "football",
                            "orioles",
-                           "touchdown"
+                           "touchdown",
+                           "sports",
+                           "coach"
                            )
 noise.indicator.terms <- c(paste(" ", noise.indicator.terms, sep=""),
                            paste(noise.indicator.terms, " ", sep="")

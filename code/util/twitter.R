@@ -1367,17 +1367,31 @@ sparse.to.dtm <- function(sparseM, weighting=weightTf){
 
 }
 
-
+format.quantile.minmax <- function(vec, probs=seq(0,1,0.1)){
+  quantiles <- quantile(vec, probs)
+  out <- matrix(nrow=(length(quantiles) - 1), ncol=2, NA)
+  for(i in 1:(length(quantiles) - 1))
+    {
+      out[i,1] <- ceiling(quantiles[i] + 0.1)
+      out[i,2] <- floor(quantiles[i+1])
+    }
+  ## Make sure we handle zeros even if not present in the data
+  out[1,1] <- 0
+  colnames(out) <- c("start", "end")
+  return(out)
+  
+}
 ##' A little function to generate some summary statistics on tweets.
 ##' @title generateStats
 ##' @param tweets The master.cron.file, i.e. the big dataframe of collected tweets
 ##' thus far.
+##' @param candidate.id.names The correspondence table between the unique_cand_id and the full candidate name
 ##' @param plot Logical - should a few graphs be made to visualize the summary stats?
 ##' Defaults to FALSE.
 ##' @return A list of named matrices, each a particular description of the tweets. e.g.
 ##' number of tweets per party per district.
 ##' @author Hillary Sanders
-generateStats <- function(tweets=master.cron.file){
+generateStats <- function(tweets=master.cron.file, candidate.id.names){
 
   # Tweets per day
   print(dim(tweets))
@@ -1390,9 +1404,23 @@ generateStats <- function(tweets=master.cron.file){
   # Tweets per district
   district <- substr(tweets$unique_cand_id, 1,4)
   per.district <- as.matrix(table(district))
-
-  # Tweets per candidate
+  per.district.quantiles <- format.quantile.minmax(per.district[,1])
+  per.district.quantiles[,1] <- per.district.quantiles[,1]
+  ## Tweets per candidate
   per.cand <- as.matrix(table(tweets$unique_cand_id))
+  per.cand <- cbind(rownames(per.cand), per.cand)
+  colnames(per.cand) <- c("NAMEID", "TOTAL")
+  per.cand <- merge(candidate.id.names, per.cand,
+                    by.x="unique_cand_id",
+                    by.y="NAMEID",
+                    all=TRUE
+                    )
+  per.cand$TOTAL <- as.integer(as.character(per.cand$TOTAL))
+  per.cand$TOTAL[is.na(per.cand$TOTAL)] <- 0
+  per.cand <- per.cand[,c("name", "TOTAL")]
+  names(per.cand) <- c("NAME", "TOTAL")
+  per.cand.quantiles <- format.quantile.minmax(per.cand$TOTAL)
+  
   # Tweets per candidate per day
   per.cand.day <- as.matrix(table(tweets$unique_cand_id, time))
   # Tweets per candidate per district
@@ -1414,20 +1442,29 @@ generateStats <- function(tweets=master.cron.file){
 
   info <- list((per.day),
                (per.district),
+               (per.district.quantiles),
                (per.cand),
+               (per.cand.quantiles),
                (per.cand.day),
                (per.cand.district),
                (per.party),
                (per.party.day),
                (per.party.district)
                # ,(per.day.district.party)
-  )
+               )
 
   
-  names(info) <- c("tweets_per_day", "tweets_per_district", "tweets_per_candidate", "tweets_per_candidate_per_day",
-                   "tweets_per_candidate_per_district", "tweets_per_party", "tweets_per_party_per_day",
+  names(info) <- c("tweets_per_day",
+                   "tweets_per_district",
+                   "tweets_per_district_quantiles",
+                   "tweets_per_candidate",
+                   "tweets_per_candidate_quantiles",
+                   "tweets_per_candidate_per_day",
+                   "tweets_per_candidate_per_district",
+                   "tweets_per_party",
+                   "tweets_per_party_per_day",
                    "tweets_per_party_per_district"
-  )
+                   )
   return(info)
 }
 
