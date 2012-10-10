@@ -4,7 +4,9 @@
 ## concatenating tweets. Cat'ing tweets gives the
 ## problem of bigrams at the junction
 
-
+## This is Mark's build_doc_term_mat.R code with a few changes to create 
+## summary data on opinionfinder wordcounts per candidate, over tweets. 
+## Final product is a candidate-level dataframe. -hs
 
 print(options("encoding"))
 print(Sys.getlocale("LC_CTYPE"))
@@ -13,12 +15,18 @@ library(tm)
 library(RWeka)
 library(foreach)
 
-setwd("/Users/hills/t1/twitter_election2012")
+# For fiddling purposes, to be deleted:
+# setwd("/Users/hills/t1/twitter_election2012")
 # source("./code/util/build_sparse_functions.R")
 source("./code/util/twitter.R")
-load("../../master.cron.file.Rdata")
+# load("../../master.cron.file.Rdata")
+load("./data/cron_output/master.cron.file.Rdata")
 
-master.cron.file <- master.cron.file[1000:5000,]
+# For fiddling purposes, to be deleted:
+# master.cron.file <- master.cron.file[5000:15000,]
+
+# Strong-subject vs weak-subject opinionfinder weights:
+weights <- c(1, .5)
 
 
 ## Load the dictionaries for doc-term matrix construction
@@ -34,12 +42,9 @@ wordlist$priorpolarity[wordlist$priorpolarity=="negative"] <- -1
 wordlist$priorpolarity <- as.numeric(wordlist$priorpolarity)
 
 wordlist$type <- as.character(wordlist$type)
-wordlist$type[wordlist$type=="strongsubj"] <- 1
-wordlist$type[wordlist$type=="weaksubj"] <- .5
+wordlist$type[wordlist$type=="strongsubj"] <- weights[1]
+wordlist$type[wordlist$type=="weaksubj"] <- weights[2]
 wordlist$type <- as.numeric(wordlist$type)
-
-
-levels(wordlist$type) <- c(1, .5)
 
 wordlist.dictionary <- Dictionary(as.character(wordlist$word1))
 
@@ -57,11 +62,8 @@ formatted.date <-
   strptime(as.character(formatted.date), time.format)
 master.cron.file$created_at <- formatted.date
 
-
-## Subset the candidates to D/R races
-# is.dem.or.rep <- master.cron.file$party %in% c("D", "R")
-house.data <- master.cron.file # [is.dem.or.rep,]
-# rm(is.dem.or.rep, master.cron.file)
+house.data <- master.cron.file
+rm( master.cron.file)
 
 ## Make sure that all tweets come from before the election
 election.date <- as.Date("2012-11-6", format="%Y-%m-%d")
@@ -70,7 +72,7 @@ formatted.election.date <- strptime(election.date, time.format)
 before.date <-
   as.numeric(house.data$created_at) < as.numeric(formatted.election.date)
 house.data <- house.data[before.date, ]
-# rm(election.date) -hs
+rm(before.date)
 
 ## Chart the tweet age in days before election date
 tweet.age <- round(as.numeric(difftime(election.date,
@@ -131,8 +133,7 @@ gc()
 
 print("Challengers subsetted")
 
-
- ## Now clear out the junk in the tweets themselves
+## Now clear out the junk in the tweets themselves
 ## To prevent an error when certain tweets have non-unicode-8 characters, encode to latin-1.
 #Encoding(house.data$text) <- "latin1"
 house.data$text <- iconv(house.data$text,
@@ -232,6 +233,9 @@ tokenizer.control <- Weka_control(min=1, max=1)
 my.tokenizer <-
   function(x) NGramTokenizer(x, tokenizer.control)
 
+## Determine number of tweets per candidate.
+## Will later determine number of opinion-finder tweets per candidate.
+tweets.per.cand <- as.matrix(table(house.data$unique_cand_id))
 
 ## Build up the corpus with the appropriate dictionary
 ###### Use you wordlist dictionary.
@@ -248,6 +252,9 @@ house.data <- house.data[non.zero.rows, ]
 dtm <- dtm[non.zero.rows, non.zero.cols]
 words <- wordlist[non.zero.cols, ]
 weights <- (words$type)*(words$priorpolarity)
+
+## Determine number of tweets with opinion-finder words per candidate.
+op_tweets_per_cand <- as.matrix(table(house.data$unique_cand_id))
 
 # Aggregate sparse matrix by candidate.
 # The c-code wasn't working, so I just did this for now:
@@ -299,7 +306,14 @@ party <- substr(rownames(opinion.matrix), 6, 6)
 sentiment_score <- by.candidate
 sentiment_date <- rep(Sys.Date(), nrow(opinion.matrix))
 
-by.cand <- data.frame(state, district, party, sentiment_score, sentiment_date)
+# Merge the two types of number of tweets per candidate
+tweets_per_cand <- as.matrix(tweets.per.cand[
+  rownames(tweets.per.cand) %in% rownames(op.tweets.per.cand), 1
+  ])
+standardized_score <- (sentiment_score/tweets.per.cand)
+
+by.cand <- data.frame(state, district, party, sentiment_score, 
+                      tweets.per.cand, op.tweets.per.cand, sentiment_date)
 
 barplot(by.candidate, col=c("blue", "red")[as.numeric(factor(party))],
         pch=19, xlab="Candidate", ylab="Sentiment Score", names.arg="")
@@ -309,5 +323,9 @@ plot(1:length(by.candidate), by.candidate,
      pch=19, xlab="Candidate", ylab="Sentiment Score", cex=abs(by.candidate)^.2)
   
   
+plot(standardized_score, col=c("#1111FF70", "#FF111170")[as.numeric(factor(party))],
+     pch=19, cex=tweets.per.cand^.2)
+abline(h=mean(standardized_score[party=="D"]), col="#1111FF99", lwd=4)
+abline(h=mean(standardized_score[party=="R"]), col="#FF111199", lwd=4)
   
   
