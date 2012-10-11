@@ -103,10 +103,10 @@ def compute_partisanship(entity, partisan_labels, label_scores={'con':1, 'lib':-
 # tweets = [row for row in reader]
 # input_conn.close()
 
-tweets = pds.read_csv('/Users/markhuberty/Documents/Research/Papers/'
-                      'twitter_election2012/data/master_partisan_data.csv'
-                      )
-
+# tweets = pds.read_csv('/Users/markhuberty/Documents/Research/Papers/'
+#                       'twitter_election2012/data/master_partisan_data.csv'
+#                       )
+tweets = pds.read_csv('../../data/doc_term_mat/house_data.csv')
 ## Find liberal and conservative tags
 lib_tags = return_jaccard_similar_tags(tweets['text'], 'p2', threshold=0.01)
 con_tags = return_jaccard_similar_tags(tweets['text'], 'tcot', threshold=0.01)
@@ -116,14 +116,16 @@ con_tags = dict(con_tags)
 ## Eliminate any overlaps
 lib_tag_subset = lib_tags.copy()
 con_tag_subset = con_tags.copy()
+confusion_tags = ['#GOP', '#tcot', '#gop2012', '#ocra']
 for l in lib_tags:
     if l in con_tags:
-        if lib_tags[l] > con_tags[l] and l not in ['#GOP', '#tcot', '#gop2012']:
+        if lib_tags[l] > con_tags[l] and l not in confusion_tags:
             del con_tag_subset[l]
         else: 
             del lib_tag_subset[l]
     else:
-        if l in ['#GOP', '#tcot', '#gop2012']:
+        if l in confusion_tags:
+            con_tag_subset[l] = 1
             del lib_tag_subset[l]
 
 ## Munge them into regex

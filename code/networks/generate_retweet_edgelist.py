@@ -1,14 +1,13 @@
 import csv
-import networkx as nx
 import re
 import string
-import time
 import numpy as np
-import pandas
+import pandas as pds
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 import os
+import networkx as nx
 
 os.chdir('/mnt/fwire_80/twitter_election2012')
 
@@ -77,23 +76,90 @@ def return_most_connected_individual(rt_graphs):
         
 
 ## Test it
-rt_data = pandas.read_csv('./data/cand_fuser_msg.csv')
+#rt_data = pandas.read_csv('./data/cand_fuser_msg.csv')
+rt_data = pds.read_csv('/mnt/fwire_80/twitter_election2012/data/doc_term_mat/house_data.csv')#tweets
+user_pship = pds.read_csv('/mnt/fwire_80/twitter_election2012/data/user_partisanship.csv')
 
-
-rt_edgelist = extract_edgelist(rt_data['unique_cand_id'],
+rt_edgelist = extract_edgelist(['master'] * rt_data.shape[0],#rt_data['unique_cand_id'],
                                rt_data['from_user'],
                                rt_data['text']
                                )
 
 
 ## First layout each edgelist separately
-rt_graphs = dgraph_from_edgelist(rt_edgelist, edge_threshold = 0)
-cc_graph_length = plot_largest_connected_component(rt_graphs, plot=False)
+# rt_graphs = dgraph_from_edgelist(rt_edgelist, edge_threshold = 0)
+# cc_graph_length = plot_largest_connected_component(rt_graphs, plot=True, nx_layout='sfdp')
 
-import operator
-sorted_cc = sorted(cc_graph_length.iteritems(), key=operator.itemgetter(1))
-sorted_betweenness = return_most_connected_individual(rt_graphs)
+# import operator
+# sorted_cc = sorted(cc_graph_length.iteritems(), key=operator.itemgetter(1))
+# sorted_betweenness = return_most_connected_individual(rt_graphs)
+
+## Accumulate the nodes and edges across districts
+global_nodelist = []
+global_edgelist = {}
+for rtg in rt_edgelist:
+    for edge in rt_edgelist[rtg]:
+        for node in edge:
+            if node not in global_nodelist:
+                global_nodelist.append(node)
+        if edge not in global_edgelist:
+            global_edgelist[edge] = 1
+        else:
+            global_edgelist[edge] += 1
+
+for idx, node in enumerate(global_nodelist):
+    if node in user_pship['user'].values:
+        ncolor = user_pship['pscore'][user_pship['user'].values ==  node
+        ncolor = ncolor.values[0]
+    else:
+        ncolor = 0
+    global_nodelist[idx] = (node, {'color': ncolor})
 
 
+global_ebunch = []
+for edge in global_edgelist:
+    etuple = (edge[0], edge[1], global_edgelist[edge])
+    global_ebunch.append(etuple)
 
-## Then combine and extract
+global_rt_graph = nx.DiGraph()
+global_rt_graph.add_nodes_from(global_nodelist)
+global_rt_graph.add_weighted_edges_from(global_ebunch)
+
+largest_cc = nx.connected_component_subgraphs(global_rt_graph.to_undirected())[0]
+largest_cc_mst = nx.minimum_spanning_tree(largest_cc)
+
+node_color = nx.get_node_attributes(largest_cc_mst, 'color')
+colorvec = [node_color[n] for n in node_color]
+nodesize = [2 if np.abs(c) > 0 else 0.2 for c in colorvec]
+
+graph_layout = nx.graphviz_layout(largest_cc_mst, prog='sfdp')
+
+nx.draw_networkx_edges(largest_cc_mst,
+                       graph_layout,
+                       alpha=0.2,
+                       width=0.2
+                       )
+nx.draw_networkx_nodes(largest_cc_mst,
+                       graph_layout,
+                       nodelist=[n for n in node_color if np.abs(node_color[n]) > 0],
+                       node_color=[c for c in colorvec if np.abs(c) > 0],
+                       vmin=-1,
+                       vmax=1,
+                       cmap=matplotlib.cm.get_cmap('RdBu_r'),
+                       alpha=1,
+                       node_size=[s for s, c in zip(nodesize, colorvec) if np.abs(c) > 0],
+                       linewidths=0.05
+                       )
+nx.draw_networkx_nodes(largest_cc_mst,
+                       graph_layout,
+                       nodelist=[n for n in node_color if np.abs(node_color[n]) == 0],
+                       node_color=[c for c in colorvec if np.abs(c) == 0],
+                       vmin=-1,
+                       vmax=1,
+                       cmap=matplotlib.cm.get_cmap('RdBu_r'),
+                       alpha=0.5,
+                       node_size=[s for s, c in zip(nodesize, colorvec) if np.abs(c) == 0],
+                       linewidths=0.05
+                       )
+plt.savefig('./figures/largest_cc_partisan_plot.pdf')
+plt.close()
