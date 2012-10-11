@@ -999,7 +999,7 @@ compute.rating <- function(prediction.master.wide,
   n.periods <- min(n.periods, ncol(prediction.master.wide))
 
   if(is.null(cutpoint.intervals)){
-    if(voteshare==FALSE){
+    if(voteshare){
       cutpoint.intervals <- c(0, 45, 49, 51, 55, 100)
     } else {
       cutpoint.intervals <- c(0, 0.45, 0.49, 0.51, 0.55, 1)
@@ -1377,7 +1377,7 @@ format.quantile.minmax <- function(vec, probs=seq(0,1,0.1)){
     }
   ## Make sure we handle zeros even if not present in the data
   out[1,1] <- 0
-  colnames(out) <- c("start", "end")
+  colnames(out) <- c("begin", "end")
   return(out)
   
 }
@@ -1392,7 +1392,8 @@ format.quantile.minmax <- function(vec, probs=seq(0,1,0.1)){
 ##' number of tweets per party per district.
 ##' @author Hillary Sanders
 generateStats <- function(tweets=master.cron.file, candidate.id.names){
-
+  chloropleth.quantiles <- seq(0,1, 1/7)
+  
   # Tweets per day
   print(dim(tweets))
   created.at.vec <- unlist(tweets$created_at)
@@ -1404,8 +1405,10 @@ generateStats <- function(tweets=master.cron.file, candidate.id.names){
   # Tweets per district
   district <- substr(tweets$unique_cand_id, 1,4)
   per.district <- as.matrix(table(district))
-  per.district.quantiles <- format.quantile.minmax(per.district[,1])
-  per.district.quantiles[,1] <- per.district.quantiles[,1]
+  per.district.quantiles <- format.quantile.minmax(per.district[,1],
+                                                   chloropleth.quantiles
+                                                   )
+
   ## Tweets per candidate
   per.cand <- as.matrix(table(tweets$unique_cand_id))
   per.cand <- cbind(rownames(per.cand), per.cand)
@@ -1419,7 +1422,9 @@ generateStats <- function(tweets=master.cron.file, candidate.id.names){
   per.cand$TOTAL[is.na(per.cand$TOTAL)] <- 0
   per.cand <- per.cand[,c("name", "TOTAL")]
   names(per.cand) <- c("NAME", "TOTAL")
-  per.cand.quantiles <- format.quantile.minmax(per.cand$TOTAL)
+  per.cand.quantiles <- format.quantile.minmax(per.cand$TOTAL,
+                                               chloropleth.quantiles
+                                               )
   
   # Tweets per candidate per day
   per.cand.day <- as.matrix(table(tweets$unique_cand_id, time))
