@@ -26,7 +26,8 @@ def return_hashtag_index(tweets, seed_tag):
     for i,t in enumerate(tweets):
         if seed_tag in t:
             seed_tag_idx.append(i)
-        other_tags = [word for word in t.split() if word.startswith('#') and len(word) > 1]
+        other_tags = [word for word in t.split()
+                      if word.startswith('#') and len(word) > 1]
         if other_tags:
             for tag in other_tags:
                 if tag != seed_tag:
@@ -75,7 +76,10 @@ def compute_partisanship(entity, partisan_labels, label_scores={'con':1, 'lib':-
     """
     u_score = {}
     u_piecewise_score = {}
-    score_template = dict(zip(label_scores.keys(), [0] * len(label_scores.keys())))
+    score_template = dict(zip(label_scores.keys(),
+                              [0] * len(label_scores.keys())
+                              )
+                          )
     for u, l in zip(entity, partisan_labels):
         if u not in u_piecewise_score:
             u_piecewise_score[u] = copy.deepcopy(score_template)
@@ -95,25 +99,17 @@ def compute_partisanship(entity, partisan_labels, label_scores={'con':1, 'lib':-
             u_score[u] = numerator_score / float(denominator_score)
     return u_score # u_piecewise_score
 
-## Load in a file of users and messages
-# input_conn = open('/Users/markhuberty/Documents/Research/Papers/twitter_election2012/data/tweets_users.csv',
-#                   'rt'
-#                   )
-# reader = csv.DictReader(input_conn)
-# tweets = [row for row in reader]
-# input_conn.close()
-
-# tweets = pds.read_csv('/Users/markhuberty/Documents/Research/Papers/'
-#                       'twitter_election2012/data/master_partisan_data.csv'
-#                       )
+## Read in the text data
 tweets = pds.read_csv('../../data/doc_term_mat/house_data.csv')
+
 ## Find liberal and conservative tags
 lib_tags = return_jaccard_similar_tags(tweets['text'], 'p2', threshold=0.01)
 con_tags = return_jaccard_similar_tags(tweets['text'], 'tcot', threshold=0.01)
 lib_tags = dict(lib_tags)
 con_tags = dict(con_tags)
 
-## Eliminate any overlaps
+## Eliminate any overlaps; note the hand-coding required
+## to deal with some obvious false positives
 lib_tag_subset = lib_tags.copy()
 con_tag_subset = con_tags.copy()
 confusion_tags = ['#GOP', '#tcot', '#gop2012', '#ocra']
@@ -143,6 +139,7 @@ con_tweets = [True if re_con.search(t.lower()) else False for t in tweets['text'
 neu_tweets = [True if re_neu.search(t.lower()) else False for t in tweets['text']]
 
 l = [t for i,t in enumerate(tweets['text']) if lib_tweets[i]]
+
 ## Take as "training" a restrictive set where 'liberal' is only
 ## 'liberal' if only 'liberal' tags are found, and similarly for conservative
 training_tweets = []

@@ -130,6 +130,13 @@ global_rt_graph.add_weighted_edges_from(global_ebunch)
 largest_cc = nx.connected_component_subgraphs(global_rt_graph.to_undirected())
 largest_cc_mst = nx.minimum_spanning_tree(largest_cc[0])
 
+## Generate the betweenness centrality and sort it
+lcc_centrality = nx.degree_centrality(largest_cc[0])
+sorted_centrality = sorted(lcc_centrality.iteritems(), key=operator.itemgetter(1))
+labels_to_plot = [c[0] for i,c in enumerate(sorted_centrality) if i <= 30]
+
+plot_labels = [n if n in labels_to_plot else '' for n in largest_cc_mst.nodes()]
+
 ## Recover the color and size attributes for nodes
 ## in the mst
 node_color = nx.get_node_attributes(largest_cc_mst, 'color')
@@ -146,19 +153,6 @@ nx.draw_networkx_edges(largest_cc_mst,
                        )
 nx.draw_networkx_nodes(largest_cc_mst,
                        graph_layout,
-                       nodelist=[n for n in node_color if np.abs(node_color[n]) > 0],
-                       node_color=[c for c in colorvec
-                                   if np.abs(c) > 0],
-                       vmin=-1,
-                       vmax=1,
-                       cmap=matplotlib.cm.get_cmap('RdBu_r'),
-                       alpha=1,
-                       node_size=[s for s, c in zip(nodesize, colorvec)
-                                  if np.abs(c) > 0],
-                       linewidths=0.05
-                       )
-nx.draw_networkx_nodes(largest_cc_mst,
-                       graph_layout,
                        nodelist=[n for n in node_color
                                  if np.abs(node_color[n]) == 0],
                        node_color=[c for c in colorvec
@@ -171,5 +165,24 @@ nx.draw_networkx_nodes(largest_cc_mst,
                                   if np.abs(c) == 0],
                        linewidths=0.05
                        )
+nx.draw_networkx_nodes(largest_cc_mst,
+                       graph_layout,
+                       nodelist=[n for n in node_color if np.abs(node_color[n]) > 0],
+                       node_color=[c for c in colorvec
+                                   if np.abs(c) > 0],
+                       vmin=-1,
+                       vmax=1,
+                       cmap=matplotlib.cm.get_cmap('RdBu_r'),
+                       alpha=1,
+                       node_size=[s for s, c in zip(nodesize, colorvec)
+                                  if np.abs(c) > 0],
+                       linewidths=0.05
+                       )
+nx.draw_networkx_labels(largest_cc_mst,
+                        graph_layout,
+                        labels=node_labels,
+                        font_color='green',
+                        font_size=6
+                        )
 plt.savefig('./figures/largest_cc_partisan_plot.pdf')
 plt.close()
