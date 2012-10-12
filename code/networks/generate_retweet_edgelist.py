@@ -85,7 +85,12 @@ rt_edgelist = extract_edgelist(['master'] * rt_data.shape[0],#rt_data['unique_ca
                                rt_data['from_user'],
                                rt_data['text']
                                )
-
+## Strip out some extraneous stuff in the tweet data:
+rt_data = rt_data[rt_data['user'] not in ['Yankees',
+                                          'ObliviousNFLRef',
+                                          'stephenasmith'
+                                          ]
+                  ]
 
 ## First layout each edgelist separately
 # rt_graphs = dgraph_from_edgelist(rt_edgelist, edge_threshold = 0)
