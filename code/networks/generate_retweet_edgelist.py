@@ -8,6 +8,7 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 import os
 import networkx as nx
+import operator
 
 os.chdir('/mnt/fwire_80/twitter_election2012')
 
@@ -95,31 +96,33 @@ rt_edgelist = extract_edgelist(['master'] * rt_data.shape[0],#rt_data['unique_ca
 # sorted_betweenness = return_most_connected_individual(rt_graphs)
 
 ## Accumulate the nodes and edges across districts
-global_nodelist = []
-global_edgelist = {}
+## NOTE: much faster to accumulate nodes in dict
+global_nodedict = {}
+global_edgedict = {}
 for rtg in rt_edgelist:
     for edge in rt_edgelist[rtg]:
         for node in edge:
-            if node not in global_nodelist:
-                global_nodelist.append(node)
-        if edge not in global_edgelist:
-            global_edgelist[edge] = 1
+            if node not in global_nodedict:
+                global_nodedict[node] = 1
+        if edge not in global_edgedict:
+            global_edgedict[edge] = 1
         else:
-            global_edgelist[edge] += 1
+            global_edgedict[edge] += 1
 
 ## Set node color by user partisanship
-for idx, node in enumerate(global_nodelist):
+global_nodelist = []
+for node in global_nodedict.keys():
     if node in user_pship['user'].values:
-        ncolor = user_pship['pscore'][user_pship['user'].values ==  node
+        ncolor = user_pship['pscore'][user_pship['user'].values ==  node]
         ncolor = ncolor.values[0]
     else:
         ncolor = 0
-    global_nodelist[idx] = (node, {'color': ncolor})
+    global_nodelist.append((node, {'color': ncolor})) 
 
 ## Generate the (f,t,w) edge tuples
 global_ebunch = []
-for edge in global_edgelist:
-    etuple = (edge[0], edge[1], global_edgelist[edge])
+for edge in global_edgedict:
+    etuple = (edge[0], edge[1], global_edgedict[edge])
     global_ebunch.append(etuple)
 
 ## Generate the graph and recover its largest connected component
@@ -132,11 +135,16 @@ largest_cc_mst = nx.minimum_spanning_tree(largest_cc[0])
 
 ## Generate the betweenness centrality and sort it
 lcc_centrality = nx.degree_centrality(largest_cc[0])
-sorted_centrality = sorted(lcc_centrality.iteritems(), key=operator.itemgetter(1))
+sorted_centrality = sorted(lcc_centrality.iteritems(),
+                           key=operator.itemgetter(1),
+                           reverse=True
+                           )
+
 labels_to_plot = [c[0] for i,c in enumerate(sorted_centrality) if i <= 30]
 
-plot_labels = [n if n in labels_to_plot else '' for n in largest_cc_mst.nodes()]
-
+plot_labels = [n if n in labels_to_plot else ''
+               for n in largest_cc_mst.nodes()]
+plot_labels = dict(zip(largest_cc_mst.nodes(), plot_labels))
 ## Recover the color and size attributes for nodes
 ## in the mst
 node_color = nx.get_node_attributes(largest_cc_mst, 'color')
@@ -180,7 +188,7 @@ nx.draw_networkx_nodes(largest_cc_mst,
                        )
 nx.draw_networkx_labels(largest_cc_mst,
                         graph_layout,
-                        labels=node_labels,
+                        labels=plot_labels,
                         font_color='green',
                         font_size=6
                         )
