@@ -15,5 +15,5 @@ for(i in 1:length(stats)){
 # Now the JSON object:
 per.district <- generateStats_JSON(tweets=master.cron.file)
 write(per.district, file="./data/summary_stats/tweets_per_district.JSON")
-
+print("Summary stats complete")
 
