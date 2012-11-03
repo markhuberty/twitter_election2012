@@ -103,8 +103,14 @@ def compute_partisanship(entity, partisan_labels, label_scores={'con':1, 'lib':-
 tweets = pds.read_csv('../../data/doc_term_mat/house_data.csv')
 
 ## Find liberal and conservative tags
-lib_tags = return_jaccard_similar_tags(tweets['text'], 'p2', threshold=0.01)
-con_tags = return_jaccard_similar_tags(tweets['text'], 'tcot', threshold=0.01)
+lib_tags = return_jaccard_similar_tags(tweets['text'],
+                                       'p2',
+                                       threshold=0.01
+                                       )
+con_tags = return_jaccard_similar_tags(tweets['text'],
+                                       'tcot',
+                                       threshold=0.01
+                                       )
 lib_tags = dict(lib_tags)
 con_tags = dict(con_tags)
 
