@@ -49,3 +49,10 @@ parse.json.results <- function(result.list){
 }
 
 house.results <- parse.json.results(nyt.list)
+house.results$state_dist <-
+  ifelse(nchar(as.character(house.results$seat)) == 1,
+         paste(house.results$state, "0", house.results$seat, sep=""),
+         paste(house.results$state, house.results$seat, sep="")
+         )
+
+write.csv(house.results, file="./data/house_vote_results.csv")
