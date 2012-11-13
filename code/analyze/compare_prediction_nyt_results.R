@@ -106,3 +106,25 @@ plot.voteshare.corr <- ggplot(df.voteshare.corr,
   scale_colour_discrete("Correspondence between predictions and outcomes")
 
 ggsave(file="./figures/voteshare_winloss_correlation_bydate.pdf", plot=plot.voteshare.corr)
+
+
+## Do some analysis of what votes changed the most
+
+vote.diff.oct.nov <- house.votes$X2012.11.06 - house.votes$X2012.10.22
+switch.victor <-
+  house.votes$X2012.11.06 < 50 & house.votes$X2012.10.22 > 50
+df.vote.diff <- data.frame(house.votes$state_dist, vote.diff.oct.nov, switch.victor)
+
+districts.to.inspect <-
+  df.vote.diff[order(df.vote.diff$vote.diff.oct.nov),][1:20,]
+
+## Load up
+load("~/generic.tdm.2.voteshare.2012-10-23.RData")
+load("~/generic.tdm.2.voteshare.2012-11-06.RData")
+
+sparse.corpus <- sparseMatrix(i=tdm$i,
+                              j=tdm$j,
+                              x=tdm$v,
+                              dims=c(tdm$nrow,
+                                tdm$ncol)
+                              )
