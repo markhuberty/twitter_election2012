@@ -119,12 +119,58 @@ districts.to.inspect <-
   df.vote.diff[order(df.vote.diff$vote.diff.oct.nov),][1:20,]
 
 ## Load up
-load("~/generic.tdm.2.voteshare.2012-10-23.RData")
-load("~/generic.tdm.2.voteshare.2012-11-06.RData")
+dtm.to.sparse <- function(tdm){
+  sparse.corpus <- sparseMatrix(i=tdm$i,
+                                j=tdm$j,
+                                x=tdm$v,
+                                dims=c(tdm$nrow,
+                                  tdm$ncol)
+                                )
+  return(sparse.corpus)
+}
 
-sparse.corpus <- sparseMatrix(i=tdm$i,
-                              j=tdm$j,
-                              x=tdm$v,
-                              dims=c(tdm$nrow,
-                                tdm$ncol)
+load("~/generic.tdm.master.2.voteshare.2012-10-23.RData")
+oct.corpus <- dtm.to.sparse(tdm.corpus)
+
+load("~/generic.tdm.master.2.voteshare.2012-11-06.RData")
+nov.corpus <- dtm.to.sparse(tdm.corpus)
+
+col.names <- unlist(tdm.corpus$dimnames[2])
+
+oct.term.sums <- colSums(oct.corpus)
+nov.term.sums <- colSums(nov.corpus)
+
+oct.term.shares <- oct.term.sums / sum(oct.term.sums)
+nov.term.shares <- nov.term.sums / sum(nov.term.sums)
+
+df <- data.frame(col.names,
+                 oct.term.sums,
+                 nov.term.sums,
+                 oct.term.shares,
+                 nov.term.shares
+                 )
+
+plot.termshares <- ggplot(df,
+                          aes(x=oct.term.shares,
+                              y=nov.term.shares,
+                              label=col.names,
+                              size=oct.term.shares
                               )
+                          ) +
+  geom_text()
+
+print(plot.termshares)
+
+df$sharediff <- df$nov.term.shares - df$oct.term.shares
+
+df <- df[order(df$sharediff, decreasing=TRUE),]
+df$col.names <- factor(df$col.names,
+                       levels=df$col.names[order(df$sharediff,
+                         decreasing=TRUE)]
+                       )
+
+plot.col.diffs <- ggplot(df,
+                         aes(x=col.names, y=sharediff, label=col.names)
+                         ) +
+  geom_text(size=2, alpha=0.5, position="jitter", hjust=0)
+print(plot.col.diffs)
