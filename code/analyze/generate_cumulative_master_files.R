@@ -34,7 +34,7 @@ for(i in 1:length(date.seq)){
                         )
   print(d)
   load(file.to.load)
-  
+
   ## Generate the sparse matrix version and aggregate
   col.names <- unlist(tdm.corpus$dimnames[2])
   time.var <- as.Date(house.data$created_at)
@@ -73,12 +73,15 @@ for(i in 1:length(date.seq)){
   row.names <- rownames(tdm.sparse)
 
 
-  
+
   out <- list(tdm.sparse, house.data, col.names, row.names)
   tdm.sparse.byday[[length(tdm.sparse.byday) + 1]] <- out
 
 
 }
 names(tdm.sparse.byday) <- date.seq
+
+tdm.out <- lapply(tdm.sparse.byday, function(x) x[[1]])
+names(tdm.out) <- names(tdm.sparse.byday)
 
 save(tdm.sparse.byday, file="./data/doc_term_mat/tdm.sparse.byday.RData")
