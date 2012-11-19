@@ -52,19 +52,21 @@ for(idx in idxrange){
   test.new.match <- nrow(new.house) == dim(new.master)[1]
 
   ## Check if the first rows match; or if first row is moved down
-  check.first.rows <- all(new.master[1,] == master.house[1,])
-  check.row.shift <- all(new.master[2,] == master.house[1,])
+  check.first.rows <- all(new.house[1,] == master.house[1,], na.rm=TRUE)
+  check.row.shift <- all(new.house[2,] == master.house[1,], na.rm=TRUE)
 
+  idx.row <- nrow(master.house.lag) + 1 + nrow(house.data.temp)
+  check.nth.rows <- all(new.house[,] == master.house[,], na.rm=TRUE)
   ## Print diagnostics
 
   print(daterange[idx])
   print("Are daily files the same length?")
   print(test.daily.match)
-  print("\n")
+
 
   print("Are archive and reconstructed masters the same length?")
   print(test.new.match)
-  print("\n")
+
 
   if(check.first.rows)
     print("First rows match")

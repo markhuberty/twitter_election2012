@@ -5,7 +5,7 @@
 ## a data loss problem in the original code.
 
 
-
+setwd("/mnt/fwire_80/twitter_election2012")
 print(options("encoding"))
 print(Sys.getlocale("LC_CTYPE"))
 
@@ -51,16 +51,18 @@ print("Inputs loaded")
 ## Want to make sure you have tests in place to check for dropped
 ## data.
 
-dateseq <- seq.Date(as.Date("2012-09-17"), as.Date("2012-11-06"), "day")
+dateseq <- as.character(seq.Date(as.Date("2012-09-17"), as.Date("2012-11-06"), "day"))
+print(dateseq)
 
 first.time <- TRUE
 for(cron.date in dateseq){
-
+  print(cron.date)
   cron.filename <- paste("./data/cron_output/cron.file.",
                          cron.date,
                          ".RData",
                          sep=""
                          )
+  print(cron.filename)
   load(cron.filename)
   master.cron.file <- file.today.parsed.en
   rm(file.today.parsed.en)
@@ -259,13 +261,13 @@ for(cron.date in dateseq){
     names(winloss.properties) <-
       names(topicmodel.properties) <- c("type", "ngram", "dict")
 
-  properties.list <- list(voteshare.properties,
-                          winloss.properties,
-                          topicmodel.properties
+  properties.list <- list(voteshare.properties#,
+                          #winloss.properties,
+                          #topicmodel.properties
                           )
-  names(properties.list) <- c("voteshare",
-                              "winloss",
-                              "topicmodel"
+  names(properties.list) <- c("voteshare"## ,
+                              ## "winloss",
+                              ## "topicmodel"
                               )
 
   house.data.temp <- house.data
@@ -316,7 +318,7 @@ for(cron.date in dateseq){
           print(dim(house.data.temp))
           print("Dim of old house data")
           print(dim(house.data.master))
-          house.data <- rbind(house.data.master, house.data.temp)
+          house.data.master <- rbind(house.data.master, house.data.temp)
           print("Dim of house data after bind")
           print(dim(house.data.master))
 
@@ -330,7 +332,16 @@ for(cron.date in dateseq){
       ## values. Bad for the predictors later on.
 
       ## Generate the date-stamped file
-      today <- Sys.Date()
+      today <- cron.date
+      master.corpus.filename <-
+        paste("./data/doc_term_mat/rebuild/generic.tdm.master.",
+              n,
+              ".",
+              l$type,
+              ".RData",
+              sep=""
+              )
+    
       timestamp.file.name <- paste("./data/doc_term_mat/rebuild/generic.tdm.",
                                    n,
                                    ".",
@@ -362,7 +373,7 @@ for(cron.date in dateseq){
            file=timestamp.file.name
            )
       save(tdm.corpus,
-           house.data,
+           house.data.master,
            file=master.corpus.filename
            )
 
@@ -377,9 +388,11 @@ for(cron.date in dateseq){
               sep=""
               )
       save(tdm.corpus,
-           house.data,
+           house.data.master,
            file=timestamp.master.corpus.filename
            )
+      rm(tdm.daily.corpus, house.data.temp, corpus)
+      gc()
     } ## end ngram
   } ## end properties
 
