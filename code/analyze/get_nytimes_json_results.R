@@ -56,3 +56,51 @@ house.results$state_dist <-
          )
 
 write.csv(house.results, file="./data/house_vote_results.csv")
+
+## ## Some tests
+## library(reshape)
+## predictions <- read.csv("./data/continuous.prediction.master.csv")
+## predictions <- melt(predictions)
+## predictions$state_district <-
+##   gsub("00", "01", predictions$state_district)
+
+## predictions.wide <- cast(predictions, state_district ~
+##                          prediction.date)
+
+## compute.win.rate <- function(vote){
+
+##   tab <- table(vote >= 50)
+##   rate <- tab / sum(tab)
+##   return(rate)
+## }
+
+## house.results <- house.results[house.results$state_dist %in%
+##                                predictions.wide$state_district, ]
+## house.results$winner <-
+##   as.numeric(as.character(house.results$vote_pct_display)) >= 50
+
+## rep.incumbents <-
+##   house.results[house.results$incumbent_party == "rep" &
+##                 house.results$incumbent==TRUE &
+##                 house.results$party_id == "REP", ]
+
+## dem.incumbents <-
+##   house.results[house.results$incumbent_party == "dem" &
+##                 house.results$incumbent==TRUE &
+##                 house.results$party_id == "DEM", ]
+
+## twoparty.incumbents <-
+##   house.results[house.results$incumbent_party %in% c("rep", "dem") &
+##                 house.results$incumbent==TRUE &
+##                 house.results$party_id %in% c("REP", "DEM"), ]
+
+## rep.inc.winrate <-
+##   compute.win.rate(as.numeric(as.character(rep.incumbents$vote_pct_display)))
+## dem.inc.winrate <-
+##   compute.win.rate(as.numeric(as.character(dem.incumbents$vote_pct_display)))
+## twoparty.inc.winrate <-
+##   compute.win.rate(as.numeric(as.character(twoparty.incumbents$vote_pct_display)))
+
+## (mean(d$incumbent == d$winner)*(sum(d$incumbent)) +
+##   mean(r$incumbent == r$winner)*(sum(r$incumbent))) / sum(r$incumbent +
+## d$incumbent)
