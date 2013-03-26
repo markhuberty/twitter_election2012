@@ -9,6 +9,8 @@ paper](http://markhuberty.berkeley.edu/files/twitter_paper.pdf.zip) by
 entitled "Voting with your tweet: forecasting elections with social
 media data". 
 
+Thanks to the support of the UC Berkeley Graduate School of Journalism, we published real-time predictions throughout the 2012 election cycle. See [Voting with your Tweet](http://californianewsservice.org/category/tweet-vote/) for more detail.
+
 Background
 -----------------------
 A range of very interesting papers have attempted to predict elections
