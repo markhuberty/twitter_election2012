@@ -58,3 +58,4 @@ tweet_text = [t['text'].lower() for t in tweets]
 tweet_sentiment = [score_tweet(t , sentiment_dict) for t in tweet_text]
 
 sentiments = zip(tweet_text, tweet_sentiment)
+
