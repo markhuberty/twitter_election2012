@@ -12,7 +12,7 @@ def score_tweet(tweet, sentiment_dict):
     return tweet_score
 
 
-input_conn = open('/Users/markhuberty/Documents/Research/Papers/twitter_election2012/data/all_tweets.csv',
+input_conn = open('/home/markhuberty/projects/twitter_election2012/data/master_cron_file_2013_sub.csv',
                   'rt'
                   )
 reader = csv.DictReader(input_conn)
@@ -21,7 +21,7 @@ input_conn.close()
 
 ## Would be better to read this in as a dict with word:score, solves problems later on
 word_score_dict = {}
-with(open('/Users/markhuberty/Documents/Research/Papers/twitter_election2012/data/opinionfinder_wordlist.csv',
+with(open('../../data/opinionfinder_subj_dict.csv',
           'rU'
           )
      ) as opinionfinder_conn:
@@ -54,8 +54,8 @@ emoticons = {':-)':1, ':)':1,
 
 sentiment_dict = dict(word_score_dict, **emoticons)
 
-tweet_text = [t['text'].lower() for t in tweets]
-tweet_sentiment = [score_tweet(t , sentiment_dict) for t in tweet_text]
+tweets = [t['text'] if t['text'] else '' for t in tweets]
+tweet_sentiment = [score_tweet(t['text'] , sentiment_dict) if t['text'] else 0 for t in tweets]
 
-sentiments = zip(tweet_text, tweet_sentiment)
+sentiments = zip(tweets, tweet_sentiment)
 

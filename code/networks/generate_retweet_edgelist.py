@@ -147,11 +147,6 @@ sorted_centrality = sorted(lcc_centrality.iteritems(),
 
 labels_to_plot = [c[0] for i,c in enumerate(sorted_centrality) if i <= 30]
 
-plot_labels = [n if n in labels_to_plot else ''
-               for n in largest_cc_mst.nodes()]
-plot_labels = dict(zip(largest_cc_mst.nodes(), plot_labels))
-## Recover the color and size attributes for nodes
-## in the mst
 node_color = nx.get_node_attributes(largest_cc_mst, 'color')
 colorvec = [node_color[n] for n in node_color]
 nodesize = [2 if np.abs(c) > 0 else 0.2 for c in colorvec]

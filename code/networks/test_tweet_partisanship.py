@@ -136,8 +136,24 @@ def score_tweet(tweet, sentiment_dict):
             tweet_score += sentiment_dict[word]
     return tweet_score
 
+def score_user(tweets, users, tag_dict):
+    out = {}
+    for t, u in zip(tweets, users):
+        if u not in out:
+            out[u] = {'n_total':0}
+        for h in tag_dict:
+            if h in t.lower():
+                out[u]['n_total'] += 1
+                if tag_dict[h] in out[u]:
+                    out[u][tag_dict[h]] += 1
+                else:
+                    out[u][tag_dict[h]] = 1
+    return out
+        
+
 ## Read in the text data
 tweets = pd.read_csv('../../data/master_cron_file_2013_sub.csv')
+tweets['text'].fillna(value='', inplace=True)
 
 noise_terms = ["mlb",
                "kicker",
@@ -164,7 +180,8 @@ for t in tweets['text'].values:
         noise_bool.append(True)
 
 tweets = tweets[noise_bool]
-tweets['dist'] = [d[0:4] for d in tweets.unique_cand_id]    
+tweets['dist'] = [d[0:4] for d in tweets.unique_cand_id]
+tweets['text'].fillna('', inplace=True)
 
 ## Find liberal and conservative tags
 lib_tags = return_jaccard_similar_tags(tweets['text'],
@@ -175,6 +192,8 @@ con_tags = return_jaccard_similar_tags(tweets['text'],
                                        'tcot',
                                        threshold=0.01
                                        )
+lib_tags = [(l[0].lower(), l[1]) for l in lib_tags]
+con_tags = [(c[0].lower(), c[1]) for c in con_tags]
 lib_tags = dict(lib_tags)
 con_tags = dict(con_tags)
 
@@ -182,7 +201,7 @@ con_tags = dict(con_tags)
 ## to deal with some obvious false positives
 lib_tag_subset = lib_tags.copy()
 con_tag_subset = con_tags.copy()
-confusion_tags = ['#GOP', '#tcot', '#gop2012', '#ocra']
+confusion_tags = ['#gop', '#tcot', '#gop2012', '#ocra']
 for l in lib_tags:
     if l in con_tags:
         if lib_tags[l] > con_tags[l] and l not in confusion_tags:
@@ -193,6 +212,36 @@ for l in lib_tags:
         if l in confusion_tags:
             con_tag_subset[l] = 1
             del lib_tag_subset[l]
+
+## Score users
+hashtag_dict = {k:'lib' for k in lib_tag_subset}
+hashtag_dict = dict(hashtag_dict, **{k:'con' for k in con_tag_subset})
+
+user_alignment = score_user(tweets['text'].values, tweets['from_user'].values, hashtag_dict)
+
+all_users, con_users, lib_users = {}, {}, {}
+
+for u, v in user_alignment.iteritems():
+    if isinstance(u, str):
+        if 'con' in v and 'lib' in v:
+            if v['con'] > v['lib']:
+                con_users[u] = v['con'] / float(v['n_total'])
+                all_users[u] = v['con'] / float(v['n_total'])
+            elif v['con'] < v['lib']:
+                lib_users[u] = v['lib'] / float(v['n_total'])
+                all_users[u] = -1 * v['lib'] / float(v['n_total'])
+            elif 'lib' in v:
+                lib_users[u] = -1 * v['lib'] / float(v['n_total'])
+            elif 'con' in v:
+                con_users[u] = v['con'] / float(v['n_total'])
+
+## dump this for kicks
+with open ('../../data/user_alignment.csv', 'wt') as f:
+    writer = csv.writer(f)
+    writer.writerow(['username', 'score'])
+    for u, s in all_users.iteritems():
+        writer.writerow((u,s))
+
 
 ## Munge them into regex
 lib_re = '|'.join([t.lower() for t in lib_tag_subset]) + '|#p2'
@@ -212,19 +261,23 @@ l = [t for i,t in enumerate(tweets['text']) if lib_tweets[i]]
 
 ## Take as "training" a restrictive set where 'liberal' is only
 ## 'liberal' if only 'liberal' tags are found, and similarly for conservative
+## Remove the hashtags so we don't just rediscover the labels
 training_tweets = []
 training_labels = []
+re_hashtag = re.compile("#\w+")
+re_url = re.compile('http\://[\w\./]+')
+
 for i, t in enumerate(tweets['text']):
     if lib_tweets[i] and not con_tweets[i]:
-        t_out = re_lib.sub(' ', t.lower())
+        t_out = re_url.sub('LINK', re_lib.sub(' ', t.lower()))
         training_labels.append('lib')
         training_tweets.append(t_out)
     elif con_tweets[i] and not lib_tweets[i]:
-        t_out = re_lib.sub(' ', t.lower())
+        t_out = re_url.sub('LINK', re_con.sub(' ', t.lower()))
         training_labels.append('con')
         training_tweets.append(t_out)
     elif not con_tweets[i] and not lib_tweets[i] and neu_tweets[i]:
-        t_out = re_neu.sub(' ', t.lower())
+        t_out = re_url.sub('LINK', re_neu.sub(' ', t.lower()))
         training_labels.append('neu')
         training_tweets.append(t_out)
 
@@ -244,7 +297,7 @@ training_tweets = [unicode(t.lower(), errors='ignore') for t in training_tweets]
 
 
 ## Generate the romanized / lowercase / no punctuation text
-tweet_count_vectorizer = fe.text.CountVectorizer(ngram_range=(2,2))
+tweet_count_vectorizer = fe.text.CountVectorizer(ngram_range=(1,1))
 vectorizer = tweet_count_vectorizer.fit(training_tweets)
 vectorized_counts = vectorizer.transform(training_tweets)
 
@@ -266,8 +319,13 @@ pred_test = tweet_classifier.predict(test_data)
 
 ## Now label everything and write it out
 all_tweets = [unicode(t.lower(), errors='ignore') for t in tweets['text']]
-all_counts = transformer.transform(vectorizer.transform(all_tweets))
-all_labels = tweet_classifier.predict(all_counts)
+all_tweets = [re_url.sub('LINK', t) for t in all_tweets]
+all_vectorized_counts = vectorizer.transform(all_tweets)
+all_tfidf_counts = transformer.transform(all_vectorized_counts)
+all_labels = tweet_classifier.predict(all_tfidf_counts)
+
+#all_counts = transformer.transform(vectorizer.transform(all_tweets))
+#all_labels = tweet_classifier.predict(all_counts)
 
 neu_ct = 0
 lib_ct = 0
@@ -282,7 +340,7 @@ for l in all_labels:
 print lib_ct, neu_ct, con_ct
 
 word_score_dict = {}
-with(open('/Users/markhuberty/Documents/Research/Papers/twitter_election2012/data/opinionfinder_wordlist.csv',
+with(open('../../data/opinionfinder_subj_dict.csv',
           'rU'
           )
      ) as opinionfinder_conn:
@@ -340,7 +398,16 @@ tweets['partisanship'] = all_labels
 ## then will have the 2x2 implicitly.
 
 ## Then estimate partisanship scores by user, candidate, and district
-user_partisanship = compute_partisan_sentiment(tweets['from_user'], all_labels, all_sentiment, agg_fun='np.sum')
+user_partisanship = compute_partisan_sentiment(tweets['from_user'],
+                                               all_labels,
+                                               all_sentiment,
+                                               agg_fun='np.sum'
+                                               )
+
+pship_scores = user_partisanship.aggregate(sum)
+pship_scores.reset_index(inplace=True)
+
+
 
 ## And finally get entities
 tweet_entities = []
