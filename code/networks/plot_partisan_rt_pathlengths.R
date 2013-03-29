@@ -81,4 +81,7 @@ plot.path.density <- ggplot(df,
   ##          )
 
 print(plot.path.density)
-ggsave(plot.path.density, file="../../figures/rt_graph_path_length_distribution.pdf")
+ggsave(plot.path.density,
+       width=7,
+       height=7,
+       file="../../figures/rt_graph_path_length_distribution.pdf")

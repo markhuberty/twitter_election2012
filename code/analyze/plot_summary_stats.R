@@ -1,6 +1,7 @@
 library(ggplot2)
-library(reshape)
-setwd("../../")
+library(reshape2)
+library(scales)
+setwd("~/projects/twitter_election2012")
 
 convert.candidate.names <- function(statedistparty){
 
@@ -17,6 +18,8 @@ convert.candidate.names <- function(statedistparty){
 ## Load and format the per-candidate and per-district data
 per.candidate.bydate <-
   read.csv("./data/summary_stats/tweets_per_candidate_per_day.csv")
+
+
 per.candidate.melt <- melt(per.candidate.bydate, id.vars="X")
 per.candidate.melt$variable <- gsub("X", "", per.candidate.melt$variable)
 per.candidate.melt$variable <- strptime(per.candidate.melt$variable,
@@ -53,7 +56,11 @@ plot.daily.party.volume <- ggplot(per.party.byday,
   opts(axis.text.x=theme_text(angle=-90, hjust=0))
 
 print(plot.daily.party.volume)
-ggsave(plot.daily.party.volume, file="./figures/plot_daily_party_volume.pdf")
+ggsave(plot.daily.party.volume,
+       width=7,
+       height=7,
+       file="./figures/plot_daily_party_volume.pdf"
+       )
 
 per.candidate.test <- aggregate(per.candidate.melt$value,
                                 by=list(per.candidate.melt$X),
@@ -77,7 +84,8 @@ per.district <-
   aggregate(per.candidate.melt$n.tweets, by=list(per.candidate.melt$state, per.candidate.melt$district), sum)
 names(per.district) <- c("state", "district", "n.tweets")
 
-candidates <- read.csv("./data/candidates.final.vis.2012.csv")
+candidates <- read.csv("./data/candidates_wide.csv")
+
 candidates <- candidates[,c("state_dist", "incumbent_party", "D_name",
                             "R_name")
                          ]
@@ -113,11 +121,11 @@ per.candidate.melt <- melt(per.candidate,
 ## There are dups, not sure why...
 per.candidate.melt <- unique(per.candidate.melt)
 
-per.candidate.cast <- cast(per.candidate.melt,
-                           state_dist + incumbent_party ~
-                           party + variable,
-                           fun.aggregate=mean
-                           )
+per.candidate.cast <- dcast(per.candidate.melt,
+                            state_dist + incumbent_party ~
+                            party + variable,
+                            fun.aggregate=mean
+                            )
 
 ## Generate the logged count data for both parties
 per.candidate.cast$log.d.count <-
@@ -142,8 +150,33 @@ plot.cand.volumes <- ggplot(per.candidate.cast,
                       breaks=c("D", "O", "R")
                       ) +
   theme_bw()
-ggsave(plot.cand.volumes, file="./figures/plot_raw_cand_volumes.pdf")
+print(plot.cand.volumes)
+ggsave(plot.cand.volumes,
+       height=7,
+       width=7,
+       file="./figures/plot_raw_cand_volumes.pdf"
+       )
 
+## Plot candidate volume density by party
+plot.cand.volume.density <- ggplot(per.candidate.melt,
+                                   aes(x=value,
+                                       group=party,
+                                       colour=party
+                                       )
+                                   ) +
+  geom_density() +
+  scale_x_continuous("Twitter volume by candidate", limits=c(0, 5000)) +
+  scale_y_continuous("Density") +
+  scale_colour_manual("Party", values=c("D" = "blue", "R" = "red"),
+                      labels=c("Democrat", "Republican")
+                      ) +
+  theme_bw()
+print(plot.cand.volume.density)
+ggsave(plot.cand.volume.density,
+       width=7,
+       height=7,
+       file='./figures/plot_cand_volume_density_byparty.pdf'
+       )
 
 ## Plot the data by day
 

@@ -356,7 +356,30 @@ nx.draw_networkx_labels(largest_cc_mst,
                         font_color='green',
                         font_size=6
                         )
-plt.savefig('../../figures/user_rt_largest_cc_mst.pdf')
+plt.axis('off')
+plt.savefig('../../figures/user_rt_largest_cc_mst.pdf',
+            bbox_inches='tight'
+            )
+plt.close()
+
+## Then render as a png w/o labels
+nx.draw_networkx_edges(largest_cc_mst,
+                       mst_layout,
+                       alpha=0.2,
+                       width=0.2
+                       )
+nx.draw_networkx_nodes(largest_cc_mst,
+                       mst_layout,
+                       nodelist=[n for n in node_color],
+                       node_color=colorvec,
+                       alpha=0.5,
+                       node_size=nodesize,
+                       linewidths=0.05
+                       )
+plt.axis('off')
+plt.savefig('../../figures/user_rt_largest_cc_mst.png',
+            bbox_inches='tight'
+            )
 plt.close()
 
 ## Colors equivalent to blue-blue/purple-purple/red-red
@@ -378,7 +401,10 @@ nx.draw_networkx_nodes(largest_cc_mst,
                        node_size=nodesize,
                        linewidths=0.05
                        )
-plt.savefig('../../figures/user_rt_largest_cc.pdf')
+plt.axis('off')
+plt.savefig('../../figures/user_rt_largest_cc.pdf',
+            bbox_inches='tight'
+            )
 plt.close()
 
 ## 3. END
