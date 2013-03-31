@@ -1,0 +1,398 @@
+\documentclass[11pt]{article}
+\usepackage{natbib}
+\usepackage[usenames, dvipsnames, svgnames, table]{xcolor}
+\usepackage[dvipdfm,colorlinks=true,urlcolor=DarkBlue,linkcolor=DarkBlue,bookmarks=false,citecolor=DarkBlue]{hyperref}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{fancyhdr}
+\usepackage[T1]{fontenc}
+\usepackage{palatino}
+\usepackage[utf8]{inputenc}
+%\usepackage[super]{nth}
+\usepackage{setspace}
+% \usepackage{placeins}
+% \usepackage{subfigure}
+% \usepackage{multirow}
+\usepackage{rotating}
+\usepackage{marvosym}  % Used for euro symbols with \EUR
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\usepackage{longtable} %% Allows the use of the longtable format produced by xl2latex.rb
+\usepackage{lscape} %% Allows landscape orientation of tables
+% \usepackage{appendix} %% Allows customization of the appendix properties
+\setcounter{tocdepth}{1} %% Restricts the table of contents to the section header level entries only
+
+
+\usepackage{geometry}
+\geometry{letterpaper}
+\usepackage{amsmath}
+% \usepackage[stable]{footmisc}
+
+
+\title{Voting with your Tweet:\\ Forecasting congressional elections
+  with social media data\thanks{This version prepared for the Midwest
+    Political Science Association Conference, April 2013, Chicago. First version: February 2011. Special
+    thanks to the Graduate School of Journalism at the University of
+    California, Berkeley for hosting the Voting with your Tweets
+    experiment for the 2012 Congressional elections. This project
+    would not have come off without the support, input, and hard work
+    of Len DeGroot and Hillary Sanders. Additional thanks to
+    to F. Daniel Hidalgo, Jasjeet
+    Sekhon, and participants at the 2011 Society for Political
+    Methodology meeting, and the Fall 2011 UC Berkeley Research Workshop in
+    American Politics, for helpful comments and feedback. All errors remain my
+    own.}}
+\author{Mark Huberty\thanks{Travers Department of Political Science,
+    University of California, Berkeley. Contact:
+    \url{markhuberty@berkeley.edu}.}\\ PRELIMINARY DRAFT}
+\date{\today}
+
+\begin{document}
+\maketitle
+\doublespacing
+
+\begin{abstract}
+  This paper reports a large-scale out-of-sample experiment in
+  election forecasting using Twitter data. Election outcomes for the
+  2012 United States House of Representatives elections were forecast
+  from Twitter data using algorithms trained on the 2010 House
+  elections. Forecasts were 90\% accurate for districts with incumbent
+  candidates; and approximately 75\% accurate for open
+  seats. Predicted vote shares were highly correlated with actual vote
+  shares. Further analysis shows that Twitter contains biases that may
+  inform against further progress. Specifically, Twitter attention to
+  candidates is highly skewed towards incumbents. Furthermore, Twitter
+  communities display very high degrees of partisan homophily. We
+  discuss the implications of both findings for future work.
+\end{abstract}
+\section{Introduction}
+\label{sec:introduction}
+
+The Twitter microblogging service has become increasingly popular for
+political communication. This popularity has led to a series of
+efforts attempting to predict election outcomes from Twitter message
+volumes, timing, and sentiment. Most of those efforts, however, focus
+on back-casting elections. Consequently, their potential utility in
+future elections remains unclear. 
+
+We report an experiment in real-time forecasting of elections for the
+United States House of Representatives.\footnote{All forecasts
+  reported here were published in real time at
+  \url{http://californianewsservice.org/category/tweet-vote/}. All
+  algorithms and other code are available at
+  \url{https://github.com/markhuberty/twitter_election2012}.} We show
+that relatively simple assumptions about the content of the Twitter
+feed enable highly accurate election forecasts. Forecasts for
+districts with either Democratic or Republican Party incumbents
+averaged approximately 90\% accuracy several weeks before the
+election. This was true in both close races and safe seats. Forecasts
+for open seats--including new districts drawn after the 2010
+census--averaged 75\% accuracy. Forecast vote shares also correlated
+well with actual vote shares. 
+
+We caution, however, against over-reading these results. Algorithm
+behavior shows evidence of using Twitter language to discover the
+identity of the incumbent in the race. Furthermore we show that
+Twitter now reproduces behavior from other media: incumbents receive
+radically more attention on Twitter than challengers. Hence, as
+Twitter continues to mature, it may come to reflect known biases in
+traditional media, rather than acting as a novel and democratic avenue
+for influencing or measuring political sentiment.
+
+\section{Prior work}
+\label{sec:prior-work}
+
+
+
+\section{Design and data gathering}
+\label{sec:design-data-gath}
+
+To resolve the out-of-sample forecasting problem, we implemented true
+open-source, out-of-sample forecasting. Those forecasts were based on
+the following process:
+
+\begin{enumerate}
+\item Gather Twitter data during the 2010 Congressional election
+\item Build supervised learning algorithms to map 2010 election
+  outcomes by district to the content of Twitter messages about
+  district candidates
+\item Gather new data during the 2012 Congressional election
+\item Use the trained algorithms to forecast both the election winner
+  and the Democratic vote share in real time
+\end{enumerate}
+
+By using the 2012 election as a true out-of-sample test of algorithm
+performance, we gain traction on several problems. First, we can
+estimate the stability of language over time. Second, we can estimate
+how algorithms fare in very different elections. In this case, two
+major changes occur between 2010 and 2012: from mid-term to
+presidential-year elections; and from one set of Congressional
+districts to another, consequence of the post-2010 Census
+redistricting. 
+
+\subsection{Data acquisition}
+\label{sec:data-acquisition}
+
+Data were acquired via the Twitter Search API. For each day during the
+General Election campaign, we queried the Twitter Search API for the
+full name of each candidate running for Congressional office. \footnote{Each general election campaign
+  starts at a different date, consequence of variation in state
+  primary schedules. In practice, we gathered data daily starting on
+  September 1 2012.} Figure \ref{fig:daily-msg-volume} provides the
+time-series message volume. Daily volumes averaged approximately ()
+messages. Overall, we collected approximately 1.02 million individual
+messages.
+
+\subsection{Data cleaning}
+\label{sec:data-cleaning}
+
+Prior to analysis, we cleaned the raw data in four ways:
+\begin{enumerate}
+\item Only contested districts were included
+\item Only districts where both candidates were represented were included
+\item Name homonyms were omitted where possible
+\item Obviously irrelevant data were excluded
+\end{enumerate}
+
+Name homonyms were closely correlated with irrelevant data. In
+particular, sports-themed data related to both the end of the American
+baseball season and the start of the American football season were
+common. Both groups were found by modeling tweet content using a basic
+Latent Dirichlet Allocation topic model, and excluding tweets and
+users based on the terms discovered through those models.
+
+The cleaned data show two important biases. First, Republican
+candidates averaged more Twitter volume than Democrats. At the median,
+the Republican candidate in a district received 28\% more message
+volume than their Democratic challenger. Second, incumbents received
+substantially more attention than challengers. At the median, an
+incumbent was mentioned in three times as many messages (595 to 196)
+as their challenger.
+
+
+
+%% Table here
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics{../figures/plot_daily_party_volume}
+  \caption{This figure shows the daily aggregate message volume by party for each day of data gathering up to Election Day 2012. }
+  \label{fig:daily-msg-volume}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics{../figures/plot_raw_cand_volumes}
+  \caption{This figure shows the comparative message volume for
+    candidate pairs in each district. Colors indicate the party of the
+    district incumbent. The diagonal line illustrates where points would fall if both candidates in a district received equal message volume.}
+  \label{fig:cand-msg-volume}
+\end{figure}
+
+\subsection{Data transformation for prediction}
+\label{sec:data-transf-pred}
+
+For use in prediction, the data were transformed into a vector-space
+representation of text in the following steps:
+\begin{enumerate}
+\item URLs, punctuation, and non-ASCII characters were removed
+\item Candidate names were replaced with party-specific placeholders
+\item All text was converted to lowercase
+\item English stopwords were removed
+\item Each individual tweet was converted into a term-frequency
+  vector-space representation. For prediction, terms were restricted
+  to a dictionary of bigrams corresponding to the variables used in
+  the trained prediction algorithms
+\item The resulting term-frequency matrix, with one row per message,
+  was consolidated into a district-level matrix by summing term
+  frequencies for each row belonging to a distinct district. For
+  voteshare predictions, the message-level term-frequency values were
+  first weighted linearly by their creation date relative to election
+  day (e.g., a tweet that originated one week prior to election day
+  would be weighted by a factor $\frac{1}{7}$). Binary (win-loss)
+  predictors used the raw term-frequency data. These weights were
+  selected based on their relative performance in out-of-sample tests
+  on the 2010 data. 
+\end{enumerate}
+
+For real-time prediction, this process was repeated daily. 
+
+
+\section{Results}
+\label{sec:results}
+
+
+\subsection{Predictions}
+\label{sec:predictions}
+
+
+\subsubsection{Win-loss predictions}
+\label{sec:win-loss-predictions}
+
+\subsubsection{Voteshare predictions}
+\label{sec:votesh-pred}
+
+
+
+
+\subsection{Social network behavior}
+\label{sec:soci-netw-behav}
+
+The data collected for the purposes of prediction also permit analysis
+of the social behavior of politically-oriented Twitter users. 
+
+\subsection{Constructing a retweet graph}
+\label{sec:constr-retw-graph}
+
+Retweets provide a very useful way of identifying connections between
+users wherein we know that (1) one user follows another and (2) read
+and forwarded a message. These data are thus potentially more useful
+for considering social relationships than the Twitter follower graph,
+which may be dominated by weaker ties. Nodes in the retweet graph
+represent users; directed edges represent one user retweeting one or
+more messages from another; edge weights represent the total retweet
+count. To filter out users who may appear extraneously, we consider
+only those users who generated (via their own tweets or retweets) a
+message volume greater than the mean of all user volumes over the
+entire election cycle. The resulting graph has 33,005 users and
+136,888 edges. 
+
+
+
+\subsection{Estimating user partisanship}
+\label{sec:estim-user-part}
+
+We estimate the partisan alignment of Twitter users via a two-step
+approach. First, we identify a set of hashtags with a known partisan
+alignment.\footnote{Hashtags here are individual terms of the form
+  \texttt{\#word}, commonly used to tag tweets for easy retrieval and
+  subject identification.} Beginning with a hashtag with a known
+partisan alignment (\texttt{\#tcot} for Republicans and \texttt{\#p2}
+for liberals), we find all messages where that seed tag occurs. We
+then construct a list of all unique tags, and compute the Jaccard
+index for the co-occurrance of each unique tag and the known partisan
+tag. We retain tags with a Jaccard index of greater than 0.01 as tags
+with a similar alignment as the seed tag. After identifying both
+conservative and liberal tags, we eliminate any confusion terms that
+appear in both lists. 
+
+ Based on these hashtags, we construct a partisan score for each user,
+ $p_u$, as the scaled difference between their use of conservative and
+ liberal tags in their messages. Scores range from -1 (most liberal) to 1 (most conservative). The resulting distribution of partisan scores for users is shown in
+figure \ref{fig:user-pscore}. Formally:
+
+ \begin{equation}
+   \label{eq:pscore}
+   p_u = \frac{\left|tags_{u,cons}\right| - \left|tags_{u, lib}\right|}{\left|tags\right|}
+ \end{equation}
+
+However, not all users use hashtags. To
+score those users that do not, we use the scored users as an input to
+train a classification algorithm based on the text of user
+messages. Formally, we convert the continuous partisan score to a
+4-class rating from ``Very liberal'' to ``Very conservative''. We then
+train a multinomial naive Bayesian estimator to predict a user's
+partisan class based on the language of their aggregated
+messages.\footnote{Formally, we aggregate each user's tweets and
+  transform them into a term-frequency matrix. Term frequencies are
+  weighted using a TfIdf rank. Terms used by fewer than 1\%, or
+  more than 99\%, of users are discarded. All computation was done
+  using the \textit{scikits-learn} machine learning package for Python.} The classifier was trained
+on a random 90\% subset of this data. Estimation of its accuracy on
+the held-out 10\% places the accuracy at greater than 70\%. We then
+use the trained classifier to predict the partisan alignment of all
+users in the retweet graph.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[angle=90,height=\textwidth]{../figures/user_partisan_alignment_byuser.pdf}
+  \caption{This figure shows the partisan score for users whose
+    messages contain hashtags, as computed using equation
+    \ref{eq:pscore}. Scores range from -1 (most liberal) to 1 (most conservative)}
+  \label{fig:user-pscore}
+\end{figure}
+
+Two issues immediately become apparent from these estimates. First, by
+this measure Republicans on Twitter are more strongly partisan-aligned
+than Democrats. Figure \ref{fig:user-pscore-distribution} shows that
+conservative users are much more likely to score at the more extreme
+end of the spectrum than liberal users. Second, among all users, acute
+partisans are far better represented than moderates. Users with the
+most extreme scores (-1 for liberals, or 1 for conservatives) account
+for 72\% of all users whose partisan alignment could be directly
+estimated from hashtags. 
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{../figures/user_partisan_alignment_density}
+  \caption{This figure shows the distribution of partisan alignment
+    scores for users whose tweets contain hashtags. Liberal scores are shows as absolute values to permit direct comparison with conservative scores. }
+  \label{fig:user-pscore-distribution}
+\end{figure}
+
+\subsection{Descriptive results}
+\label{sec:descriptive-results}
+
+Figure \ref{fig:largest-cc-mst} illustrates the resulting retweet
+graph, colored by the partisan alignment of the users. The figure
+provides visual evidence of partisan polarization among the Twitter
+user community: Republican-aligned users (shown in red) are weakly
+connected to Democrat-aligned users (shown in blue). That visual
+impression is confirmed by the graph's descriptive statistics. First,
+co-partisans account for 89\% of all observed retweets. Second, within
+the retweet graph, we are much more likely to find paths from any one
+node to some other node if the two nodes are both liberal (22\% of
+liberal node pairs share a path), or both conservative (17\%) versus
+paths between anti-partisans (13\%). Third, as figure the shortest path between
+any two nodes is significantly shorter for liberals (a mean 6 degrees
+of separation) than for conservatives or anti-partisan pairs (a mean 7
+degrees of separation). 
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[angle=90, width=0.7\textheight]{../figures/user_rt_largest_cc_mst.png}
+  \caption{Network representation of retweet connections between
+    users. Colors represent a user's partisan alignment towards the
+    Republicans (reds) or Democrats(blue). Labels illustrate users with
+    very high degree centrality. This representation uses the maximum
+    spanning tree of the largest connected component of the retweet graph.}
+  \label{fig:largest-cc-mst}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{../figures/rt_graph_path_length_distribution}
+  \caption{Path length distribution between co- and anti-partisans within the retweet graph. Path lengths are computed as the Djikstra shortest path between a 1,000 random liberal-liberal, conservative-conservative, or liberal-conservative node pairs. }
+  \label{fig:rt-partisan-path-length}
+\end{figure}
+
+Hence the retweet graph paints a picture of heavily partisan political activity
+on Twitter. Users are more likely to be extreme partisans; more likely
+to connect with others of their own partisan makeup; and relatively
+unlikely to converse across the partisan divide. 
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+The data presented here suggest that, for the 2012 Congressional election:
+
+\begin{enumerate}
+\item 
+\item Incumbency and partisan alignment bias Twitter message volumes
+  in consistent ways
+\item User behavior appears to be highly partisan
+\item Partisan homophily tends to dominate communication within
+  Twitter social networks
+\item  Partisans are more likely to establish ``strong'' ties with,
+  and are more closely connected to,
+  co-partisans than anti-partisans
+\end{enumerate}
+
+
+
+\section{Conclusions}
+\label{sec:conclusions}
+
+
+
+\end{document}

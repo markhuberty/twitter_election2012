@@ -6,6 +6,7 @@ library(e1071)
 library(randomForest)
 library(reshape)
 
+
 setwd("/mnt/fwire_80/twitter_election2012/")
 source("./code/util/twitter.R")
 load("./algorithms/voteshare.linear.predictor.RData")
