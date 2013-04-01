@@ -2,17 +2,19 @@ library(rjson)
 library(RCurl)
 library(foreach)
 library(ggplot2)
-library(reshape)
+library(reshape2)
 
-setwd("~/Documents/Research/Papers/twitter_election2012/")
+setwd("~/projects/twitter_election2012/")
 house.results <- read.csv("./data/house_vote_results.csv")
 ## Load up the prediction data
 #voteshare <- read.csv("~/continuous.prediction.master.wide.csv")
 
-voteshare <- read.csv("./predictions/continuous.prediction.master.csv")
+voteshare <- read.csv("./predictions/vote_share/repredict/continuous.prediction.master.csv")
+colnames(voteshare) <- c("state_district", "vote_pct_display", "prediction.date")
 
-voteshare <- melt(voteshare)
-voteshare <- cast(voteshare, state_district ~ prediction.date)
+voteshare <- melt(voteshare, id.vars=c("state_district", "prediction.date"))
+voteshare <- voteshare[,c("state_district", "prediction.date", "value")]
+voteshare <- dcast(voteshare, state_district ~ prediction.date)
 
 ## Subset the vote data to Democratic candidate voteshares
 house.votes <- house.results[house.results$party_bucket=="Dem" &
@@ -52,6 +54,7 @@ plot.vote.bydate <- ggplot(house.votes.melt,
   geom_point(alpha=0.05) +
   stat_smooth(method="lm", alpha=0.1) +
   scale_x_continuous(limits=c(0,100))
+print(plot.vote.bydate)
 ggsave("./figures/voteshare_prediction_corr_bydate.pdf", plot.vote.bydate)
 
 winning.party <- ifelse(house.votes$vote_pct_display > 50,
@@ -77,13 +80,44 @@ plot.voteshare.district <- ggplot(house.votes,
   opts(axis.title.x=theme_text(size=20),
        axis.title.y=theme_text(size=20, angle=90)
        )
-
+print(plot.voteshare.district)
 ggsave(file="./figures/plot_repredict_actual_corr.pdf",
-       plot=plot.voteshare.district
+       plot=plot.voteshare.district,
+       width=7,
+       height=7
        )
 
-print(plot.voteshare.district)
+## Estimate where the big errors were.
+predicted.winning.party <- ifelse(house.votes[,"2012-11-06"] > 50,
+                                  "Democrat",
+                                  "Republican"
+                                  )
+party.victory.confusion <- table(winning.party,
+                                 predicted.winning.party
+                                 )
 
+error.margin <- house.votes[, "2012-11-06"] - house.votes$vote_pct_display
+
+df.error.margin <- data.frame(error.margin, winning.party)
+plot.error.margin <- ggplot(df,
+                            aes(x=error.margin,
+                                group=winning.party,
+                                colour=winning.party
+                                )
+                            ) +
+  geom_vline(xintercept=0, alpha=0.5) +
+  geom_density() +
+  scale_x_continuous("Predicted voteshare error") +
+  scale_colour_manual("Winning party",
+                      values=c("Democrat"="blue", "Republican"="red")
+                      ) +
+  theme_bw()
+print(plot.error.margin)
+ggsave(plot.error.margin,
+       file="./figures/plot_voteshare_error_margin.pdf",
+       width=7,
+       height=7
+       )
 
 ## Check the correlation between predicted and actual voteshare
 ## by date for the entire prediction period. Plot the output
@@ -117,31 +151,38 @@ df.voteshare.corr <- data.frame(voteshare.corr,
                                 )
 names(df.voteshare.corr) <- c("Voteshare Correlation",
                               "Prediction Accuracy",
-                              "N",
-                              "date"
+                              "n.districts",
+                              "predict.date"
                               )
-df.voteshare.corr$date <- gsub("X", "", df.voteshare.corr$date)
-df.voteshare.corr$date <- as.POSIXlt(df.voteshare.corr$date,
-                                        format="%Y-%m-%d"
-                                        )
 
-df.voteshare.corr <- melt(df.voteshare.corr, id.vars=c("date", "N"))
+df.voteshare.corr$predict.date <- gsub("X", "", df.voteshare.corr$predict.date)
+df.voteshare.corr$predict.date <- as.POSIXlt(df.voteshare.corr$predict.date,
+                                     format="%Y-%m-%d"
+                                     )
 
-plot.voteshare.corr <- ggplot(df.voteshare.corr,
-                              aes(x=date,
+df.voteshare.melt <- melt(df.voteshare.corr,
+                          id.vars=c("n.districts", "predict.date")
+                          )
+
+plot.voteshare.corr <- ggplot(df.voteshare.melt,
+                              aes(x=predict.date,
                                   y=value,
                                   group=variable,
                                   colour=variable
                                   )
                               ) +
-  geom_point(aes(size=N)) +
+  geom_point(aes(size=n.districts)) +
   geom_line() +
   scale_x_datetime("Prediction date") +
   scale_y_continuous("")+
-  scale_colour_discrete("Correspondence between predictions and outcomes") +
+  scale_colour_discrete("Correspondence between\n predictions and outcomes") +
   theme_bw()
-
-ggsave(file="./figures/repredict_voteshare_winloss_correlation_bydate.pdf", plot=plot.voteshare.corr)
+print(plot.voteshare.corr)
+ggsave(file="./figures/repredict_voteshare_winloss_correlation_bydate.pdf",
+       plot=plot.voteshare.corr,
+       width=7,
+       height=7
+       )
 
 
 

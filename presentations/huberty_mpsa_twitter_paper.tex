@@ -134,31 +134,34 @@ redistricting.
 
 Data were acquired via the Twitter Search API. For each day during the
 General Election campaign, we queried the Twitter Search API for the
-full name of each candidate running for Congressional office. \footnote{Each general election campaign
-  starts at a different date, consequence of variation in state
-  primary schedules. In practice, we gathered data daily starting on
-  September 1 2012.} Figure \ref{fig:daily-msg-volume} provides the
-time-series message volume. Daily volumes averaged approximately ()
-messages. Overall, we collected approximately 1.02 million individual
-messages.
+full name of each candidate running for Congressional
+office. Only Republican or Democratic candidates, running in contested
+districts, were used.\footnote{Each general election campaign starts at a different
+date, consequence of variation in state primary schedules. In
+practice, we gathered data daily starting on September 1 2012.} Figure
+\ref{fig:daily-msg-volume} provides the time-series message
+volume. Candidates averaged 25 messages per day, or around 19,000
+messages per day in total. Overall, we collected approximately 1.02
+million individual messages over 60 days.
 
 \subsection{Data cleaning}
 \label{sec:data-cleaning}
 
 Prior to analysis, we cleaned the raw data in four ways:
 \begin{enumerate}
-\item Only contested districts were included
-\item Only districts where both candidates were represented were included
-\item Name homonyms were omitted where possible
-\item Obviously irrelevant data were excluded
+\item Only districts where we found Twitter content for both
+  candidates were included
+\item Non-political messages resulting from name homonyms were omitted where possible
+\item Obviously irrelevant non-political data were excluded
 \end{enumerate}
 
 Name homonyms were closely correlated with irrelevant data. In
 particular, sports-themed data related to both the end of the American
 baseball season and the start of the American football season were
-common. Both groups were found by modeling tweet content using a basic
-Latent Dirichlet Allocation topic model, and excluding tweets and
-users based on the terms discovered through those models.
+common. These and other extraneous content groups were found by
+modeling tweet content using a basic Latent Dirichlet Allocation topic
+model. Tweets were subsequently excluded based on terms discovered via
+those models.
 
 The cleaned data show two important biases. First, Republican
 candidates averaged more Twitter volume than Democrats. At the median,
@@ -188,6 +191,7 @@ as their challenger.
   \label{fig:cand-msg-volume}
 \end{figure}
 
+
 \subsection{Data transformation for prediction}
 \label{sec:data-transf-pred}
 
@@ -214,7 +218,25 @@ representation of text in the following steps:
   on the 2010 data. 
 \end{enumerate}
 
-For real-time prediction, this process was repeated daily. 
+During real-time prediction, each day's new data was pre-processed and
+added to a consolidated corpus. 
+
+\subsection{Prediction algorithms}
+\label{sec:pred-algor}
+
+Prediction algorithms were developed based on the 2010 House of
+Representatives election. For the 2010 campaign cycle, data were
+gathered and preprocessed as described above. The final data set
+included data on 356 House races. An ensemble machine learning
+algorithm (van der Laan 2007) was trained on a random 90\% subset,
+using actual election outcomes. Accuracy was estimated against the
+held-out 10\%. Estimates showed that binary prediction did best when
+term frequencies received uniform time weights; and that vote share
+prediction did best when term frequencies received weights inverse
+linear in the number of days prior to election date. These algorithms
+and the dictionaries of their predictor terms were then used to
+generate each day's forecasts during the 2012 election.
+
 
 
 \section{Results}
@@ -231,14 +253,45 @@ For real-time prediction, this process was repeated daily.
 \subsubsection{Voteshare predictions}
 \label{sec:votesh-pred}
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics{../figures/plot_repredict_actual_corr}
+  \caption{This figure shows the predicted Democratic vote share by district, compared to the actual vote received by the Democratic candidate. Colors illustrate the party of the electoral winner. All election outcome data provided by the New York Times.}
+  \label{fig:predicted-actual-voteshare-bydistrict}
+\end{figure}
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics{../figures/repredict_voteshare_winloss_correlation_bydate}
+  \caption{This figure illustrates the time-series predictive accuracy of the vote share prediction algorithm. Win/loss accuracy computed at the 50\% vote share cutpoint. Correlation accuracy measures the correlation between the actual vote share received by the Democrat, and the predicted vote share as of each date. All data measured relative to election results as reported by the New York Times.}
+  \label{fig:pred-acc-corr-timeseries}
+\end{figure}
 
 
 \subsection{Social network behavior}
 \label{sec:soci-netw-behav}
 
 The data collected for the purposes of prediction also permit analysis
-of the social behavior of politically-oriented Twitter users. 
+of the social behavior of politically-oriented Twitter users. Two
+types of social behavior are immediately accessible: where and when
+users decide to \textit{retweet} other users' messages, as opposed to
+where and when they \textit{mention} other users in their
+messages. Both types of communication are strong signals of actual
+social interaction, as opposed to follow networks which may signal
+only extremely weak ties.
+
+We are particularly interested in how these forms of behavior interact
+with partisanship. Other scholars () have found that partisans on
+Twitter tend to \textit{mention} anti-partisans but only
+\textit{retweet} messages from their co-partisans. That should
+generate a social network in which users of different partisan
+alignments are largely isolated from each other, but closely connected
+to networks of their co-partisans. 
+
+Finally, wewould also like to know whether these networks are
+primarily \textit{local} in scale, confined to the districts in which
+users' candidates are campaigning; or \textit{national}, spanning
+district boundaries. 
 
 \subsection{Constructing a retweet graph}
 \label{sec:constr-retw-graph}

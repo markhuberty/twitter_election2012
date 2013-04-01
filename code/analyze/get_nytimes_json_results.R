@@ -1,7 +1,8 @@
 library(rjson)
 library(RCurl)
 library(foreach)
-
+library(plyr)
+setwd("~/projects/twitter_election2012")
 nyt.house.results <-
   getURL("http://elections.nytimes.com/2012/results/house/big-board.json")
 

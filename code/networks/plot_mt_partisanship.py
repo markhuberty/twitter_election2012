@@ -10,6 +10,19 @@ import pandas as pd
 import re
 import string
 
+re_rt = re.compile(r'RT\s.*?\s')
+re_mt = re.compile(r'@(\w+)')
+re_punct = re.compile(r'[' + string.punctuation + ']')
+
+def is_mt(msg):
+    """
+    Checks a string for non-rt mentions. Return any mentions found.
+    """
+    msg = re_rt.sub(' ', msg)
+    mentions = re_mt.findall(msg)
+    return mentions
+
+
 def is_rt(msg):
     """
     Checks a string for evidence that it's a retweet. If so, it returns
@@ -37,34 +50,25 @@ def extract_edgelist(group_id, from_user, msg_list):
     """
     edgelist_dict = {}
     for group, msg_author, msg in zip(group_id, from_user, msg_list):
-        rt_origin = is_rt(msg)
-        if rt_origin:
+        mentions = is_mt(msg)
+        if mentions:
             try:
-                rt_origin = rt_origin.encode('ascii', 'replace')
+                mentions = [m.encode('ascii', 'replace') for m in mentions]
                 msg_author = msg_author.encode('ascii', 'replace')
             except:
                 continue
-            pair = (rt_origin, msg_author) #msg_author.encode('ascii', 'replace'))
-            if group in edgelist_dict:
-                if pair in edgelist_dict[group]:
-                    edgelist_dict[group][pair] += 1
+            pairs = [(msg_author, m) for m in mentions if m != msg_author]
+            for pair in pairs:
+                if group in edgelist_dict:
+                    if pair in edgelist_dict[group]:
+                        edgelist_dict[group][pair] += 1
+                    else:
+                        edgelist_dict[group][pair] = 1
                 else:
-                    edgelist_dict[group][pair] = 1
-            else:
-                edgelist_dict[group] = {pair: 1}
+                    edgelist_dict[group] = {pair: 1}
         else:
             continue
     return edgelist_dict
-
-def dgraph_from_edgelist(edgelist, edge_threshold):
-    graph_dict = {}
-    for k in edgelist:
-        if len(edgelist[k]) >= edge_threshold:
-            dgraph = nx.DiGraph()
-            dgraph.add_edges_from(edgelist[k])
-            graph_dict[k] = dgraph
-    return graph_dict
-
 
 def compute_shortest_paths(g, node_list_a, node_list_b, n_paths=1000):
     """
@@ -148,6 +152,8 @@ def compute_edge_homophily(graph, labels):
 ## END FUNCTION DEF ## 
 
 
+
+
 ## Begin analysis
 ## This script does three things:
 ## 1. It builds a graph of retweets from the entire set of
@@ -171,6 +177,7 @@ users_to_use = user_count[user_count > np.mean(user_count)].index
 mnb_pship = pd.read_csv('../../data/mnb_user_partisanship.csv')
 gnb_pship = pd.read_csv('../../data/gnb_user_partisanship.csv')
 
+
 ## Strip out some extraneous stuff in the tweet data:
 extraneous_names = ['Yankees',
                     'ObliviousNFLRef',
@@ -192,7 +199,7 @@ gnb_pship = gnb_pship[bool_gnb_pship]
 
 ## 1. BUILD GRAPH
 ## Build the entire retweet edgelist
-rt_edgelist = extract_edgelist(['master'] * tweets.shape[0],
+mt_edgelist = extract_edgelist(['master'] * tweets.shape[0],
                                tweets['from_user'],
                                tweets['text']
                                )
@@ -201,14 +208,14 @@ rt_edgelist = extract_edgelist(['master'] * tweets.shape[0],
 ## edgelist
 global_nodedict = {}
 global_edgedict = {}
-for rtg in rt_edgelist:
-    for edge in rt_edgelist[rtg]:
+for rtg in mt_edgelist:
+    for edge in mt_edgelist[rtg]:
         if edge[0] in users_to_use and edge[1] in users_to_use:
             for node in edge:
                 if node not in global_nodedict:
                     global_nodedict[node] = 1
             if edge not in global_edgedict:
-                global_edgedict[edge] = rt_edgelist[rtg][edge]
+                global_edgedict[edge] = mt_edgelist[rtg][edge]
             else:
                 global_edgedict[edge] += 1
 
@@ -230,9 +237,9 @@ for edge in global_edgedict:
     global_ebunch.append(etuple)
 
 ## Generate the graph from the nodelist and edge bunch
-global_rt_graph = nx.DiGraph()
-global_rt_graph.add_nodes_from(global_nodelist)
-global_rt_graph.add_weighted_edges_from(global_ebunch)
+global_mt_graph = nx.DiGraph()
+global_mt_graph.add_nodes_from(global_nodelist)
+global_mt_graph.add_weighted_edges_from(global_ebunch)
 
 ## 1. END BUILD GRAPH
 ###################################
@@ -247,10 +254,10 @@ global_rt_graph.add_weighted_edges_from(global_ebunch)
 
 gnb_pship.reset_index(inplace=True)
 gnb_pship.set_index('user', inplace=True)
-lib_nodes = [n for n in global_rt_graph.nodes() if n in gnb_pship.index and
+lib_nodes = [n for n in global_mt_graph.nodes() if n in gnb_pship.index and
              gnb_pship.ix[n]['pship_label'] in ['lib', 'very_lib']
              ]
-con_nodes = [n for n in global_rt_graph.nodes() if n in gnb_pship.index and
+con_nodes = [n for n in global_mt_graph.nodes() if n in gnb_pship.index and
              gnb_pship.ix[n]['pship_label'] in ['con', 'very_con']
              ]
 lib_nodes = pd.Series(lib_nodes)
@@ -258,9 +265,9 @@ con_nodes = pd.Series(con_nodes)
         
 ## Compute the shortest paths between
 ## the node pairs
-lib_paths = compute_shortest_paths(global_rt_graph, lib_nodes, lib_nodes)
-con_paths = compute_shortest_paths(global_rt_graph, con_nodes, con_nodes)
-lib_con_paths = compute_shortest_paths(global_rt_graph,
+lib_paths = compute_shortest_paths(global_mt_graph, lib_nodes, lib_nodes)
+con_paths = compute_shortest_paths(global_mt_graph, con_nodes, con_nodes)
+lib_con_paths = compute_shortest_paths(global_mt_graph,
                                        lib_nodes,
                                        con_nodes
                                        )
@@ -273,7 +280,7 @@ lib_con_path_list = zip(['lib_con'] * len(lib_con_paths),
                         )
 lib_path_list.extend(con_path_list)
 lib_path_list.extend(lib_con_path_list)
-with open('../../data/gnb_rt_path_lengths.csv', 'wt') as f:
+with open('../../data/gnb_mt_path_lengths.csv', 'wt') as f:
     writer = csv.writer(f)
     writer.writerow(['class', 'length'])
     for p in lib_path_list:
@@ -282,19 +289,19 @@ with open('../../data/gnb_rt_path_lengths.csv', 'wt') as f:
 # Compute the probabilities that paths
 # exist between node pairs from the same or
 # different partisans
-lib_path_prob = compute_path_prob(global_rt_graph,
+lib_path_prob = compute_path_prob(global_mt_graph,
                                   lib_nodes,
                                   lib_nodes,
                                   n_paths=1000000
                                   )
 
-con_path_prob = compute_path_prob(global_rt_graph,
+con_path_prob = compute_path_prob(global_mt_graph,
                                   con_nodes,
                                   con_nodes,
                                   n_paths=1000000
                                   )
 
-lib_con_path_prob = compute_path_prob(global_rt_graph,
+lib_con_path_prob = compute_path_prob(global_mt_graph,
                                       lib_nodes,
                                       con_nodes,
                                       n_paths=1000000
@@ -302,7 +309,7 @@ lib_con_path_prob = compute_path_prob(global_rt_graph,
 
 # Finally, compute the share of retweets that occur
 # between users of the same partisan class.
-share, homophile_edges, total_edges = compute_edge_homophily(global_rt_graph,
+share, homophile_edges, total_edges = compute_edge_homophily(global_mt_graph,
                                                              gnb_pship.pship_label
                                                              )
 
@@ -313,7 +320,7 @@ share, homophile_edges, total_edges = compute_edge_homophily(global_rt_graph,
 ## 3. Lay out and plot a graph of the largest
 ##    connected component of the retweet graph.
 
-largest_cc = nx.connected_component_subgraphs(global_rt_graph.to_undirected())
+largest_cc = nx.connected_component_subgraphs(global_mt_graph.to_undirected())
 largest_cc_mst = nx.minimum_spanning_tree(largest_cc[0])
 
 
@@ -363,7 +370,7 @@ nx.draw_networkx_labels(largest_cc_mst,
                         font_size=6
                         )
 plt.axis('off')
-plt.savefig('../../figures/user_rt_largest_cc_mst_gnb.pdf',
+plt.savefig('../../figures/user_mt_largest_cc_mst_gnb.pdf',
             bbox_inches='tight'
             )
 plt.close()
@@ -383,7 +390,7 @@ nx.draw_networkx_nodes(largest_cc_mst,
                        linewidths=0.05
                        )
 plt.axis('off')
-plt.savefig('../../figures/user_rt_largest_cc_mst_gnb.png',
+plt.savefig('../../figures/user_mt_largest_cc_mst_gnb.png',
             bbox_inches='tight'
             )
 plt.close()
@@ -409,7 +416,7 @@ nx.draw_networkx_nodes(largest_cc_mst,
                        linewidths=0.05
                        )
 plt.axis('off')
-plt.savefig('../../figures/user_rt_largest_cc_gnb.pdf',
+plt.savefig('../../figures/user_mt_largest_cc_gnb.pdf',
             bbox_inches='tight'
             )
 plt.close()
