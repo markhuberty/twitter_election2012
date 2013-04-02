@@ -197,6 +197,18 @@ tweets = tweets[bool_tweets]
 mnb_pship = mnb_pship[bool_mnb_pship]
 gnb_pship = gnb_pship[bool_gnb_pship]
 
+test = pd.merge(tweets, gnb_pship,
+                how='inner',
+                left_on='from_user',
+                right_on='user'
+                )
+
+test['district'] = [s[0:4] for s in test.unique_cand_id]
+test_grouped = test.groupby('district')
+mean_district_partisanship = test_grouped.pship.agg(np.mean)
+
+mean_district_partisanship[1:].to_csv('../../data/district_gnb_partisan_score.csv')
+
 ## 1. BUILD GRAPH
 ## Build the entire retweet edgelist
 mt_edgelist = extract_edgelist(['master'] * tweets.shape[0],

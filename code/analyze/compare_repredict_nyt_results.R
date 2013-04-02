@@ -2,19 +2,25 @@ library(rjson)
 library(RCurl)
 library(foreach)
 library(ggplot2)
-library(reshape2)
+library(reshape)
+
 
 setwd("~/projects/twitter_election2012/")
 house.results <- read.csv("./data/house_vote_results.csv")
+
 ## Load up the prediction data
 #voteshare <- read.csv("~/continuous.prediction.master.wide.csv")
 
 voteshare <- read.csv("./predictions/vote_share/repredict/continuous.prediction.master.csv")
 colnames(voteshare) <- c("state_district", "vote_pct_display", "prediction.date")
 
+temp <- house.results[house.results$state_dist %in% voteshare$state_district,]
+incumbent.win.rate <-
+  sum(temp$incumbent & temp$winner) / sum(temp$incumbent)
+
 voteshare <- melt(voteshare, id.vars=c("state_district", "prediction.date"))
 voteshare <- voteshare[,c("state_district", "prediction.date", "value")]
-voteshare <- dcast(voteshare, state_district ~ prediction.date)
+voteshare <- cast(voteshare, state_district ~ prediction.date)
 
 ## Subset the vote data to Democratic candidate voteshares
 house.votes <- house.results[house.results$party_bucket=="Dem" &
@@ -34,9 +40,10 @@ house.votes$vote_pct_display <-
   as.numeric(as.character(house.votes$vote_pct_display))
 
 
+
 ## Reshape and plot the relationship between actual and predicted voteshare by date
 house.votes.melt <- melt(house.votes,
-                         id.vars=c("state_dist", "vote_pct_display")
+                         id.vars=c("state_dist", "vote_pct_display", "vote_spread")
                          )
 house.votes.melt$variable <- gsub("X", "", house.votes.melt$variable)
 house.votes.melt$variable <- as.POSIXlt(house.votes.melt$variable,
@@ -142,6 +149,27 @@ accuracy.rate <- sapply(3:ncol(house.votes), function(x){
 }
                          )
 
+## And compute the mean absolute error
+mae.byweek <- sapply(3:ncol(house.votes), function(x){
+
+  error = house.votes[,x] - house.votes$vote_pct_display
+  mae = mean(abs(error), na.rm=TRUE)
+  return(mae)
+
+})
+df.mae <- data.frame(as.Date(names(house.votes)[3:ncol(house.votes)]),
+                     mae.byweek
+                     )
+names(df.mae) <- c("date", "mae")
+
+vote_spread <- house.votes$vote_pct_display - 50
+vote_spread_quantile <- cut(vote_spread, 10, include.lowest=TRUE)
+df.spread <- data.frame(vote_spread,
+                        vote_spread_quantile,
+                        house.votes[,ncol(house.votes)] - house.votes$vote_pct_display
+                        )
+names(df.spread) <- c("vote.spread", "vote.spread.quantile", "error")
+
 
 ## Aggregate the correlation and timewise accuracy data
 ## and plot it.
@@ -168,14 +196,21 @@ plot.voteshare.corr <- ggplot(df.voteshare.melt,
                               aes(x=predict.date,
                                   y=value,
                                   group=variable,
-                                  colour=variable
+                                  shape=variable
                                   )
                               ) +
   geom_point(aes(size=n.districts)) +
   geom_line() +
   scale_x_datetime("Prediction date") +
   scale_y_continuous("")+
-  scale_colour_discrete("Correspondence between\n predictions and outcomes") +
+  scale_shape("Correspondence between\n predictions and outcomes") +
+  scale_size("Number of districts\n predicted", range=c(1,3)) +
+  geom_hline(yintercept=incumbent.win.rate, linetype=2) +
+  annotate(x=as.POSIXct(as.Date("2012-09-20")),
+           y=0.94, label="Incumbent win rate",
+           geom="text",
+           hjust=0
+           ) +
   theme_bw()
 print(plot.voteshare.corr)
 ggsave(file="./figures/repredict_voteshare_winloss_correlation_bydate.pdf",
@@ -184,7 +219,21 @@ ggsave(file="./figures/repredict_voteshare_winloss_correlation_bydate.pdf",
        height=7
        )
 
-
+plot.mae.byweek <- ggplot(df.mae,
+                          aes(x=as.POSIXlt(date),
+                              y=mae
+                              )
+                          ) +
+  geom_line() +
+  scale_y_continuous("Mean absolute error, predicted Democratic vote share", limits=c(0,10)) +
+  scale_x_datetime("Prediction Date") +
+  theme_bw()
+print(plot.mae.byweek)
+ggsave(plot.mae.byweek,
+       file="./figures/repredict_voteshare_mae_bydate.pdf",
+       width=7,
+       height=7
+       )
 
 ## Do some analysis of what votes changed the most
 
