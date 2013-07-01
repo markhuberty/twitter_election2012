@@ -16,30 +16,85 @@ convert.candidate.names <- function(statedistparty){
 }
 
 ## Load and format the per-candidate and per-district data
-per.candidate.bydate <-
-  read.csv("./data/summary_stats/tweets_per_candidate_per_day.csv")
+per.candidate.bydate.2010 <-
+  read.csv("./data/summary_stats/tweets_per_candidate_per_day_2010.csv", header=FALSE)
+per.candidate.bydate.2012 <-
+  read.csv("./data/summary_stats/tweets_per_candidate_per_day_2012.csv", header=FALSE)
+
+names(per.candidate.bydate.2010) <- names(per.candidate.bydate.2012) <-
+  c("date", "unique_cand_id", "tweet_ct")
+
+per.candidate.bydate.2010$year <- 2010
+per.candidate.bydate.2012$year <- 2012
 
 
-per.candidate.melt <- melt(per.candidate.bydate, id.vars="X")
-per.candidate.melt$variable <- gsub("X", "", per.candidate.melt$variable)
-per.candidate.melt$variable <- strptime(per.candidate.melt$variable,
-                                        format="%m.%d.%y")
-per.candidate.melt <- per.candidate.melt[per.candidate.melt$variable <
-                                         as.POSIXlt(as.Date("2012-11-08"))
-                                         & per.candidate.melt$variable
-                                         > as.POSIXlt(as.Date("2010-09-01")),
-                                         ]
+## Candidate volume timeseries, with a part-specific smoother
+per.candidate.bydate <- rbind(per.candidate.bydate.2010,
+                              per.candidate.bydate.2012
+                              )
+per.candidate.bydate$party <- substr(per.candidate.bydate$unique_cand_id, 6, 6)
 
-per.party <- per.candidate.melt
-per.party$party <- substr(per.party$X, 6, 6)
+per.candidate.bydate$date <- as.Date(per.candidate.bydate$date)
 
-per.party.byday <- aggregate(per.party$value,
-                             by=list(per.party$party,
-                               as.character(per.party$variable)),
+plot.candidate.volumes <- ggplot(per.candidate.bydate,
+                                 aes(x=date,
+                                     y=tweet_ct,
+                                     group=unique_cand_id,
+                                     linetype=party
+                                     )
+                                 ) +
+  geom_point(size=1, alpha=0.1, position="jitter") +
+  geom_smooth(aes(group=party), size=1, colour="black") +
+  scale_y_log10("Log tweet count") +
+  scale_x_date("Date") +
+  facet_wrap(~ year, scales="free_x") +
+  theme_bw()
+print(plot.candidate.volumes)
+ggsave(plot.candidate.volumes,
+       file="./figures/plot_daily_candidate_volume.pdf",
+       width=7,
+       height=7
+       )
+
+
+## Distribution of total candidate message volume
+per.candidate <- aggregate(per.candidate.bydate$tweet_ct,
+                           by=list(per.candidate.bydate$unique_cand_id,
+                             per.candidate.bydate$year),
+                           sum
+                           )
+names(per.candidate) <- c("unique_cand_id", "year", "volume")
+per.candidate$party <- substr(per.candidate$unique_cand_id, 6, 6)
+
+plot.total.candidate.volumes <- ggplot(per.candidate,
+                                       aes(x=volume,
+                                           linetype=party
+                                           )
+                                       ) +
+  geom_density() +
+  scale_x_log10("Total tweet count per candidate") +
+  scale_y_continuous("Density") +
+  facet_wrap(~ year, scales="free_x") +
+  scale_linetype("Party") +
+  theme_bw()
+print(plot.total.candidate.volumes)
+ggsave(plot.total.candidate.volumes,
+       file="./figures/plot_total_candidate_volume.pdf",
+       width=7,
+       height=7
+       )
+
+## Party volumes by day
+per.party.byday <- aggregate(per.candidate.bydate$tweet_ct,
+                             by=list(per.candidate.bydate$party,
+                               per.candidate.bydate$date),
                              sum
                              )
+
+
 names(per.party.byday) <- c("party", "date", "volume")
 per.party.byday$date <- strptime(per.party.byday$date, format="%Y-%m-%d")
+per.party.byday$year <- strftime(per.party.byday$date, format="%Y")
 
 ## Plot daily party volumnes
 plot.daily.party.volume <- ggplot(per.party.byday,
@@ -52,6 +107,7 @@ plot.daily.party.volume <- ggplot(per.party.byday,
   scale_x_date("Date", breaks="1 week", labels=date_format("%A, %B %d, %Y")) +
   scale_y_continuous("Tweet Volume") +
   scale_colour_manual("Party", values=c("R" = "red", "D" = "blue")) +
+  facet_wrap(~ year, scales="free_x") +
   theme_bw() +
   opts(axis.text.x=theme_text(angle=-90, hjust=0))
 
@@ -62,27 +118,15 @@ ggsave(plot.daily.party.volume,
        file="./figures/plot_daily_party_volume.pdf"
        )
 
-per.candidate.test <- aggregate(per.candidate.melt$value,
-                                by=list(per.candidate.melt$X),
-                                sum
-                                )
-
-per.candidate.stp <- convert.candidate.names(per.candidate.test$Group.1)
-per.candidate.melt <- cbind(per.candidate.test, per.candidate.stp)
-per.candidate.melt <- per.candidate.melt[,c("state", "dist", "party",
-                                            "x"
-                                            )
-                                         ]
-names(per.candidate.melt) <- c("state", "district", "party", "n.tweets")
-
-per.candidate.melt$state_dist <- paste(per.candidate.melt$state,
-                                       per.candidate.melt$district,
-                                       sep=""
-                                       )
+## R vs. D volumes
+per.candidate$district <- substr(per.candidate$unique_cand_id,
+                                 1,
+                                 4)
+per.candidate.wide <- melt(per.candidate[,2:ncol(per.candidate)], id.vars=c("district", "year", "party"))
 
 per.district <-
-  aggregate(per.candidate.melt$n.tweets, by=list(per.candidate.melt$state, per.candidate.melt$district), sum)
-names(per.district) <- c("state", "district", "n.tweets")
+  aggregate(per.candidate.wide$value, by=list(per.candidate.wide$district), sum)
+names(per.district) <- c("state_dist", "n.tweets")
 
 candidates <- read.csv("./data/candidates_wide.csv")
 
@@ -99,9 +143,9 @@ candidates.melt <- melt(candidates, id.vars=c("state_dist",
 candidates.melt$party <- substr(candidates.melt$variable, 1, 1)
 
 
-per.candidate <- merge(per.candidate.melt,
+per.candidate <- merge(per.candidate.wide,
                        candidates.melt,
-                       by.x=c("state_dist", "party"),
+                       by.x=c("district", "party"),
                        by.y=c("state_dist", "party"),
                        all=FALSE
                        )
@@ -138,17 +182,21 @@ plot.cand.volumes <- ggplot(per.candidate.cast,
                             aes(x=D_cand.count + 1,
                                 y=R_cand.count + 1,
                                 colour=incumbent_party,
-                                group=incumbent_party)
+                                group=incumbent_party,
+                                shape=incumbent_party)
                             ) +
   geom_abline(aes(intercept=0, slope=1), colour="black") +
   geom_point() +
   scale_x_log10("Log Democrat tweet volume") +
   scale_y_log10("Log Republican tweet volume") +
-  scale_colour_manual("Incumbent Party", values=c(D="blue", R="red",
-                            O="green"),
+  scale_colour_manual("Incumbent Party", #values=c(D="blue", R="red",
+                                        # O="green"),
                       labels=c("Democrat", "None", "Republican"),
-                      breaks=c("D", "O", "R")
+                      values=c("black", "grey", "black")
                       ) +
+  scale_shape_manual("Incumbent Party",
+                     labels=c("Democrat", "None", "Republican"),
+                     values=c(1, 2, 19)) +
   theme_bw()
 print(plot.cand.volumes)
 ggsave(plot.cand.volumes,
