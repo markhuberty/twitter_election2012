@@ -1,0 +1,782 @@
+\documentclass{acm_proc_article-sp}
+%\usepackage{caption}
+
+\begin{document}
+\title{Multi-cycle forecasting of Congressional elections with social
+  media}
+\numberofauthors{1}
+\author{\alignauthor
+Mark Huberty\titlenote{Enormous credit and thanks are due to Len DeGroot of the
+  Graduate School of Journalism at the University of California,
+  Berkeley for hosting real-time publication of predictions during the
+2012 election; and to Hillary Saunders for invaluable research
+support. Additional thanks to F. Daniel Hidalgo, Jasjeet Sekhon, and
+participants at the 2011 UC Berkeley Research Workshop in American
+politics for helpful comments and feedback. The usual disclaimers apply.}\\
+\affaddr{Travers Department of Political
+  Science}\\
+\affaddr{University of California, Berkeley}
+\email{markhuberty@berkeley.edu}
+}
+% \thanks{This version prepared for the Midwest
+%     Political Science Association Conference, April 2013, Chicago. First version: February 2011. Special
+%     thanks to the Graduate School of Journalism at the University of
+%     California, Berkeley for hosting the Voting with your Tweets
+%     experiment for the 2012 Congressional elections. This project
+%     would not have come off without the support, input, and hard work
+%     of Len DeGroot and Hillary Sanders. Additional thanks to
+%     to F. Daniel Hidalgo, Jasjeet
+%     Sekhon, and participants at the 2011 Society for Political
+%     Methodology meeting, and the Fall 2011 UC Berkeley Research Workshop in
+%     American Politics, for helpful comments and feedback. All errors remain my
+%     own.}
+
+% \author{Mark Huberty\thanks{Travers Department of Political Science,
+%     University of California, Berkeley. Contact:
+%     \url{markhuberty@berkeley.edu}.}\\ PRELIMINARY DRAFT}
+% \date{\today}
+\maketitle
+\begin{abstract}
+  This paper reports a multi-cycle experiment in election forecasting using social media data. Drawing on Twitter content referring to candidates, We forecast the 2012 United States House of Representatives elections using algorithms trained on the 2010 House elections. 2010 results suggested accuracy rates could surpass the incumbency baseline. Forward-looking forecasts for 2012 were accurate at rates exceeding 85\% for districts with incumbent candidates; and 65\% for open seats created by redistricting. Vote share forecasts were highly correlated with observed outcomes. These results suggest the potential for social media-based forecasting to learn cumulatively across election cycles. We discuss three caveats to these results: first, that algorithm behavior may converge on incumbent success rates over time; second, that Twitter users display severe partisan polarization; and third, that Twitter communication patterns displays severe partisan homophily. These issues may may undermine the forward predictive power of the social media user population.
+\end{abstract}
+\section{Introduction}
+\label{sec:introduction}
+
+Twitter has become as increasingly prominent media source in political campaigns
+\cite{economist2009,harden2009}. This popularity has led to a series
+of attempts at predicting predict election outcomes from Twitter
+message volumes, timing, and content. Most of those efforts report
+successful predictions. However, these accuracy estimates rely on
+back-casting the same election used to train and validate the
+prediction algorithms. Consequently, their potential utility in future elections
+remains unclear.
+
+This paper reports an experiment in real-time, multi-cycle election forecasting for the
+United States House of Representatives using Twitter data.
+We show that relatively simple assumptions about the content of the
+Twitter feed enable highly accurate election forecasts. For the 2012
+election, forecasts for districts with either Democratic or Republican
+Party incumbents correctly predicted 85-90\% of races several weeks
+before the election. Forecasts for open seats in districts drawn after the 2010
+ were accurate 67\% of the time. Forecast vote shares also correlated
+well with actual vote shares.
+
+We provide three caveats that inform against over-reading these
+results. First, predictor behavior indicates that algorithms learned a
+baseline by discovering the identity of the district incumbent, and
+then adjusting predictions for that district from that baseline. That
+strategy risks regression to the baseline over time, suggesting a
+limited utility horizon. Second, we show that Twitter now reproduces
+behavior from other media: incumbents receive radically more attention
+on Twitter than challengers. Hence, as Twitter continues to mature, it
+may come to reflect known biases in traditional media, rather than
+acting as a novel and democratic avenue for influencing or measuring
+political sentiment. Third, Twitter users and communication patterns
+among them display significant partisan polarization and homophily, in
+ways not necessarily correlated with empirical patterns of
+partisanship. Hence Twitter's convenience sample poses problems for
+accurately representing the electorate. These caveats point to future
+problems to address in building viable forecasting algorithms from
+social media streams.
+
+
+\section{Prior forecasting results}
+\label{sec:prior-forec-results}
+
+Twitter has become a popular medium for both studying online political
+behavior. As an information-push medium,
+tweets promise an unvarnished, if also unstructured, look into
+individuals' political attitudes. Pursuing this possibility, 
+\cite{tumasjan2010election} show that mere counts of tweets provide an
+accurate polling medium for party election outcomes in
+Germany. In the United Kingdom, \cite{tweetminster2010} claim to have
+predicted the 2009 General Election outcomes with 90\% accuracy at the
+national level, and with 69\% accuracy at the seat
+level. \cite{o2010tweets} show
+that Twitter traffic about American presidential candidates correlated with
+polling outcomes in 2008, and may provide a leading indicator of polling
+performance. \cite{bermingham2011using} conclude that a mixed approach
+using both sentiment analysis and message volume may offer marginal
+advantages over volume-based methods alone. But their result,
+estimating outcomes for the 2011 Republic of Ireland general election,
+does worse than traditional polls as measured by the mean absolute
+error between their predicted vote share and actual outcomes. \cite{sang2012predicting} use Twitter sentiment and population
+measures to forecast the 2011 Dutch senate elections, though their
+best results depend on ad-hoc re-weighting with polling information and
+are thus unsatisfying. Most
+recently, \cite{digrazia2013} show that a very simple measure of candidate media
+attention on Twitter provides predictive value for their election vote
+outcomes. 
+
+The lack of credible data on the demographics and demographic trends
+of politically-active Twitter users throws further doubt on these
+results. \cite{mislove2011understanding} provide preliminary data
+suggesting that American Twitter users are disproportionately male,
+urban, and coastal compared with the American
+population. \cite{conover2011} provide evidence from the 2010
+Congressional election that these users organize themselves in
+communities with significant partisan homophily: Twitter users may
+talk about their anti-partisans, but they converse largely with their
+co-partisans. Perhaps, of course, these demographic difficulties could
+be overcome via suitable weighting strategies. But Twitter continues
+to see very rapid growth and change in its user
+base \cite{gwi2013,thenextweb2013}. Instability in either the demographic makeup
+or pattern of Twitter use among politically-interested Twitter users
+could quickly erode the utility of estimators trained on historic
+data.
+
+\cite{gayo2011limits} raise this issue and others to
+cast doubt on reported successes at using Twitter
+to forecast elections. They point out that cases of successful
+prediction are almost entirely dominated by back-casting elections
+that have already occurred, and thus have uncertain future-predictive
+value; that the data gathering, cleaning, and prediction routines are
+rarely released as reproducible results; and that predictions are
+rarely compared to suitable baselines for accuracy. For the latter, he
+specifically notes that predictions are rarely benchmarked to rates of
+incumbent re-election instead of pure chance. Hence, while these
+results are suggestive, they leave the long-term performance of social
+media-based election predictors uncertain.
+
+
+\section{Design and data gathering}
+\label{sec:design-data-gath}
+
+Addressing some of these critiques, we present an open, fully
+out-of-sample test of Twitter-based election forecasting across
+multiple election cycles. This test is designed to address the
+problems of transparency, back-casting, and underlying user base
+stability raised by critics of past election forecasting results. The
+forecasts presented here forecast the 2012 United States House of
+Representatives elections using machine learning algorithms trained on
+the 2010 House elections. Using the 2012 election as a true
+out-of-sample test of predictive performance addresses several of the
+problems raised by \cite{gayo2011limits}. Forward-looking prediction
+addresses both the stability of Twitter information dynamics over
+time, and the lack of transparency in past attempts at election
+prediction.\footnote{All forecasts reported here were published in
+real time at \texttt{http://californianewsservice.org/category/tweet-vote/}.  All
+algorithms and other code are available at \texttt{https://github.com/markhuberty/twitter\_election2012}.}
+
+The differences between the 2010 and 2012 elections make this
+particular experiment an very strong test. Three differences in
+particular stand out: the shift from a midterm to a Presidential year
+election; the post-2010 redistricting; and the pronounced 2010
+Republican swing. Each of these three differences should challenge the
+portability of an estimator across election cycles. Addressing the
+transparency critique, all data acquisition, cleaning, and prediction
+logic was released ahead of time, and all predictions were posted in
+real time during the general election campaign.\footnote{We note one departure from this commitment to
+  pre-release: examination of predictions post-hoc showed that an
+  off-by-one error in one step of the cleaning process led to
+  mis-alignment of data with districts about halfway through the general
+  campaign. This led to a spurious collapse in predictor accuracy. The
+  source of the error remains unclear. Fixing this error resolved the
+  accuracy issue. The actual prediction algorithms used remained
+  unchanged.}
+
+\subsection{Data acquisition and cleaning}
+\label{sec:data-acquisition}
+
+Data acquisition used the Twitter search API to return messages
+mentioning the full name of Democratic or Congressional candidates
+running in contested races..\footnote{Data acquisition began on September 12
+2010; and on September 1, 2012. Dates were timed to fall after as many
+primary elections as possible.} Queries were run nightly for each day
+in the general election campaign. Table
+\ref{tab:volume-by-party-inc} provides summary statistics on total
+message volumes per candidate. As is immediately apparent, the observed
+Twitter volume per candidate exploded between 2010 and 2012. The query
+procedure generated approximately 260,000 messages for 313 districts
+in 2010, the same procedure collected 1.3 million messages for 369
+districts in 2012.  %% Double check this count (esp districts)
+
+Data cleaning retained only
+data for districts wherein both candidates had Twitter
+content. Further data cleaning removed extraneous messages resulting
+from name homonyms, and excluded obviously irrelevant non-political
+data. Extraneous content was identified by modeling tweet content
+using a Latent Dirichlet Allocation topic model applied to
+``documents'' created by aggregating all tweets relevant to each
+district. Tweets were subsequently excluded based on terms discovered
+via those models.\footnote{Football- and baseball-related messages were
+  common sources of irrelevant data. Indicative terms included
+  \texttt{mlb}, \texttt{yankees}, and \texttt{stephen smith} (a name
+  homonym for both a sports journalist and a candidate for California
+  district 34).} Data cleaning reduced the overall message volume
+by approximately 25,000 in 2010; and by 200,000 in 2012.
+
+The cleaned data demonstrate the first significant result presented in
+this paper: Twitter volumes are strongly biased in favor of
+incumbents. As figure \ref{fig:cand-msg-volume} shows, incumbents
+received significantly greater attention on Twitter than challengers.
+The detailed breakdown in table \ref{tab:volume-by-party-inc} shows
+that a Democratic incumbent received approximately 33\% more messages
+than their Republican challenger in 2010; and nearly three times more
+in 2012. Similar results obtain for Republican incumbents. This
+imbalance suggests why volume-based forecasting algorithms (e.g.,
+\cite{digrazia2013,tumasjan2010election,bermingham2011using}) work:
+candidates' message volumes echo an ingrained bias towards incumbents
+that manifests itself across a variety of measures (fund raising,
+conventional media attention, name familiarity, etc), and which
+correlates well with high incumbent rates of success. 
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[width=\textwidth]{../figures/plot_daily_party_volume}
+%   \caption{This figure shows the daily aggregate message volume by 
+% party for each day of data gathering up to Election Day 2012.}
+%   \label{fig:daily-msg-volume}
+% \end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/plot_raw_cand_volumes}
+  \caption{Incumbents receive far more attention from Twitter users
+    than challengers. This figure shows the comparative message volume for
+    candidate pairs in each district. Colors indicate the party of the
+    district incumbent. The diagonal line illustrates where points would fall if both candidates in a district received equal message volume.}
+  \label{fig:cand-msg-volume}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/plot_msg_volume_vote_spread}
+  \caption{Competitive districts receive more attention on
+    Twitter. This figure shows how total district message volume
+    varies with district competitiveness. Elections decided around the
+  50\% cut point receive orders of magnitude more attention from
+  Twitter users than less competitive races.}
+  \label{fig:msg-volume-vote-spread}
+\end{figure}
+
+\input{../tables/tab_volume_by_party_incumbency}
+
+\subsection{Data transformation for prediction}
+\label{sec:data-transf-pred}
+
+For use in prediction, the data were transformed into a vector-space
+representation of text in the following steps:
+\begin{enumerate}
+\item URLs, punctuation, English stopwords, and non-ASCII characters were removed and
+  message case was standardized
+\item Candidate names were replaced with party-specific placeholders
+\item Officeholder names (the Speaker of the House, the Senate
+  Majority Leader, and the President) were replaced with
+  office-specific placeholders,
+\item A message-level term-frequency matrix,
+  was consolidated into a district-level matrix by summing term
+  frequencies for each row belonging to a distinct district. In 2010,
+  terms were restricted to those appearing in more than 1\%, and less
+  than 99\% of districts. The same vocabulary was then used to build
+  the 2012 prediction matrices. Message-level term frequencies were
+  weighted by creation date prior to summation. Win-loss data were
+   weighted linearly relative to election
+  day. Vote share 
+  predictors used the raw term-frequency data. These weights were
+  selected based on their relative performance in out-of-sample tests
+  on the 2010 data. The district-level term-frequency matrix was row-normalized.
+\end{enumerate}
+
+\subsection{Prediction algorithms}
+\label{sec:pred-algor}
+
+Prediction algorithms were developed based on 313 districts from the 2010 House of
+Representatives election. An ensemble machine learning
+algorithm \cite{van2007super} was trained on a random 90\% subset of
+these districts, using actual election outcomes.\footnote{For discrete
+  prediction, the ensemble
+included variants on: lasso, support vector machines with various
+kernel parameters, and random forests with various tuning
+parameters. For vote share prediction, this ensemble was expanded to
+include boosted regression, sparse partial least squares, step
+regression, ridge regression, and multivariate adaptive splines. Algorithms were selected for their capacity to deal with
+high-dimensional, very sparse data.} Accuracy was
+estimated against the held-out districts. Estimates showed that binary
+prediction did best when term frequencies received uniform time
+weights; and that vote share prediction did best when term frequencies
+received weights inverse linear in the number of days prior to
+election date. These algorithms and the dictionaries of their
+predictor terms were then used to generate forecasts for each day of
+the 2012 general election campaign.
+
+\section{Results}
+\label{sec:results}
+
+We discuss four results:
+\begin{enumerate}
+\item Election predictions were reasonably accurate given the relative
+  simplicity of the predictors. This accuracy persisted even for
+  estimates made far in advance of the election.
+\item Examination of algorithm performance shows that predictions are
+  made in reference to terms signaling the party of the incumbent; and
+  then adjusted from that basis. This presents the danger of
+  algorithms regressing to the incumbency baseline over time.
+\item User and message content displays significant partisan biases
+  that may render Twitter messages suspect as a means of measuring
+  social sentiment
+\item Partisan communities in Twitter display significant partisan
+  homophily, consistent with results obtained under very different
+  sampling and partisan ranking assumptions
+\end{enumerate}
+
+\subsection{Vote share predictions}
+\label{sec:predictions}
+
+Figure \ref{fig:prediction-corr-bydate} summarizes the predictive
+accuracy for both vote share and win/loss predictions. 2010 results
+back-casted election outcomes correctly at rates far exceeding the
+rate of incumbent success in this sample. For 2012, some regression to
+the incumbent win rate was observed: both the win-loss and vote share
+algorithms forecast the correct winner in 88\% of cases, approximating
+the 90\% rate of incumbent re-election for districts in our sample.
+
+Much of the mis-prediction error can be attributed to systemic
+predictor bias against Democratic candidates. As figure
+\ref{fig:corr-voteshare} shows, the vote share predictor
+under-predicted Democratic vote shares in a large number of districts
+that the Democrats ultimately won. In contrast, vote shares in districts
+won by Republicans were forecast much more accurately. Table
+\ref{tab:accuracy-by-incumbency} makes this clear for the overall
+point estimates: Republican districts were successfully forecast at
+rates equalling the incumbent success rate, while forecasts for
+Democratic districts ran well behind the incumbency baseline. This outcome
+confirms a concern about Republican bias in the training algorithm: to
+the extent that the algorithm learned an implicit bias from the 2010
+elections, in which the Republicans achieved a historic swing in party
+control of House seats, it would carry this bias forward. However, we
+note that such problems should be muted as data for additional
+elections is added to the training pool. 
+
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/plot_corr_final_prediction_actual}
+  \caption{Predicted vote shares correlate well with actual
+    outcomes. This figure shows the correlation between predicted and
+    actual vote shares for the 2010 and 2012 elections. District
+    labels are colored according to the party of the electoral winner.}
+  \label{fig:corr-voteshare}
+\end{figure}
+
+\begin{figure*}[ht]
+  \centering
+  \includegraphics[width=1.75\columnwidth]{../figures/voteshare_winloss_correlation_bydate}
+  \caption{Predictive algorithms provide accuracy leading
+    forecasts. This figure shows the predictive accuracy of both the
+    vote share and win/loss algorithms for each day in the general election campaign. Predictions are back-cast for the 2010 election, using the trained algorithm; and forecast for the 2012 election. Vote shares were converted to win/loss predictions at the 50\% cut point. Horizontal lines indicate the incumbent win rate for the districts in the total population of forecasted districts.}
+  \label{fig:prediction-corr-bydate}
+\end{figure*}
+
+\input{../tables/predictive_accuracy_election_incumbent}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/plot_accuracy_by_quantile}
+  \caption{Predictive accuracy is biased towards Republican
+    candidates. This figure illustrates how predictor performance
+    breaks down according to the party of the district incumbent, and
+    the competitiveness of the race. Notice that predictions for
+    Democratic districts where Republicans won far outperformed
+    Republican districts where Democrats won. Competitiveness is defined according to the ultimate Democratic vote share in the district. }
+  \label{fig:accuracy-by-competitiveness}
+\end{figure}
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[height=0.3\textheight]{../figures/plot_ae_by_quantile}
+%   \caption{Vote share forecast errors are worse for close
+%     districts. This figure shows the absolute vote share prediction
+%     error broken down by
+%     district incumbent and election competitiveness. Forecast error is
+%     scaled by the margin of difference between the actual vote outcome
+%     and 50\%. Competitiveness
+%     is defined according to the ultimate Democratic vote share in
+%     the district.}
+%   \label{fig:mae-by-competitiveness}
+% \end{figure}
+
+
+\subsection{Algorithms rely on incumbent cues as a baseline}
+\label{sec:algor-behav-perf}
+
+Results from multi-cycle forecasting thus evidence regression to
+the incumbency baseline. Examination of the structure of the
+forecasting algorithms suggests why. The use of
+bigram algorithms permits partisan and officeholding cues to exist in
+the same features. As figure \ref{fig:rf-term-importance} shows, those
+features receive substantial weight in the random forest components of
+the ensemble predictor. Additional terms then adjust from this incumbency baseline. The
+importance of these linguistic cues in the predictor is confirmed by
+attempting to re-train a predictive algorithm on data pre-cleaned to
+eliminate these cues; predictive accuracy, even for back-casting,
+declines significantly.
+
+This is not, per se, a bad strategy: the high rate of incumbent
+re-election in the US system makes the incumbency baseline ideal. But
+the instability in salient political issues makes consistent
+adjustment from that baseline difficult. For instance, ``4 hcr'' was a
+top predictive term for the vote share predictor. It played a
+significant role in the 2010 elections, which followed closely on the
+passage of healthcare reforms. Two years later, however, jobs and
+fiscal policy played a much more salient role. Unstable issue salience
+complicates attempts at topic-driven forecasting such as was attempted
+here. 
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/plot_rf_algorithm_term_importance}
+  \caption{Prediction algorithms key in on incumbency
+    indicators. This figure shows the estimated term importance for the random forest algorithm component
+    of the vote share and win-loss ensembles. Term importance is
+    estimated as the normalized change in predictive error upon
+    random permutation of each term. Each panel shows the top
+    30 terms by importance for the highest-weighted random forest
+    member of the SuperLearner library.}
+  \label{fig:rf-term-importance}
+\end{figure}
+
+\subsection{Twitter users are highly partisan}
+\label{sec:part-cont-twitt}
+
+Mapping from Twitter conversations to election outcomes presumes not
+just linguistic stability, but also some stability in Twitter's
+convenience sample. To investigate the dynamics of the
+politically-engaged Twitter community further, we would like to know
+both (1) the pattern of partisan alignment of users in our sample and
+(2) patterns of communication among partisans. We estimate the
+partisan alignment of Twitter users via a two-step approach. First, we
+identify a set of Twitter hashtags with a known partisan alignment. In
+this case, we choose \texttt{\#tcot} for conservatives and
+\texttt{\#p2} for liberals. Following \cite{conover2011}, we then
+index all hashtag-containing messages by their hashtags. Using this
+index, we compute the Jaccard similarity for co-occurrence of each
+unique hashtag with the known partisan tag. We retain separate lists
+of conservative and liberal tags with a Jaccard index of greater than
+0.01. We make these lists exclusive by discarding any confusion terms
+appearing in both lists.
+
+Based on these hashtags, we construct a partisan score, $p_u$ for each
+user that employed hashtags in their messages. The scores is computed
+as the scaled difference between their use of conservative and liberal
+tags, on the interval $[-1, 1]$ from most liberal to most
+conservative. Formally:
+
+ \begin{equation}
+   \label{eq:pscore}
+   p_u = \frac{\left|tags_{u,cons}\right| - \left|tags_{u, lib}\right|}{\left|tags_u\right|}
+ \end{equation}
+
+To score those users that do not use hashtags, we use the scored users
+as an input to train a classifier based on the text of user
+messages. Formally, we convert the continuous partisan score to binary
+``liberal'' / ``conservative'' score around a cut point at zero. We
+then train a naive Bayesian classifier to predict a user's
+partisan class based on the language of their aggregated
+messages.\footnote{Formally, we aggregate each user's tweets and
+transform them into a term-frequency matrix with one row per
+user. Term frequencies are TfIdf-weighted. Hashtags,
+common English stopwords and terms used by fewer than 0.1\%, or more
+than 99.9\%, of users were discarded. URLs were standardized to a
+'URL' placeholder. All computation used the \texttt{sklearn} machine
+learning suite for Python \cite{scikit-learn}.} Cross-validated
+predictive accuracy averaged 92\% for the 2010 user population, and
+86\% for the 2012 population. We then use the trained classifier to
+predict the partisan alignment of all users, based on the text of
+their messages.
+
+These estimates raise two issues about the nature of the Twitter
+user population and its utility as a sample for real-world political
+forecasting. First, by this measure Republicans on Twitter are more
+strongly partisan-aligned than Democrats. Figure
+\ref{fig:user-pscore-distribution} shows that conservative-leaning
+users score as more extreme partisans than liberal-leaning users.
+
+Second, conservative-aligned users are better represented in the
+population than liberals. Conservatives outnumbered liberals 6.8:1 in
+2010, and 2.2:1 in 2012. This Republican dominance of
+politically-active Twitter users contrasts with the general electorate,
+in which the share of self-described Democrats has remained stable as
+the percentage of self-described Republicans has fallen since 2000
+\cite{pew2012}.
+
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/user_partisan_alignment_density}
+  \caption{Twitter users are highly partisan. This figure shows the distribution of partisan alignment
+    scores for users whose tweets contain hashtags. Scores were
+    calculated on the $[-1 , 1]$ interval, where 1 is most
+    conservative. Liberal scores are shows as absolute values to permit direct comparison.}
+  \label{fig:user-pscore-distribution}
+\end{figure}
+
+
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[width=\textwidth]{../figures/mt_graph_path_length_distribution}
+%   \caption{Path length distribution between co- and anti-partisans within the \textbf{mention} graph. Path lengths are computed as the Dijkstra shortest path between a 1,000 random liberal-liberal, conservative-conservative, or liberal-conservative node pairs. }
+%   \label{fig:rt-partisan-path-length}
+% \end{figure}
+
+\subsection{Twitter users display significant partisan homophily}
+\label{sec:twitt-users-displ}
+
+
+Third, Twitter communication networks display very high partisan
+homophily, even if the content of the communication spans partisan
+boundaries. Twitter users can signal partisan links of two
+forms. First, one user may \textit{retweet} messages from
+another. Second, one user may \textit{mention} another in a
+message. Since retweets require a user to first have received the
+message being retweeted, they tend to signal communication
+links. Mentions, in contrast, may signal only attempts at
+communication or citation. To put this another way, retweets may
+signal conversation, while mentions signal references.
+
+Quantitative measures of graph connectedness suggest a high degree of
+partisan homophily: individuals talk to their co-partisans, but talk
+about their anti-partisans. We measure this in two ways. First, we
+exploit graph connectedness to determine how closely bound partisan
+types are to each other and to their anti-partisans. Three connection
+types are possible: two co-partisan (Liberal-Liberal and
+Conservative-Conservative) and one anti-partisan
+(Liberal-Conservative). For each type, we compute the Dijkstra
+shortest path for 1000 randomly chosen pairs of each type. The resulting
+mean path lengths, show in figure \ref{fig:path-lengths}, suggest a world in which
+individuals are far more likely to be connected to, and to converse
+with, their co-partisans, even if they may talk about both co- and
+anti-partisans.
+
+We confirm this impression by investigating the community structure of
+the relationship graphs. Community detection used the Louvain
+algorithm \cite{blondel2008fast}. For a community $C$ containing
+users $U$ with partisanship scores $p \in \{-1, 1\}$, community partisanship was computed
+as $p_C = \frac{1}{\left|U\right|}\sum_U p_u$. Figure
+\ref{fig:partisan-subcommunities} 
+illustrates the distribution of community partisan membership
+for both the mention and retweet graphs. Figures
+ illustrate the graph
+structure linking these communities to each other.\footnote{Graph
+  nodes correspond to single communities. Edges correspond to mentions
+or retweets between community members. Node color corresponds to the
+partisan mix of community members.} Again, we see that users tend
+to speak to one another, while talking about a more uniformly
+distributed set of partisans. The retweet graphs, signalling
+communication, cluster by partisan membership; while the mention
+graphs show dense connections between communities of different
+partisan content. These results are consistent with
+\cite{conover2011}, under completely different sampling procedures. 
+
+
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[angle=90, width=0.7\textheight]{../figures/user_rt_largest_cc_mst_2010.png}
+%   \caption{Network representation of \textbf{retweet} connections between
+%     users for \textbf{2010}. Colors represent a user's partisan alignment towards the
+%     Republicans (reds) or Democrats(blue). Labels illustrate users with
+%     very high degree centrality. This representation uses the maximum
+%     spanning tree of the largest connected component of the retweet graph.}
+%   \label{fig:rt-largest-cc-mst-2010}
+% \end{figure}
+
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[angle=90, width=0.7\textheight]{../figures/user_rt_largest_cc_mst_2012.png}
+%   \caption{Network representation of \textbf{retweet} connections between
+%     users for \textbf{2012}. Colors represent a user's partisan alignment towards the
+%     Republicans (reds) or Democrats(blue). Labels illustrate users with
+%     very high degree centrality. This representation uses the maximum
+%     spanning tree of the largest connected component of the retweet graph.}
+%   \label{fig:rt-largest-cc-mst-2012}
+% \end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/plot_rt_mt_pathlengths_2010_2012}
+  \caption{Conservatives are more tightly connected to each other via
+    conversation than liberals. This figure shows the 95\% confidence interval of the mean
+    Dijkstra path length between co- and anti-partisans in the
+    retweet and mention graphs. Path lengths were computed for 1000 randomly chosen pairs of each type.}
+  \label{fig:path-lengths}
+\end{figure}
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[width=0.9\columnwidth]{../figures/mt_rt_graph_path_length_distribution}
+%   \caption{Path length distribution between co- and anti-partisans. Path lengths are computed as the Dijkstra shortest path between a 1,000 random liberal-liberal, conservative-conservative, or liberal-conservative node pairs. }
+%   \label{fig:partisan-path-length}
+% \end{figure}
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[angle=90,
+%   width=0.7\textheight]{../figures/user_mt_largest_cc_mst_2010.png}
+%   \caption{Network representation of \textbf{mention} connections between
+%     users for \textbf{2010}. Colors represent a user's partisan alignment towards the
+%     Republicans (reds) or Democrats(blue). Labels illustrate users with
+%     very high degree centrality. This representation uses the maximum
+%     spanning tree of the largest connected component of the mention graph.}
+%   \label{fig:mt-largest-cc-mst-2010}
+% \end{figure}
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[angle=90,
+%   width=0.7\textheight]{../figures/user_mt_largest_cc_mst_2012.png}
+%   \caption{Network representation of \textbf{mention} connections between
+%     users for \textbf{2012}. Colors represent a user's partisan alignment towards the
+%     Republicans (reds) or Democrats(blue). Labels illustrate users with
+%     very high degree centrality. This representation uses the maximum
+%     spanning tree of the largest connected component of the mention graph.}
+%   \label{fig:mt-largest-cc-mst-2012}
+% \end{figure}
+
+
+%% NOTE: notice that for the communities, there's a baseline random
+%% prob of membership if the communities were just drawn from the
+%% existing distribution. So bootstrap that: draw 1000 samples of k
+%% pairs and figure out what the distribution of membership looks
+%% like. 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/rt_mt_community_partisanship}
+  \caption{Retweet communities display greater partisan homophily than
+    mention communities. Retweet communities tend to contain
+    communities with well-defined partisanship (either very liberal,
+    or very conservative). Mention communities display more uniformly
+    mixed partisan members.}
+  \label{fig:partisan-subcommunities}
+\end{figure}
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[width=\textwidth]{../figures/voteshare_prediction_corr_bydate}
+%   \caption{Predicted and actual vote shares by district for 2010 and 2012. For 2010, all numbers reflect back-casting using the trained algorithm. For 2012, predictions reflect the forecasted Democratic vote share on election day. }
+%   \label{fig:predicted-actual-voteshare-bydistrict}
+% \end{figure}
+
+\begin{figure*}[ht]
+  \centering
+  \begin{minipage}[h]{0.45\linewidth}
+    \begin{center}
+      \includegraphics[width=\textwidth, clip=true, trim=0 2cm 0 2cm]{../figures/mt2010_community_graph}
+      Mentions 2010
+    \end{center}
+
+  \end{minipage}
+  \begin{minipage}[h]{0.45\linewidth}
+    \begin{center}
+      \includegraphics[width=\textwidth, clip=true, trim=0 2cm 0 2cm]{../figures/mt2012_community_graph}
+      Mentions 2012
+    \end{center}
+  \end{minipage}\\
+  \begin{minipage}[h]{0.45\linewidth}
+    \begin{center}
+      \includegraphics[width=\textwidth, clip=true, trim=0 2cm 0 1cm]{../figures/rt2010_community_graph}
+      Retweets 2010
+    \end{center}
+  \end{minipage}
+  \begin{minipage}[h]{0.45\linewidth}
+    \begin{center}
+      \includegraphics[width=\textwidth, clip=true, trim=0 2cm 0 1cm]{../figures/rt2012_community_graph}
+      Retweets 2012
+    \end{center}
+  \end{minipage}
+\caption{Retweet and mention patterns among partisan communities on
+  Twitter. Nodes in each figure correspond to communities in the
+  retweet or mention graph as discovered by the Louvain
+  algorithm. Node color reflects the mean partisan makeup of the
+  community. Edges are weighted by the degree of interconnectedness
+  among users in each community.}
+\label{}
+\end{figure*}
+
+\section{Discussion}
+\label{sec:discussion}
+
+The results presented here point to the difficulty of forecasting
+beyond heuristics using 
+convenience samples in social media. Prediction algorithms that showed
+promise in the 2010 election saw significant regression by the 2012
+cycle. Patterns of Twitter message volume displayed significant
+ingrained biases towards incumbents. The partisan distribution of
+Twitter users is significantly skewed, in ways that run contrary to
+the evolving partisan structure of the American electorate. Patterns
+of communication between users suggest that Twitter partisans are
+fairly isolated: while they may speak of their partisan opponents,
+evidence of strong connections between anti-partisans is weak. To the
+extent that anti-partisans are connected in the communication graph,
+it is the large media organizations, rather than individuals, who
+bridge partisan communities. Each of these phenomena evolved between
+the 2010 and 2012 elections, weakening the effect of whatever learned
+compensation mechanisms had helped the 2010 predictions beat the
+incumbency baseline.
+
+These factors suggest future challenges for building valid forecasting
+models. The forecasting strategy here implicitly learned the
+incumbency baseline and then attempted to adjust off that baseline
+based on patterns of linguistic content about candidates. Similar
+strategies have proven useful in other contexts, such as forecasting
+macroeconomic aggregates like unemployment rates
+\cite{choi2012predicting}. But the results here suggest greater
+instability in the underlying map between online and offline behavior
+than exists in the macroeconomic context. This problem is not
+new. Google's historically accurate search-based influenza forecasts
+\cite{ginsberg2008detecting} broke down in both 2009 and 2012,
+consequence of changes to the epidemiological profile of the flu virus
+and its coverage in the media \cite{butler2013google}. Twitter has
+far lower penetration in the general populace than Google search, and
+greater volatility in its user base and usage patterns. Hence the
+greater 
+
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Social media-based election forecasts have proliferated in the last
+several years. We provide what we believe to be the first multi-cycle
+test of election forecasting with Twitter. Our results point to the
+difficulty of building persistently accurate content-based forecasting
+algorithms. Underlying changes in election dynamics, issue salience,
+the Twitter user base, and patterns of Twitter use degrade the
+performance of prediction algorithms across election cycles. Moreover,
+the convenience sample of the Twitter user space is clearly unlike the
+broader electorate in both partisan alignment and polarization. While
+we might imagine learning a valid mapping from the Twitter user base
+to the preferences of the broader electorate, the underlying
+instability of that user base and its patterns of use will weaken the
+mapping over time. While commercial uses of Twitter-based forecasting
+face similar problems, they benefit from far more regular
+opportunities to update than the two- or four-year American election
+cycle. Likewise, while poll-of-polls based forecasts also must update
+over time, they benefit from a far larger set of opportunities to
+learn the relationship between polling aggregates and house effects on
+the one hand, and election outcomes on the other, than
+the history of Twitter or other social media permit.
+
+Hence building effective and informative social media-based election
+forecasting approaches will require a sustained commitment on par with
+that required to build effective forecasting and turnout models from
+polling. Obvious needs include better models of how Twitter behavior
+relates to real-world phenoma like partisan identification and
+turnout; better monitoring of how the underlying Twitter population
+evolves between elections; and better measurement of the gap between
+the politically-active Twitter population and the broader
+electorate. 
+
+
+% Here, something about how Twitter partisans are probably very likely
+% to vote, etc, and so unlike the rest of the electorate. 
+
+
+\bibliography{/home/markhuberty/bibs/twitter}
+\bibliographystyle{plain}
+\end{document}
