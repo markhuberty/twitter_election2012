@@ -53,24 +53,38 @@ politics for helpful comments and feedback. The usual disclaimers apply.}\\
 \section{Introduction}
 \label{sec:introduction}
 
-Twitter has become as increasingly prominent media source in political campaigns
-\cite{economist2009,harden2009}. This popularity has led to a series
-of attempts at predicting predict election outcomes from Twitter
-message volumes, timing, and content. Most of those efforts report
-successful predictions. However, these accuracy estimates rely on
-back-casting the same election used to train and validate the
-prediction algorithms. Consequently, their potential utility in future elections
+Twitter has become as increasingly prominent media source in political
+campaigns \cite{economist2009,harden2009}. This popularity has led to
+a series of attempts at predicting predict election outcomes from
+Twitter message volumes, timing, and content. Most of those efforts
+report successful predictions. However, these accuracy estimates rely
+on back-casting the same election used to train and validate the
+prediction algorithms. Attempts \cite{metaxas2011not} to validate
+estimator accuracy with forecasting show that many promising
+estimators do not reliably estimate elections they have not seen
+before. Consequently, their potential utility in future elections
 remains unclear.
 
-This paper reports an experiment in real-time, multi-cycle election forecasting for the
-United States House of Representatives using Twitter data.
-We show that relatively simple assumptions about the content of the
-Twitter feed enable highly accurate election forecasts. For the 2012
-election, forecasts for districts with either Democratic or Republican
-Party incumbents correctly predicted 85-90\% of races several weeks
-before the election. Forecasts for open seats in districts drawn after the 2010
- were accurate 67\% of the time. Forecast vote shares also correlated
-well with actual vote shares.
+This paper reports further experiments in multi-cycle election
+forecasting for elections to the United States House of
+Representatives. I introduce a new estimator grounded in a specific
+assumption about the stability of language over short election
+cycles. Such an estimator, I argue, may out-perform estimators that
+make prior assumptions about sentiment, topics, or other data. I show
+that this estimator generates promising results for out-of-sample
+forecasts on the 2010 election. Subsequently, the trained algorithm
+and all supporting data acquisition, cleaning, and formatting logic
+were codified and disclosed prior to the 2012 election campaign. Real
+time prediction prior to the 2012 election showed, however, that
+forecast performance regresses to incumbent re-election rates. The
+only suggestion that such an approach may provide future traction
+comes from open seats drawn after the 2010 census. Even there,
+however, the 67\% accuracy rate, while better than chance, far
+under-performs conventional polling. These data suggest that
+linguistic instability among Twitter users over the political cycle is
+sufficient to erode estimator accuracy even over short periods such as
+those involved in US House elections. Placebo tests also call into
+question the plausibility of the estimator over time. 
 
 We provide three caveats that inform against over-reading these
 results. First, predictor behavior indicates that algorithms learned a
@@ -97,94 +111,56 @@ social media streams.
 Twitter has become a popular medium for both studying online political
 behavior. As an information-push medium,
 tweets promise an unvarnished, if also unstructured, look into
-individuals' political attitudes. Pursuing this possibility, 
-\cite{tumasjan2010election} show that mere counts of tweets provide an
-accurate polling medium for party election outcomes in
-Germany. In the United Kingdom, \cite{tweetminster2010} claim to have
-predicted the 2009 General Election outcomes with 90\% accuracy at the
-national level, and with 69\% accuracy at the seat
-level. \cite{o2010tweets} show
-that Twitter traffic about American presidential candidates correlated with
-polling outcomes in 2008, and may provide a leading indicator of polling
-performance. \cite{bermingham2011using} conclude that a mixed approach
-using both sentiment analysis and message volume may offer marginal
-advantages over volume-based methods alone. But their result,
-estimating outcomes for the 2011 Republic of Ireland general election,
-does worse than traditional polls as measured by the mean absolute
-error between their predicted vote share and actual outcomes. \cite{sang2012predicting} use Twitter sentiment and population
-measures to forecast the 2011 Dutch senate elections, though their
-best results depend on ad-hoc re-weighting with polling information and
-are thus unsatisfying. Most
-recently, \cite{digrazia2013} show that a very simple measure of candidate media
-attention on Twitter provides predictive value for their election vote
-outcomes. 
+individuals' political attitudes. However, successful predictors have
+proven ephemeral. Claims by \cite{tumasjan2010election} to have
+successfully forecast the 2009 German elections using Twitter
+data, were shown by \cite{jungherr2012pirate} to be an artifact of
+researcher choices rather than research
+design. \cite{bermingham2011using} used a hybrid approach, mixing
+sentiment analysis and relative message volumes. But their results
+under-perform conventional polling in the 2011 Republic of Ireland
+general elections. \cite{sang2012predicting} performed somewhat better
+in the 2011 Dutch elections, but their best results relied on ad-hoc
+re-weighting using polling information. 
 
-The lack of credible data on the demographics and demographic trends
-of politically-active Twitter users throws further doubt on these
-results. \cite{mislove2011understanding} provide preliminary data
-suggesting that American Twitter users are disproportionately male,
-urban, and coastal compared with the American
-population. \cite{conover2011} provide evidence from the 2010
-Congressional election that these users organize themselves in
-communities with significant partisan homophily: Twitter users may
-talk about their anti-partisans, but they converse largely with their
-co-partisans. Perhaps, of course, these demographic difficulties could
-be overcome via suitable weighting strategies. But Twitter continues
-to see very rapid growth and change in its user
-base \cite{gwi2013,thenextweb2013}. Instability in either the demographic makeup
-or pattern of Twitter use among politically-interested Twitter users
-could quickly erode the utility of estimators trained on historic
-data.
-
-\cite{gayo2011limits} raise this issue and others to
-cast doubt on reported successes at using Twitter
-to forecast elections. They point out that cases of successful
-prediction are almost entirely dominated by back-casting elections
-that have already occurred, and thus have uncertain future-predictive
-value; that the data gathering, cleaning, and prediction routines are
-rarely released as reproducible results; and that predictions are
-rarely compared to suitable baselines for accuracy. For the latter, he
-specifically notes that predictions are rarely benchmarked to rates of
-incumbent re-election instead of pure chance. Hence, while these
-results are suggestive, they leave the long-term performance of social
-media-based election predictors uncertain.
+These problems, \cite{metaxas2011not} have argued, indicate a much
+broader problem for election prediction via social media. Given the
+demographic differences between the Twitter user base and the voting
+population, the inherent dynamism of political language and activity,
+and incentives for strategic behavior on the part of motivated
+partisans, simple heuristics are unlikely to perform reliably as
+electoral predictors. At the very least, they argue, claims to valid
+prediction should clearly articulate \textit{ex ante} the underlying
+assumptions made by the forecasting method, the approach to dealing
+with spam and other forms of information noise, and the baseline
+against which the estimate should be judged. 
 
 
 \section{Design and data gathering}
 \label{sec:design-data-gath}
 
-Addressing some of these critiques, we present an open, fully
-out-of-sample test of Twitter-based election forecasting across
-multiple election cycles. This test is designed to address the
-problems of transparency, back-casting, and underlying user base
-stability raised by critics of past election forecasting results. The
-forecasts presented here forecast the 2012 United States House of
-Representatives elections using machine learning algorithms trained on
-the 2010 House elections. Using the 2012 election as a true
-out-of-sample test of predictive performance addresses several of the
-problems raised by \cite{gayo2011limits}. Forward-looking prediction
-addresses both the stability of Twitter information dynamics over
-time, and the lack of transparency in past attempts at election
-prediction.\footnote{All forecasts reported here were published in
+This paper evolved from an attempt to address some, though by no means
+all, of these problems. We describe an open, fully out-of-sample test
+of a prediction algorithm grounded in a narrow assumption about the
+behavior of political language. This test is intended to address the
+problems of transparency, back-casting, and user base instability that
+have plagued past election predictions.\footnote{All forecasts reported here were published in
 real time at \texttt{http://californianewsservice.org/category/tweet-vote/}.  All
-algorithms and other code are available at \texttt{https://github.com/markhuberty/twitter\_election2012}.}
-
-The differences between the 2010 and 2012 elections make this
-particular experiment an very strong test. Three differences in
-particular stand out: the shift from a midterm to a Presidential year
-election; the post-2010 redistricting; and the pronounced 2010
-Republican swing. Each of these three differences should challenge the
-portability of an estimator across election cycles. Addressing the
-transparency critique, all data acquisition, cleaning, and prediction
-logic was released ahead of time, and all predictions were posted in
-real time during the general election campaign.\footnote{We note one departure from this commitment to
+algorithms and other code are available at
+\texttt{https://github.com/markhuberty/twitter\_election2012}. We note one departure from this commitment to
   pre-release: examination of predictions post-hoc showed that an
   off-by-one error in one step of the cleaning process led to
   mis-alignment of data with districts about halfway through the general
   campaign. This led to a spurious collapse in predictor accuracy. The
   source of the error remains unclear. Fixing this error resolved the
   accuracy issue. The actual prediction algorithms used remained
-  unchanged.}
+  unchanged.} 
+The differences between the 2010 and 2012 elections make this
+particular experiment an very strong test. Three differences in
+particular stand out: the shift from a midterm to a Presidential year
+election; the post-2010 redistricting; and the pronounced 2010
+Republican swing. Each of these three differences should challenge the
+portability of an estimator across election cycles.
 
 \subsection{Data acquisition and cleaning}
 \label{sec:data-acquisition}
