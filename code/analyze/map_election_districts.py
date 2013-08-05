@@ -34,10 +34,13 @@ def subset_to_top_votes(g, col, n=2):
 
     return pd.concat(list_out)
 
-df_2008 = subset_to_top_votes(results_2008.groupby(['state', 'dist']), 'vote_pct')
-df_2010 = subset_to_top_votes(results_2010.groupby(['state', 'dist']), 'vote_pct')
-df_2012 = subset_to_top_votes(results_2012.groupby('state_dist'), 'vote_pct')
+df_2008 = subset_to_top_votes(results_2008[results_2008.party.isin(['D', 'R'])].groupby(['state', 'dist']), 'vote_pct')
+df_2010 = subset_to_top_votes(results_2010[results_2010.party.isin(['D', 'R'])].groupby(['state', 'dist']), 'vote_pct')
+df_2012 = subset_to_top_votes(results_2012[results_2012.party.isin(['D', 'R'])].groupby('state_dist'), 'vote_pct')
 
+# df_2008 = results_2008[results_2008.party.isin(['D', 'R'])]
+# df_2010 = results_2010[results_2010.party.isin(['D', 'R'])]
+# df_2012 = results_2012[results_2012.party.isin(['D', 'R'])] 
 
 df_2008.set_index(['state', 'dist'], inplace=True)
 vote_totals = df_2008.groupby(df_2008.index).vote_pct.sum() 
@@ -93,18 +96,18 @@ map_2010_2012 = pd.merge(df_2010_winner,
                          how='inner'
                          )
 
-map_2010_2012['r_vote_2010'] = [v if p=='R' else 100 - v for v in
-                                map_2010_2012.vote_pct_norm_x]
-map_2010_2012['r_vote_2012'] = [v if p=='R' else 100 - v for v in
-                                map_2010_2012.vote_pct_norm_y]
+map_2010_2012['r_vote_2010'] = [v if p=='R' else 100 - v for p, v in
+                                zip(map_2010_2012.party, map_2010_2012.vote_pct_norm_x)]
+map_2010_2012['r_vote_2012'] = [v if p=='R' else 100 - v for p, v in
+                                zip(map_2010_2012.party, map_2010_2012.vote_pct_norm_y)]
 
 map_2010_2012 = map_2010_2012[['state', 'dist', 'state_dist', 'r_vote_2010', 'r_vote_2012']]
 map_2010_2012 = map_2010_2012.drop_duplicates()
 
-map_2008_2010.state_dist = [s + '0' + str(d) if len(d) < 2 else s + str(d) for
+map_2008_2010['state_dist'] = [s + '0' + str(d) if len(d) < 2 else s + str(d) for
                             s, d in zip(map_2008_2010.state, map_2008_2010.dist)]
-map_2010_2012.state_dist = [s + '0' + str(d) if len(d) < 2 else s + str(d) for
-                            s, d in zip(map_2010_2012.state, map_2010_2012.dist)]
+map_2010_2012['state_dist_prior'] = [s + '0' + str(d) if len(d) < 2 else s + str(d) for
+                                     s, d in zip(map_2010_2012.state, map_2010_2012.dist)]
 
 map_2008_2010.to_csv('./results/map_2008_2010_results.csv', index=False)
 map_2010_2012.to_csv('./results/map_2010_2012_results.csv', index=False)
