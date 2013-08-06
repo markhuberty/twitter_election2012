@@ -61,6 +61,23 @@ df_2008_winner = subset_to_top_votes(df_2008.groupby(['state', 'dist']), 'vote_p
 df_2010_winner = subset_to_top_votes(df_2010.groupby(['state', 'dist']), 'vote_pct_norm', 1)
 df_2012.reset_index(inplace=True)
 
+test = pd.merge(df_2008_winner,
+                df_2010,
+                left_on=['state', 'dist', 'party'],
+                right_on=['state', 'dist', 'party'],
+                how='inner'
+                )
+test['state_dist'] = [s + d if len(d) > 1 else s + '0' + d for
+                      s, d in zip(test.state, test.dist)]
+
+# This is the easy one, b/c the district numbering hasn't changed. 
+map_2008_2010 = pd.merge(df_2008_winner,
+                         df_2010,
+                         left_on=['state', 'dist', 'party', 'cand_name_last'],
+                         right_on=['state', 'dist', 'party', 'cand_last_name'],
+                         how='inner'
+                         )
+
 # This is the easy one, b/c the district numbering hasn't changed. 
 map_2008_2010 = pd.merge(df_2008_winner,
                          df_2010,

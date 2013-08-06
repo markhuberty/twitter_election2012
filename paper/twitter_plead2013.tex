@@ -135,6 +135,60 @@ assumptions made by the forecasting method, the approach to dealing
 with spam and other forms of information noise, and the baseline
 against which the estimate should be judged. 
 
+This paper offers a slightly different version of the critique
+advanced in \cite{metaxas2011not}. They argue that, in the limit,
+Twitter-based election forecasts need to converge on the random
+sampling methods used in professional polling. They then point out why
+that will be extremely difficult, given privacy issues and proprietary
+data. Alternatively, we can treat the problem slightly differently:
+the algorithmic task is to develop a stable map from the behavior of
+the Twitter convenience sample to the behavior of real-world
+voters. That map should have sufficient resolution to beat simple
+heuristics--particularly incumbency--for election outcomes. We should
+also have some idea of where that map might break down. 
+
+
+%% Thought: elections aren't about sentiment. They are about
+%% behavior. I can vote for someone only as a result of thinking they
+%% are better than the other guy, but generally suck. Also problematic
+%% because we know that most voters aren't well-informed. So are we
+%% modeling individual choices (usually not, for incumbency) or trying
+%% to pick up on broader trends across districts or within regions. 
+
+%% Two possible ways to success:
+
+%% 1. Stable algorithmic map, based on specific assumptions about
+%% election behavior
+%% 2. Random sampling method equivalent to professional polling
+
+%% Note that (2) also embeds (1), due to likely voter models. That map
+%% has broken down in the past. So these aren't specifically unique,
+%% but (2) relies on a weaker version of this than (1). See also cell
+%% phones vs landlines, etc. 
+
+%% Models to show: (1) my own, (2) my own, plus prior vote share (just
+%% use OLS to average), (3) back-casting to the 2010 election given
+%% 2012 observations. 
+
+%% What do we know:
+%% 1. For 2010, Twitter predictions (post-hoc...) improve estimates
+%% compared w/ prior voteshare alone
+%% 2. For 2012, Twitter predictions do far worse than prior voteshare;
+%% together w/ prior voteshare, they do marginally better; but they
+%% still lose at winloss b/c the RMSEs are still too big relative to
+%% the place that matters--right at the cutpoint.
+
+%% Also: 2012 had high re-election rates for districts w/in 4pt margin
+%% in 2010; but 2010 did not (unsurprising, those districts were the
+%% subject of tea party challenges). So the estimator needed to be
+%% even better than normal at the cutpoint, which is the really hard
+%% thing to get right even if overall RMSE is low or accuracy high.
+
+%% And back-predicting 2010 given a model of this form:
+%% vote_2008 ~ vote_2010 + twitter_2010
+%% Out-performs vote alone when applied to 2012
+%% Placebo test strongly suggests that there's something weird going
+%% on here. 
 
 \section{Design and data gathering}
 \label{sec:design-data-gath}
@@ -143,7 +197,7 @@ This paper evolved from an attempt to address some, though by no means
 all, of these problems. We describe an open, fully out-of-sample test
 of a prediction algorithm grounded in a narrow assumption about the
 behavior of political language. This test is intended to address the
-problems of transparency, back-casting, and user base instability that
+problems of transparency, back-casting, and user bas einstability that
 have plagued past election predictions.\footnote{All forecasts reported here were published in
 real time at \texttt{http://californianewsservice.org/category/tweet-vote/}.  All
 algorithms and other code are available at
@@ -156,11 +210,54 @@ algorithms and other code are available at
   accuracy issue. The actual prediction algorithms used remained
   unchanged.} 
 The differences between the 2010 and 2012 elections make this
-particular experiment an very strong test. Three differences in
+particular experiment a very strong test. Three differences in
 particular stand out: the shift from a midterm to a Presidential year
 election; the post-2010 redistricting; and the pronounced 2010
 Republican swing. Each of these three differences should challenge the
 portability of an estimator across election cycles.
+
+In practice, a strong estimator compliant with the critiques outlined
+by \cite{metaxas2011not} would take the following form:
+
+\begin{equation}
+  \label{eq:1}
+  V_{c,t} = V_{c,t - 1} + X_{c,t}
+\end{equation}
+
+Where the vote share received by a candidate $c$ in an election held
+at time $t$ would be forecast by the vote that they received in the
+prior election at $t-1$, and some set of additional predictors $X$ (in
+this case derived from social media data). In the case of US
+elections, $V$ may be abstracted to the \textit{party} vote for an
+electoral district, consistent with observed \textit{party incumbency}
+effects that obtain even when a given incumbent retires. Put another
+way, successful predictors should separately model (1) structural
+advantages that accrue to incumbents across elections, and (2) the
+election-specific effects that may or may not displace the
+incumbent. Estimators are only of serious interest if the adjustments
+$X$ off the incumbency baseline $V$ improve the overall predictive
+rate of the estimator. 
+
+The estimator presented here implicitly separates these two
+effects. We employ statistical machine learning methods to model the
+relationship of n-grams in the Twitter feed for individual candidates
+to their election outcomes. Observation of the components of the
+resulting algorithm shows that influential terms fall into 2 classes:
+
+\begin{enumerate}
+\item Indicators of the incumbent party
+\item Salient issues and / or candidate sentiment
+\end{enumerate}
+
+In other words, the algorithm derives from Twitter language itself the
+incumbency signal. It then weights other terms to adjust from that
+incumbency baseline. In doing so, it embeds the following hypothesis
+about future elections: that given sufficiently short election cycles,
+the salient issues and patterns of political language change
+relatively little. If that hypothesis holds, then the
+algorithm--nothing more than a map from the Twitter convenience sample
+to the real-world behavior of the voting population--may offer
+reasonable predictive performance. 
 
 \subsection{Data acquisition and cleaning}
 \label{sec:data-acquisition}
