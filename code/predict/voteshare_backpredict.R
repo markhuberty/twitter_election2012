@@ -2,8 +2,12 @@ library(ggplot2)
 library(reshape)
 library(gdata)
 
-df.predict.2010 <- read.csv("../predictions/vote_share/continuous.prediction.master.wide.2010.csv")
-df.results.2010 <- read.csv("../results/map_2008_2010_results.csv")
+df.sentiment.2012 <- read.csv("../../data/r_sentiment_bydistrict_2012.csv")
+df.sentiment.2010 <- read.csv("../../data/r_sentiment_bydistrict_2010.csv")
+
+df.predict.2010 <- read.csv("../../predictions/vote_share/continuous.prediction.master.wide.2010.csv")
+df.results.2010 <- read.csv("../../results/map_2008_2010_results.csv")
+
 
 df.results.2010 <- df.results.2010[df.results.2010$state_dist %in% df.predict.2010$state_district,]
 df.predict.2010 <- df.predict.2010[df.predict.2010$state_district %in% df.results.2010$state_dist,]
@@ -86,8 +90,8 @@ input.df <- na.omit(input.df)
 
 lm.full = lm(d.vote.prior ~ d.vote.current + twitter.forecast, data=input.df)
 
-df.predict.2012 <- read.csv("../predictions/vote_share/continuous.prediction.master.wide.2012.csv")
-df.results.2012 <- read.csv("../results/map_2010_2012_results.csv")
+df.predict.2012 <- read.csv("../../predictions/vote_share/continuous.prediction.master.wide.2012.csv")
+df.results.2012 <- read.csv("../../results/map_2010_2012_results.csv")
 
 df.results.2012 <- df.results.2012[df.results.2012$state_dist %in% df.predict.2012$state_district,]
 df.predict.2012 <- df.predict.2012[df.predict.2012$state_district %in% df.results.2012$state_dist,]
@@ -230,3 +234,32 @@ plot.vote.margin <- ggplot(winloss.at.margin,
   scale_x_continuous("Absolute vote margin in prior election") +
   scale_y_continuous("Pct. districts with same win/loss outcome in current election")
 print(plot.vote.margin)
+
+
+df.results.2012 <- merge(df.results.2012,
+                         df.sentiment.2012,
+                         by.x="state_dist",
+                         by.y="dist",
+                         all.x=TRUE,
+                         all.y=FALSE
+                         )
+
+lm.sentiment <- lm(df.results.2012$r_vote_2012 ~ df.predict.2012$X2012.11.06 +
+                   df.results.2012$sentiment_ratio
+                   )
+
+lm.sentiment <- lm(df.results.2012$r_vote_2012 ~ df.predict.2012$X2012.11.06 +
+                   df.results.2012$sentiment_ratio + df.results.2012$r_vote_2010
+                   )
+
+predict.sentiment <- predict(lm.sentiment)
+
+plot(predict.sentiment ~ na.omit(df.results.2012)$r_vote_2012, xlim=c(0,100), ylim=c(0,100))
+
+plot.sentiment.density <- ggplot(df.results.2012,
+                                 aes(x=sentiment_ratio,
+                                     y=r_vote_2010
+                                     )
+                                 ) +
+  geom_point()
+print(plot.sentiment.density)
