@@ -172,26 +172,36 @@ df.voteshare.corr <- melt(df.voteshare.corr,
 
 
 plot.voteshare.corr <- ggplot(df.voteshare.corr,
-                              aes(x=prediction.date,
+                              aes(x=yday(prediction.date),
                                   y=value,
                                   group=variable,
-                                  shape=variable
+                                  linetype=variable
                                   )
                               ) +
-  geom_point(aes(size=N)) +
   geom_line() +
-  facet_wrap(~ year, scales="free_x") +
-  geom_hline(data=inc.win.rate, aes(yintercept=inc.win.rate)) +
-  scale_x_datetime("Prediction date") +
-  scale_y_continuous("Correlation between predicted and actual Democratic voteshare",
+  facet_grid(year ~ ., scales="free_x") +
+  geom_hline(data=inc.win.rate,
+             aes(yintercept=inc.win.rate),
+             linetype=4
+             ) +
+  scale_x_continuous("Prediction date (day of year)") +
+  scale_y_continuous("Correlation between predicted\nand actual Democratic voteshare",
                      limits=c(0.4, 1)
                      )+
-  scale_shape("Correspondence between predictions and outcomes") +
+  scale_linetype("Correspondence between\npredictions and outcomes",
+                 guide=guide_legend(nrow=2)
+                 ) +
   scale_size(range=c(0.5, 3)) +
   theme_bw() +
-  theme(axis.text.x=element_text(angle=-90, hjust=0))
+  theme(axis.text.x=element_text(angle=-90, hjust=0),
+        strip.text.y=element_text(angle=0),
+        legend.position="top")
 print(plot.voteshare.corr)
-ggsave(file="./figures/voteshare_winloss_correlation_bydate.pdf", plot=plot.voteshare.corr)
+ggsave(file="./figures/voteshare_winloss_correlation_bydate.pdf",
+       plot=plot.voteshare.corr,
+       width=7,
+       height=4
+       )
 
 
 final.prediction <- house.outcomes[house.outcomes$prediction.date %in% c(as.POSIXlt("2012-11-06"),

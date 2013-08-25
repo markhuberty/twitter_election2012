@@ -6,12 +6,12 @@ library(reshape)
 
 
 setwd("~/projects/twitter_election2012/")
-house.results <- read.csv("./data/house_vote_results.csv")
+house.results <- read.csv("./results/house_results_2012.csv")
 
 ## Load up the prediction data
 #voteshare <- read.csv("~/continuous.prediction.master.wide.csv")
 
-voteshare <- read.csv("./predictions/vote_share/repredict/continuous.prediction.master.csv")
+voteshare <- read.csv("./predictions/vote_share/continuous.prediction.master.2012.csv")
 colnames(voteshare) <- c("state_district", "vote_pct_display", "prediction.date")
 
 temp <- house.results[house.results$state_dist %in% voteshare$state_district,]
@@ -38,7 +38,7 @@ house.votes <- merge(house.votes,
                      )
 house.votes$vote_pct_display <-
   as.numeric(as.character(house.votes$vote_pct_display))
-
+house.votes$vote_spread <- vote_spread <- house.votes$vote_pct_display - 50
 
 
 ## Reshape and plot the relationship between actual and predicted voteshare by date
@@ -106,7 +106,7 @@ party.victory.confusion <- table(winning.party,
 error.margin <- house.votes[, "2012-11-06"] - house.votes$vote_pct_display
 
 df.error.margin <- data.frame(error.margin, winning.party)
-plot.error.margin <- ggplot(df,
+plot.error.margin <- ggplot(df.error.margin,
                             aes(x=error.margin,
                                 group=winning.party,
                                 colour=winning.party
@@ -128,7 +128,7 @@ ggsave(plot.error.margin,
 
 ## Check the correlation between predicted and actual voteshare
 ## by date for the entire prediction period. Plot the output
-voteshare.corr <- sapply(3:ncol(house.votes), function(x){
+voteshare.corr <- sapply(3:(ncol(house.votes) - 1), function(x){
 
   cor(house.votes$vote_pct_display, house.votes[,x], use="pairwise.complete.obs")
 
@@ -137,7 +137,7 @@ voteshare.corr <- sapply(3:ncol(house.votes), function(x){
                          )
 
 
-accuracy.rate <- sapply(3:ncol(house.votes), function(x){
+accuracy.rate <- sapply(3:(ncol(house.votes) - 1), function(x){
 
   tab.winloss <- table(house.votes$vote_pct_display > 50,
                        house.votes[,x] > 50
@@ -150,19 +150,19 @@ accuracy.rate <- sapply(3:ncol(house.votes), function(x){
                          )
 
 ## And compute the mean absolute error
-mae.byweek <- sapply(3:ncol(house.votes), function(x){
+mae.byweek <- sapply(3:(ncol(house.votes) - 1), function(x){
 
   error = house.votes[,x] - house.votes$vote_pct_display
   mae = mean(abs(error), na.rm=TRUE)
   return(mae)
 
 })
-df.mae <- data.frame(as.Date(names(house.votes)[3:ncol(house.votes)]),
+df.mae <- data.frame(as.Date(names(house.votes)[3:(ncol(house.votes) - 1)]),
                      mae.byweek
                      )
 names(df.mae) <- c("date", "mae")
 
-vote_spread <- house.votes$vote_pct_display - 50
+
 vote_spread_quantile <- cut(vote_spread, 10, include.lowest=TRUE)
 df.spread <- data.frame(vote_spread,
                         vote_spread_quantile,
@@ -175,7 +175,7 @@ names(df.spread) <- c("vote.spread", "vote.spread.quantile", "error")
 ## and plot it.
 df.voteshare.corr <- data.frame(voteshare.corr,
                                 t(accuracy.rate),
-                                colnames(house.votes)[3:ncol(house.votes)]
+                                colnames(house.votes)[3:(ncol(house.votes) - 1)]
                                 )
 names(df.voteshare.corr) <- c("Voteshare Correlation",
                               "Prediction Accuracy",
