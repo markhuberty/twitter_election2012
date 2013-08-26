@@ -24,7 +24,7 @@ district.dupes <- district.dupes[district.dupes==1]
 df.results.2012 <- df.results.2012[df.results.2012$state_dist %in% names(district.dupes),]
 
 df.test.2012 <- merge(df.sentiment.2012[,c("state_dist", "sentiment_ratio", "sentiment_score")],
-                      df.results.2012[,c("state_dist", "r_vote_2012", "r_vote_2010")],
+                      df.results.2012[,c("state_dist", "r_vote_2012", "r_vote_2010", "state_dist_prior")],
                       by.x="state_dist",
                       by.y="state_dist",
                       all=FALSE
@@ -53,9 +53,12 @@ df.test.2010$vote.cut.2008 <- cut(df.test.2010$r_vote_2008,
                                   )
 
 
-names(df.test.2012) <- names(df.test.2010) <-
+names(df.test.2010) <-
   c("state_dist", "sentiment_ratio", "sentiment_score",
     "r_vote_prior", "r_vote_current", "vote_cut_current", "vote_cut_prior")
+names(df.test.2012) <-   c("state_dist", "sentiment_ratio", "sentiment_score",
+    "r_vote_prior", "r_vote_current", "state_dist_prior", "vote_cut_current", "vote_cut_prior")
+
 
 lm.2010.2010 <- lm(r_vote_current ~ r_vote_prior + sentiment_ratio,
                    data=na.omit(df.test.2010)
@@ -94,7 +97,7 @@ voteshare.mse <- function(df, source.var, target.var){
 
 }
 
-winloss.breaks <- function(df, source.var="X2012.11.06", target.var="r_vote_2012"){
+compute.winloss <- function(df, source.var="X2012.11.06", target.var="r_vote_2012"){
 
   source.winrate <- df[, source.var] >= 50
   target.winrate <- df[, target.var] >= 50
@@ -105,6 +108,19 @@ winloss.breaks <- function(df, source.var="X2012.11.06", target.var="r_vote_2012
   n <- length(winrate.test)
 
   return(c(out, n))
+
+}
+
+compute.winloss.breaks <- function(df, source.var="X2012.11.06", target.var="r_vote_2012",
+                                   breaks="vote_cut_current"){
+
+  source.winrate <- df[, source.var] >= 50
+  target.winrate <- df[, target.var] >= 50
+
+  winrate.test <- source.winrate == target.winrate
+  out <- tapply(winrate.test, df[, breaks], mean, na.rm=TRUE)
+
+  return(out)
 
 }
 
@@ -119,26 +135,37 @@ inc.success <- function(df){
 }
 
 df.predict.2010 <- data.frame(na.omit(df.test.2010)$r_vote_current,
+                              na.omit(df.test.2010)$vote_cut_current,
                               predict.2010,
                               predict.2010.novote,
                               predict.2010.notwitter
                               )
 df.predict.2012 <- data.frame(df.test.2012$r_vote_current,
+                              df.test.2012$vote_cut_current,
                               predict.2012,
                               predict.2012.novote,
                               predict.2012.notwitter
                               )
 
-names(df.predict.2012) <- names(df.predict.2010) <- c("actual", "predict",
+names(df.predict.2012) <- names(df.predict.2010) <- c("actual", "vote_cut_current", "predict",
                                                       "predict.novote",
                                                       "predict.notwitter"
                                                       )
 
-pct.winloss.2010 <- winloss.breaks(df.predict.2010, "actual", "predict")
-pct.winloss.2012 <- winloss.breaks(df.predict.2012, "actual", "predict")
+pct.winloss.breaks.2010 <- compute.winloss.breaks(df.predict.2010,
+                                                  "actual",
+                                                  "predict"
+                                                  )
+pct.winloss.breaks.2012 <- compute.winloss.breaks(df.predict.2012,
+                                                  "actual",
+                                                  "predict"
+                                                  )
 
-pct.winloss.2010.novote <- winloss.breaks(df.predict.2010, "actual", "predict.novote")
-pct.winloss.2012.novote <- winloss.breaks(df.predict.2012, "actual", "predict.novote")
+pct.winloss.2010 <- compute.winloss(df.predict.2010, "actual", "predict")
+pct.winloss.2012 <- compute.winloss(df.predict.2012, "actual", "predict")
+
+pct.winloss.2010.novote <- compute.winloss(df.predict.2010, "actual", "predict.novote")
+pct.winloss.2012.novote <- compute.winloss(df.predict.2012, "actual", "predict.novote")
 
 pct.winloss.2010.notwitter <- winloss.breaks(df.predict.2010, "actual", "predict.notwitter")
 pct.winloss.2012.notwitter <- winloss.breaks(df.predict.2012, "actual", "predict.notwitter")
@@ -221,3 +248,48 @@ ggsave(plot.tab.success,
        height=7,
        file="../../figures/sentiment_forecast_performance.pdf"
        )
+
+
+df.placebo.fwd <- merge(df.test.2012[,c("state_dist_prior", "r_vote_current", "r_vote_prior", "sentiment_ratio"),],
+                        df.test.2010[,c("state_dist", "vote_cut_current")],
+                        by.x="state_dist_prior",
+                        by.y="state_dist",
+                        all=FALSE
+                        )
+
+df.placebo.rev <- merge(df.test.2012[,c("state_dist_prior", "sentiment_ratio"),],
+                        df.test.2010[,c("state_dist", "r_vote_current", "r_vote_prior")],
+                        by.x="state_dist_prior",
+                        by.y="state_dist",
+                        all=FALSE
+                        )
+
+df.placebo.fwd$placebo.predict.fwd <- predict(lm.2010.2010,
+                                              newdata=df.placebo.fwd
+                                              )
+df.placebo.rev$placebo.predict.rev <- predict(lm.2010.2010,
+                                              newdata=df.placebo.rev
+                                              )
+df.placebo.fwd$placebo.predict.fwd.not <- predict(lm.2010.2010.no.twitter,
+                                                  newdata=df.placebo.fwd
+                                                  )
+df.placebo.rev$placebo.predict.rev.not <- predict(lm.2010.2010.no.twitter,
+                                                  newdata=df.placebo.rev
+                                                  )
+
+rmse.placebo.fwd <- voteshare.mse(df.placebo.fwd,
+                                  "placebo.predict.fwd",
+                                  "r_vote_current"
+                                  )
+rmse.placebo.rev <- voteshare.mse(df.placebo.rev,
+                                  "placebo.predict.rev",
+                                  "r_vote_prior"
+                                  )
+rmse.placebo.fwd.not <- voteshare.mse(df.placebo.fwd,
+                                      "placebo.predict.fwd.not",
+                                      "r_vote_current"
+                                      )
+rmse.placebo.rev.not <- voteshare.mse(df.placebo.rev,
+                                      "placebo.predict.rev.not",
+                                      "r_vote_prior"
+                                      )

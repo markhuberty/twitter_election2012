@@ -220,6 +220,15 @@ mse.notwitter.2012 <- voteshare.mse(df.input.2012, "vote.current", "prediction.n
 inc.mse.2010 <- voteshare.mse(df.input.2010, "vote.current", "vote.prior")
 inc.mse.2012 <- voteshare.mse(df.input.2012, "vote.current", "vote.prior")
 
+
+incumbency.rate.2010 <- winloss.breaks(df.input.2010, "vote.current", "vote.prior")
+incumbency.rate.2012 <- winloss.breaks(df.input.2012, "vote.current", "vote.prior")
+incumbency.rate.placebo <- winloss.breaks(df.input.placebo, "vote.current", "vote.prior")
+incumbency.rate.placebo.baseline <- winloss.breaks(df.input.placebo,
+                                                   "vote.current",
+                                                   "vote.prior"
+                                                   )
+
 tab.success <- data.frame(c("Full model", "Vote only", "Twitter only", "Incumbent"),
                           c(overall.accuracy.2010[1], overall.accuracy.2010.notwitter[1],
                             overall.accuracy.2010.novote[1], incumbency.rate.2010[1]),
@@ -236,6 +245,7 @@ tab.success.melt$year <- sapply(as.character(tab.success.melt$variable), functio
   y <- as.integer(strsplit(x, " ")[[1]][2])
 
 })
+
 tab.success.melt$type <- sapply(as.character(tab.success.melt$variable), function(x){
 
   y <- strsplit(x, " ")[[1]][1]
@@ -274,15 +284,12 @@ ggsave(plot.tab.success,
        )
 
 
-
-incumbency.rate.2010 <- winloss.breaks(df.input.2010, "vote.current", "vote.prior")
-incumbency.rate.2012 <- winloss.breaks(df.input.2012, "vote.current", "vote.prior")
-incumbency.rate.placebo <- winloss.breaks(df.input.placebo, "vote.current", "vote.prior")
-incumbency.rate.placebo.baseline <- winloss.breaks(df.input.placebo,
-                                                   "vote.current",
-                                                   "vote.prior"
-                                                   )
-
+# Then generate the placebo outputs
+# eventually want placebo (past), actual (future) for accuracy @
+# cutpoint
+# for 3 predictors. So 3 * 2 (3 models, placebo + normal forecast)
+df.placebo <- data.frame(c(overall.accuracy.2012),
+                         )
 df.accuracy <- cbind(rbind(overall.accuracy.2010,
                            overall.accuracy.2012,
                            overall.accuracy.2010.placebo,
@@ -421,116 +428,4 @@ plot.winloss.breaks <- ggplot(df.winloss.breaks,
 print(plot.winloss.breaks)
 ggsave(plot.winloss.breaks,
        file="../../figures/plot_volume_regression_winloss.pdf"
-       )
-
-## Finally, something very simple: if you get a preponderance of the
-## attention, do you win?
-
-preponderance.accuracy <- function(df, target.var){
-
-  v1  = df$r.ratio > 0.5
-  v2 = df[, target.var] >= 50
-
-  out = sum(v1 == v2) / length(v1)
-  return(out)
-}
-
-preponderence.2012.2012 <- preponderance.accuracy(df.input.2012,
-                                                  "vote.current"
-                                                  )
-preponderence.2012.2010 <- preponderance.accuracy(df.input.2012,
-                                                  "vote.prior"
-                                                  )
-preponderence.2010.2010 <- preponderance.accuracy(df.input.2010,
-                                                  "vote.current"
-                                                  )
-preponderence.2010.2008 <- preponderance.accuracy(df.input.2012,
-                                                  "vote.prior"
-                                                  )
-
-preponderance.vec <- c(preponderence.2010.2008,
-                       preponderence.2010.2010,
-                       preponderence.2012.2010,
-                       preponderence.2012.2012
-                       )
-df.preponderence <- data.frame(c("2010", "2010", "2012", "2012"),
-                               c(2008, 2010, 2010, 2012),
-                               preponderance.vec
-                               )
-names(df.preponderence) <- c("Data year",
-                             "Election year",
-                             "Prediction accuracy"
-                             )
-
-
-tab.preponderence <- xtable(df.preponderence,
-                            include.rownames=FALSE,
-                            digits=c(0, 0, 0, 2),
-                            caption="Predictive accuracy of twitter volume alone. Accuracy computed as the share of races in which the Republican got more than 50% of Twitter message volume and received 50% or more of the final two-party vote share. Data year refers to the campaign year in which Twitter data were collected. Thus, for example, the first row illustrates that 2010 data predicted 2008 races correctly 83% of the time."
-                            )
-
-
-prepond.series.2012.2012 <- ddply(df.input.2012,
-                                  .variables="vote.breaks",
-                                  preponderance.accuracy,
-                                  "vote.current"
-                                  )
-
-prepond.series.2012.2010 <- ddply(df.input.2012,
-                                  .variables="vote.breaks",
-                                  preponderance.accuracy,
-                                  "vote.prior"
-                                  )
-
-prepond.series.2010.2010 <- ddply(df.input.2010,
-                                  .variables="vote.breaks",
-                                  preponderance.accuracy,
-                                  "vote.current"
-                                  )
-
-prepond.series.2010.2008 <- ddply(df.input.2010,
-                                  .variables="vote.breaks",
-                                  preponderance.accuracy,
-                                  "vote.prior"
-                                  )
-
-prepond.series.2012.2012$data.year <-
-  prepond.series.2012.2010$data.year <- "2012 campaign data"
-prepond.series.2010.2010$data.year <-
-  prepond.series.2010.2008$data.year <- "2010 campaign data"
-
-prepond.series.2012.2012$election.year <-
-  prepond.series.2010.2010$election.year <- "Current campaign"
-
-prepond.series.2012.2010$election.year <-
-  prepond.series.2010.2008$election.year <- "Prior campaign"
-
-names(prepond.series.2012.2012) <- names(prepond.series.2012.2010) <-
-  names(prepond.series.2010.2008) <- names(prepond.series.2010.2010) <-
-  c("Republican vote share", "predictive.accuracy", "data.year", "election.year")
-
-df.prepond <- na.omit(rbind(prepond.series.2010.2008,
-                            prepond.series.2010.2010,
-                            prepond.series.2012.2010,
-                            prepond.series.2012.2012
-                            )
-                      )
-
-plot.prepond <- ggplot(df.prepond,
-                       aes(x=`Republican vote share`,
-                           y=predictive.accuracy,
-                           shape=factor(election.year)
-                           )
-                       ) +
-  geom_point(size=3, position=position_dodge(width=0.3)) +
-  facet_grid(data.year ~ .) +
-  scale_shape("Election year") +
-  scale_x_discrete("Republican vote share") +
-  scale_y_continuous("Win / loss predictive accuracy") +
-  theme_bw() +
-  theme(axis.text.x=element_text(size=15), axis.title=element_text(size=15),
-        strip.text.y=element_text(angle=0, hjust=0))
-print(plot.prepond)
-ggsave(plot.prepond,
-       file="../../figures/plot_volume_preponderance_placebo.pdf"
        )
