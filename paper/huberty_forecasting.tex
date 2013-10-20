@@ -1,0 +1,1478 @@
+\documentclass{article}
+\usepackage{natbib}
+\usepackage[usenames, dvipsnames, svgnames, table]{xcolor}
+\usepackage[dvipdfm,colorlinks=true,urlcolor=DarkBlue,linkcolor=DarkBlue,bookmarks=false,citecolor=DarkBlue]{hyperref}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{fancyhdr}
+\usepackage[T1]{fontenc}
+\usepackage{palatino}
+\usepackage[utf8]{inputenc}
+%\usepackage[super]{nth}
+\usepackage{setspace}
+% \usepackage{placeins}
+\usepackage{subfigure}
+% \usepackage{multirow}
+\usepackage{rotating}
+\usepackage{marvosym}  % Used for euro symbols with \EUR
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\usepackage{longtable} %% Allows the use of the longtable format produced by xl2latex.rb
+\usepackage{lscape} %% Allows landscape orientation of tables
+% \usepackage{appendix} %% Allows customization of the appendix properties
+\setcounter{tocdepth}{1} %% Restricts the table of contents to the section header level entries only
+
+
+\usepackage{geometry}
+\geometry{letterpaper}
+\usepackage{amsmath}
+
+
+\begin{document}
+\title{Election forecasting and social media}
+\author{
+Mark Huberty\thanks{Enormous credit and thanks are due to Len DeGroot of the
+  Graduate School of Journalism at the University of California,
+  Berkeley for hosting real-time publication of predictions during the
+2012 election; and to Hillary Saunders for invaluable research
+support. Additional thanks to F. Daniel Hidalgo, Jasjeet Sekhon, and
+participants at the 2011 UC Berkeley Research Workshop in American
+politics for helpful comments and feedback. The usual disclaimers apply.}
+}
+% \thanks{This version prepared for the Midwest
+%     Political Science Association Conference, April 2013, Chicago. First version: February 2011. Special
+%     thanks to the Graduate School of Journalism at the University of
+%     California, Berkeley for hosting the Voting with your Tweets
+%     experiment for the 2012 Congressional elections. This project
+%     would not have come off without the support, input, and hard work
+%     of Len DeGroot and Hillary Sanders. Additional thanks to
+%     to F. Daniel Hidalgo, Jasjeet
+%     Sekhon, and participants at the 2011 Society for Political
+%     Methodology meeting, and the Fall 2011 UC Berkeley Research Workshop in
+%     American Politics, for helpful comments and feedback. All errors remain my
+%     own.}
+
+% \author{Mark Huberty\thanks{Travers Department of Political Science,
+%     University of California, Berkeley. Contact:
+%     \url{markhuberty@berkeley.edu}.}\\ PRELIMINARY DRAFT}
+% \date{\today}
+\maketitle
+\begin{abstract}
+
+\end{abstract}
+
+\doublespacing
+\section{Introduction}
+\label{sec:introduction}
+
+%% Point: discuss social media forecasting as a historical
+%% phenomenon. Point to failures. Discuss importance of
+%% baselines. Then focus on Twitter as a valid measure. Point to
+%% instability across elections. Point to weirdness of sample and
+%% sample dynamics year-over-year / election-over-election. Discuss
+%% import of instability. Discuss import of gaming, systemic problems
+%% of influence (e.g., much less sampling control relative to polling,
+%% so models will be much more important.)Close
+%% with recs. Openness among them. Point to Gayo-Avello as a major
+%% thing. 
+
+Virtualization of human behavior has thrown off enormous quantities of
+data about what people do or say, when whom, and when. The presence of
+such data has naturally given rise to the desire to study past behavior and,
+ultimately, forecast the future. High-profile commercial successes in
+advertising, sales, logistics, and other fields hint that this desire
+may be fulfilled. Political professionals and scholars find such hints
+particularly tantalizing, given the cost and increasing difficulty of
+traditional survey research and polling. 
+
+Yet experience to date in forecasting important events, political or
+otherwise, has not borne out the promise of new predictive
+powers. High-profile difficulties in public health and finance have
+cast doubt on the capacity to use online and social media data to
+predict accurately when it matters most. Further research into other
+means of online opinion discovery, such as consumer rating systems,
+has shown them vulnerable to systemic bias. 
+
+This paper discusses the history of political forecasting from social
+media and other online data. As in other domains, I note that all
+known examples of apparently successful forecasts have very quickly
+failed. Apparent successes at beating simple heuristics for electoral
+success have faded quickly when applied to forward-looking
+elections. High-profile claims that social media data will soon
+supplant polling have had a short shelf life. Hence while social media
+and other online data may be useful for studying how citizens behave
+online, it has proven rather less useful for forecasting what those
+same citizens--and, more importantly, their offline fellows--will do
+back in the real world.
+
+% Need the thesis here. Slightly unclear where to go--possible that we
+% can fix this, can build a stable map. In order of difficulty:
+% 1. Means of filtering spam/sarcasm/humor/etc
+% 2. Means of estimating and re-weighting pop in real time
+% 3. Check and respond to the threat of performativity in networks:
+% that the networks are "engines" not cameras, that individual
+% behaviors aren't actually windows into real-world relationships or
+% propensities, but instead highly adapted to the rules set by the
+% network itself. And we get significance b/c we're modeling the world
+% with the same tools / ideas / theories used to build it -- tools /
+% ideas theories that may have little relevance to the physical
+% world. 
+
+Fixing this problem will require us to confront to problems. The
+first, easier problem, (). The second is much harder--whether we can
+ever overcome the broader difficulty introduced by people adapting
+behaviors to a specific set of online rules very different from those
+that influence human behavior elsewhere. That problem--which has
+appeared before in finance and other strategic domains--lacks simple
+answers. % HEre, can't control the sampling or the data gen process,
+         % so might just be lost. 
+
+
+
+\section{The internet as instrument for human behavior}
+\label{sec:intern-as-instr}
+
+From a data perspective, the internet is simultaneously two
+things. First and foremost, it is a catalogue of human social
+structures. By now, the internet expresses most of humanity's wants,
+needs, desires, behaviors, languages, and social patterns. Given
+global patterns of wealth and access, it may represent these things in
+proportion to how they really occur. But represent them it does. 
+
+Secondarily, it is an instrument to detect how people
+interact with that catalogue and with others who use it. At the
+boundary between the offline and online world, the internet throws off
+huge amounts of data on what people look for and at, in combination with what
+other things, what they say about it, and to whom. 
+
+Heretofore, perhaps the most productive uses of the online world to
+measure and forecast the offline have focused on the former
+category. The internet as a catalogue of human language has anchored
+rapid advances in automated translation. The internet as a catalogue
+of knowledge supported IBM's successful bid to win Jeopardy with a
+computer. Both achievements relied on a catalogue of knowledge novel
+in its breadth, depth, and accessibility. 
+
+
+% Note here that the very successful uses of the
+% internet for offline behavior--translation, etc--rely on the first
+% version. 
+
+
+\section{Forecasting: through the glass, darkly}
+\label{sec:forec-thro-glass}
+
+Yet the internet as instrument holds perhaps the greater promise.  It
+does so as testament to the firms that made early use of the ability
+to detect and exploit human behavior. The companies operating the
+instruments, faced with the need to earn money for providing what
+quickly became public goods, turned to this data as a revenue
+source. But they did not simply sell the data. Rather, they used the
+data to act as intermediaries between those who wanted it--mostly
+companies interested in what their customers wanted--and users. What
+began with Google is now a ubiquitous feature of any large-scale
+internet services firm: advertising narrowly targeted to the user
+based on the data the firm gathers on that user in the course their of
+using its services. That model has proven so successful that it has,
+on the one hand, generated an entirely new economy; and, on the other,
+almost destroyed the older advertising model that supported newspapers
+and magazines. Online data put in service of predicting online
+behaviors and interests turned out to have enormous potential, and
+with it enormous disruptive power.
+
+To date, however, that potential has not extended to predicting
+offline behavior. The reasons why provide an instructive entry into
+the discussion of election forecasting from social media. Forecasting
+online behavior from online data enjoyed a much closer correspondence
+between historical data and future actions. It also benefited from
+much weaker consequences from predictive failure. In contrast, where
+online data has failed to predict offline behavior, that failure has
+come with large potential or real consequences. 
+
+
+\subsection{Success: targeting the person}
+\label{sec:targeting-person}
+
+% point here: that what's worked has been self-referential in large
+% part. Predict online behavior from online data. 
+
+As of this writing, Google's AdSense is now ten years
+old.\footnote{Jeff Dean, one of Google's early engineers, recounts its
+early days here:
+\url{http://googleblog.blogspot.com/2013/06/celebrating-10-years-of-shared-success.html}.}
+Together with its advertiser-side counterpart AdWords, it
+revolutionized how both publishers and advertisers bought and sold
+online advertising. The premise was straightforward: by using
+sophisticated algorithms, Google could narrowly categorize the content
+on any given website and serve ads narrowly tailored to that
+content. If newspapers once put fashion ads in the style section,
+Google could narrowly choose which ad to serve for each
+paragraph. More narrowly targeted ads proved more effective for sellers
+and less annoying for buyers. By forecasting offline interests through
+online internet behavior, AdWords and AdSense forever changed the
+advertising business. Google today earns tens of billions of dollars
+annually based on this success.
+
+Other companies found similar success. LinkedIn's ``people you may
+know'' product proved surprisingly accurate at finding long-lost
+colleagues in their database of professionals. Facebook's FriendFinder
+did the same for long-lost social connections. Twitter uses content
+and network algorithms to recommend other users of interest. Amazon
+very effectively detects both product substitutes and complements and
+recommends them to potential buyers. Target, in what was
+simultaneously an analytics coup but a PR nightmare, figured out that
+a teenage girl was pregnant before her parents did
+\citep{hill2012}. In these and other cases, the internet as an
+instrument of the offline world proved a fertile ground for
+forecasting social structure and behavior.
+
+\subsection{Failure: predicting the offline world}
+\label{sec:fail-pred-offl}
+
+
+These successes in hand, they suggested the possibility of more
+ambitious forecasts. If users increasingly studied or expounded on the
+offline world in online tools, then perhaps that data could provide
+the foundation for offline as well as online prediction. Furthermore,
+while these early successes focused on largely commercial
+behavior--advertising, purchasing, professional networking--ambitions
+quickly moved beyond that to larger social and economic problems.
+
+To date, however, performance has fallen short of these ambitions. Two
+instructive examples help to understand why. Both attempted to
+forecast complex real-world phenomena from online social and search
+data. Both proceeded from reasonable evidence that they might
+work. And yet both failed at important junctures--and failed in ways
+that were very hard to identify ahead of time. 
+
+\subsubsection{Google Flu}
+\label{sec:google-flu}
+
+
+We begin with Google Flu.\footnote{See
+  \url{http://www.google.org/flutrends/us/\#US} for the latest
+  forecasts.} The Flu project began from a simple hypothesis: when
+people get sick with the flu, they go to Google and search for
+specific things. If Google could identify what those things were, and
+track the frequency of related searches, then perhaps it could
+accurately forecast rates of influenza infection. In 2006-2007, when
+the project began, real-time flu infection
+forecasts marked a substantial gain over Centers for Disease Control
+systems, whose influenza survey data arrived with a two week lag. 
+
+As \cite{ginsberg2008detecting} reported, this hypothesis proved
+correct. Google's Flu team could accurately forecast
+geographically-specific rates of influenza infections in the US, in
+real time. To do this, Google mined millions of search queries from
+its historic database, comparing their frequency with historical CDC
+influenza infection data. The resulting model performed extremely well
+in out-of-sample historical tests. 
+
+Yet Google Flu has since failed twice, both times in the midst of
+exceptional--and thus more problematic--flu seasons. It first failed
+during the 2009 H1N1 flu outbreak, when it under-forecast influenza
+rates. It failed again in 2012, when it over-forecast influenza in an
+early-onset flu season. Under the very exceptional circumstances in
+which public health authorities might want improved monitoring tools,
+Google Flu broke down. 
+
+The reasons for the breakdown are instructive. In 2009, the viral
+character of H1N1 meant that individuals didn't know they had the
+flu. Hence their search behavior didn't reflect a search for flu
+remedies; and if it did, it used novel terms, reflecting a novel
+strain, not present in the Google Flu lexicon. In 2012, public health
+authorities worried about an early flu season were very proactive in
+getting flu information out. The public, primed by this publicity
+campaign, went looking for flu information--but did so while still healthy
+\citep{butler2013google}.
+
+These failures thus both embody a break between Google Flu's 
+hypothesis linking offline and online behavior. The link was
+plausible: people get sick, and go looking to Google for
+information. But in 2009 and 2012, the link broke. It broke first
+because people didn't know they were sick with the flu, and so didn't
+go looking; and then later, because people went looking when they
+weren't sick. But there was no way to know the link was broken until
+after the fact, when the online predictions could be checked against
+more traditional clinical surveys still used by the CDC. Nothing about
+the model or the method permitted real-time checking of its most
+fundamental assumptions. While Google has since updated its models to
+reduce their sensitivity to outlier terms \citep{41763}, this
+underlying problem remains unsolved.
+
+\subsubsection{Twitter-based hedge funds}
+\label{sec:twitter-based-hedge}
+
+Finance has provided a second test of the online-predicts-offline
+thesis. The utility of real-time data on important events has driven
+finance at least since Rothschild was purported to have deployed
+carrier pigeons to transmit the outcome of the battle at Waterloo to
+his trading desk in London. 
+
+Hedge funds moved to capitalize on Twitter as the newest source of
+information arbitrage. Starting around 2009, several papers suggested
+that sentiment analysis of the Twitter feed could accurately forecast
+stock market aggregates
+\citep{bollen2011twitter,zhang2011predicting}. In 2011, 
+Derwent Capital Management put upwards of \$40 million into a hedge
+fund built around social media analysis. That fund closed within a
+month. More recent research still suggests that Twitter may have some
+informative value for financial analysts, but cautions against the
+optimism of early papers \citep{mackintosh2013}. Other real-world
+experiments in trading on Twitter data have found the signal too noisy
+and incoherent to have much effect. Meanwhile, October
+2013 saw an errant crash as oil traders reacted to tweets about a war in
+the Middle East. Only later did they realize that those tweets
+commemorated the anniversary of the 1973 Yom Kippur War. 
+
+The shortcomings of Twitter as a stock market forecast share much in
+common with Google Flu. Here, as there, forecasts assumed a specific
+relationship between real-world action and online expression. Here,
+the relationship was far less well specified. Google Flu had a very
+clear idea of the causal chain from infection to search. Twitter as a
+stock market forecast did not: instead, it attempts to mine a weak
+connection between sentiments expressed towards a particular brand or
+company, and its future performance on the exchanges. As in Google
+Flu, the models at stake had no means of validating \textit{a priori}
+whether this hypothesis held. Instead, they had to wait for actual
+returns to roll in. To date, very little evidence suggests that
+Twitter sentiment provided a meaningful real-world edge. Moreover, if
+it had, we should expect to see such an edge quickly arbitraged away.
+%% Expand this point.
+
+% Flu
+% Twitter hedge fund
+
+% Characteristics: little introspection into DGP. Hypothesis about
+% link between offline and online behavior. Can't check the hypo until
+% we know if the forecast succeeds or fails. Op for strategic behavior
+% renders hypo permanently vulnerable to failure, not just a matter of
+% collecting more data. 
+
+\section{Forecasting the political}
+\label{sec:forec-polit}
+
+% Point out tea party, obama as harbingers of things to come. 
+% Lots of claims. Then lots of failures. 
+
+Around the same time that Google Flu and Twitter-based hedge funds
+became popular, political forecasting with social media also gained
+currency. Apart from sheer novelty, several forces conspired to make
+this an attractive target. The importance of online media grew after
+2008: President Barack Obama's digital effort was widely hailed in
+both 2008 and 2012; and the Tea Party insurgency that brought the
+Republican party back into control of the U.S. House of
+Representatives relied initially on online social media to circumvent
+traditional party channels \citep{williamson2011tea}. In parallel,
+rising non-response rates and increased cell phone usage had prompted
+a search for new means of measuring and forecasting political
+attitudes and intent
+\citep{keeter2006gauging,kohut2012assessing,christian2010assessing,boyle2013sampling,viera2013mail}.
+
+Social media services were among the most tempting
+targets. Starting in 2010, a wave of papers of the form ``using
+<social media source X> to predict Y'' began to
+arrive, scattered across computer science, machine learning, and
+social science journals.\footnote{Twitter dominates these papers, with a few notable
+  exceptions. Unlike the other major online data companies, Twitter has made
+  its data relatively freely available (albeit with heavy restrictions
+  on subsequent distribution). Hence Twitter-based forecasts face
+  lower startup costs. Among other options, Facebook appears open to
+  social science research but requires more up-front investment in
+  relationship building. Google is largely closed, though aggregated
+  data from Google Trends are freely available. The reasons for these
+  differences, and their consequences for patterns of social science
+  research, deserve more attention than this paper can give.}
+These papers often promised more than simply an
+alternative to traditional polling. Social media users appeared oddly
+insensitive to the usual social mores that inhibit survey respondents from expressing
+controversial or taboo opinions. If this held at scale, then social
+media also promised a solution to the longstanding
+difficulty of measuring individuals' true attitudes in taboo
+subjects.\footnote{Whether social media are any less prone to this
+is an open question. We might all be surprised at the blatant racism
+displayed by many individuals online. But of course this raises the
+same question: are these individuals in fact this racist in real life?
+Or do they merely express such racism as a matter of conforming to the
+social norms of their online community? \cite{wilson2012review}
+review research suggesting that users' behavior on Facebook may in
+face reflect their true selves.  We will take up this problem
+in the last section.}  While someone might not tell a phone survey worker that they
+voted against Barack Obama because he was black, many internet users
+users appeared to have no such qualms about broadcasting the
+same.\footnote{\cite{stephens2013cost} exploits this hypothesis to
+  estimate that racial animus cost Barack Obama 3-5\% of the national
+  vote. Hard verification of this estimate remains difficult for the
+  very reason that this estimate is valuable: the inability to
+  benchmark it to survey data of actual human subjects.}
+
+Unfortunately, political forecasting has had no more--and in many
+cases far less--success predicting the offline world from online
+behavior than hedge funds or public health organizations. All known
+attempts at election forecasting with social media have failed. Some
+have failed simply because models that tested well on contemporaneous
+out-of-sample data performed poorly on future elections. Others have
+failed because their initial success relied on undisclosed data
+manipulation on the part of researchers.
+
+Here we present a selection of those attempts and failures. We discuss
+in detail our own experience in what we believe to be the first
+attempt at multi-cycle forecasting of U.S. House of Representatives
+elections. There, as in other attempts, promising forecasting methods
+failed to beat simple heuristics like incumbency in predicting
+election outcomes. Close examination of the underlying data suggests
+why: the demographic, partisan, and behavioral profile of Twitter
+users changed significantly across the election cycle, in ways the
+models could not account for. The following section reflects on the
+broader implications of this problem in forecasting elections: the
+need to build models that can dynamically check their own assumptions
+about the real world. 
+%% TODO: make this sharper.
+
+\subsection{The universal failure of election forecasts}
+\label{sec:univ-fail-elect}
+
+Daniel Gayo-Avello and coauthors \citep{gayo2011limits,metaxas2011not}
+provide a long catalog of failed attempts at election forecasting with
+Twitter. Here we recount a few notable examples. 
+
+\cite{o2010tweets} led the pack in political forecasting with an
+analysis of Twitter and the 2008 presidential polls. They showed that
+mention counts--the rate at which McCain or Obama were mentioned in a
+sample of tweets--could provide leading correlations to presidential
+election polling. But the correlations were somewhat weak, and they
+cautioned against interpreting their results as evidence that Twitter
+could predict election outcomes.
+
+Other forecasts were less circumspect. \cite{tumasjan2010election}
+claimed to have successfully forecast the 2009 German elections using
+Twitter data. Those claims were tested and shown to be invalid by
+\cite{jungherr2012pirate}. The paper's success was an artifact
+researcher choices rather than research design. Recent attempts to
+apply their methods to the 2013 German election likewise forecast a
+win for the wrong party.
+
+\cite{bermingham2011using} built forecasts from a sentiment analysis
+of tweets and a comparison of candidate's relative message
+volumes. Their results under-performed compared to conventional
+polling in the 2011 Republic of Ireland general
+elections. \cite{sang2012predicting} performed somewhat better in the
+2011 Dutch elections. However, both results relied on ad-hoc
+re-weighting using polling information, which casts doubt on whether
+it was their algorithms or the poll that did the heavy lifting.
+
+Finally, volume-based forecasts have also proven popular. The ``one
+tweet one vote'' heuristic simply assumes that greater attention to a
+candidate on Twitter correlates with a higher likelihood of electoral
+success. \cite{digrazia2013} suggested that metrics based on message
+volume alone could contribute value to forward-looking election
+predictions in U.S. House races. However, \cite{huberty2013twitter}
+show that such volume metrics do not contribute predictive value above
+and beyond a candidate's prior vote share when employed in true
+forward-looking electoral forecasts.
+
+Apart from the empirical and methodological shortcomings of such
+forecasts, the data source itself may threaten the validity of most of
+these estimates. Forecasts based on data scraped from Twitter's
+Streaming API mostly rely on the freely available 1\% sample
+stream. Access to the Gardenhose (10\%) and Firehose (100\%)
+samples is expensive and harder to arrange. But as
+\cite{morstatter2013sample} show, the 1\% sample is not a valid random
+sample of the Twitter message population. As such, even if the Twitter
+message stream were a representative flow of information about the
+electorate (a big if), the most common form of access to that stream
+is not. 
+
+\cite{metaxas2011not} note that most of these attempts all suffer from
+an additional problem: they all claim to predict, but in reality
+back-cast. These papers all proceed by splitting the set of available
+outcomes for a single election, and test the predictive power of their
+methods on the held-out set. But this is emphatically not the same
+thing as forecasting a future election. Particularly for political
+elections, where the terms of contestation can change significantly
+and incentives for strategic behavior and innovation are high, the
+lack of true forward-looking forecasts is a serious deficiency.
+
+
+\section{A multi-cycle example of failure}
+\label{sec:multi-cycle-example}
+
+%% Here, the Twitter stuff
+
+The author can add his own experience to the catalog of failed attempts at
+election prediction. Over the 2010-2012 election cycle, we performed
+what we believe to be the first multi-cycle experiment forecasting
+elections in the U.S. House of Representatives. We built forecasting
+algorithms from data collected in the 2010 election. Initial results
+proved promising, and so the same algorithms were deployed to forecast
+the 2012 election in real time. All data acquisition, cleaning, and
+forecasting methods were made available ahead of time. Unfortunately,
+despite evidence that the algorithm could beat incumbency as a
+predictor of electoral success, our methods did no better than
+incumbency in 2012.
+
+Here we present a post-mortem of the project. We show that post-hoc
+examination of the 2010 and 2012 data show how the Twitter userspace
+and terms of political conversation changed over the period in
+question. Even for elections with very short periodicity, like the
+U.S. House, social media dynamics change sufficiently as to quickly
+erode the utility of algorithms trained from historical data. 
+
+\subsection{Design and data gathering}
+\label{sec:design-data-gath}
+
+This experiment evolved from an attempt to address some, though by no means
+all, of the problems outlined in section \ref{sec:univ-fail-elect}. We describe an open, fully out-of-sample test
+of a prediction algorithm grounded in a narrow assumption about the
+behavior of political language. This test is intended to address the
+problems of transparency, back-casting, and user bas einstability that
+have plagued past election predictions.\footnote{All forecasts reported here were published in
+real time at \texttt{http://californianewsservice.org/category/tweet-vote/}.  All
+algorithms and other code are available at
+\texttt{https://github.com/markhuberty/twitter\_election2012}. We note one departure from this commitment to
+  pre-release: examination of predictions post-hoc showed that an
+  off-by-one error in one step of the cleaning process led to
+  mis-alignment of data with districts about halfway through the general
+  campaign. This led to a spurious collapse in predictor accuracy. The
+  source of the error remains unclear. Fixing this error resolved the
+  accuracy issue. The actual prediction algorithms used remained
+  unchanged.} 
+The differences between the 2010 and 2012 elections make this
+particular experiment a very strong test. Three differences in
+particular stand out: the shift from a midterm to a Presidential year
+election; the post-2010 redistricting; and the pronounced 2010
+Republican swing. Each of these three differences should challenge the
+portability of an estimator across election cycles.
+
+In practice, a strong estimator compliant with the critiques outlined
+by \cite{metaxas2011not} would take the following form:
+
+\begin{equation}
+  \label{eq:1}
+  V_{c,t} = V_{c,t - 1} + X_{c,t}
+\end{equation}
+
+Where the vote share received by a candidate $c$ in an election held
+at time $t$ would be forecast by the vote that they received in the
+prior election at $t-1$, and some set of additional predictors $X$ (in
+this case derived from social media data). In the case of US
+elections, $V$ may be abstracted to the \textit{party} vote for an
+electoral district, consistent with observed \textit{party incumbency}
+effects that obtain even when a given incumbent retires. Put another
+way, successful predictors should separately model (1) structural
+advantages that accrue to incumbents across elections, and (2) the
+election-specific effects that may or may not displace the
+incumbent. Estimators are only of serious interest if the adjustments
+$X$ off the incumbency baseline $V$ improve the overall predictive
+rate of the estimator. 
+
+The estimator presented here implicitly separates these two
+effects. We employ statistical machine learning methods to model the
+relationship of n-grams in the Twitter feed for individual candidates
+to their election outcomes. Observation of the components of the
+resulting algorithm shows that influential terms fall into 2 classes:
+
+\begin{enumerate}
+\item Indicators of the incumbent party
+\item Salient issues and / or candidate sentiment
+\end{enumerate}
+
+In other words, the algorithm derives from Twitter language itself the
+incumbency signal. It then weights other terms to adjust from that
+incumbency baseline. In doing so, it embeds the following hypothesis
+about future elections: that given sufficiently short election cycles,
+the salient issues and patterns of political language change
+relatively little. If that hypothesis holds, then the
+algorithm--nothing more than a map from the Twitter convenience sample
+to the real-world behavior of the voting population--may offer
+reasonable predictive performance. 
+
+\subsection{Data acquisition and cleaning}
+\label{sec:data-acquisition}
+
+Data acquisition used the Twitter search API\footnote{The Search API
+  is subject to different restrictions than the Streaming API whose
+  biases \cite{morstatter2013sample} document. Search restricts access
+to the most recent 1500 messages returned by a given query. Most
+candidates averaged less than 1500 messages per day. Hence it appears
+reasonable to assume we have the population of candidate mentions for
+most candidates. But this assumption does not hold for high-profile
+candidates like Nancy Pelosi or Paul Ryan, who may receive ten times
+that number of mentions on a daily basis.} to return messages
+mentioning the full name of Democratic or Congressional candidates
+running in contested races.\footnote{Data acquisition began on September 12
+2010; and on September 1, 2012. Dates were timed to fall after as many
+primary elections as possible.} Queries were run nightly for each day
+in the general election campaign. Table
+\ref{tab:volume-by-party-inc} provides summary statistics on total
+message volumes per candidate. As is immediately apparent, the observed
+Twitter volume per candidate exploded between 2010 and 2012. The query
+procedure generated approximately 260,000 messages for 313 districts
+in 2010, the same procedure collected 1.3 million messages for 369
+districts in 2012.  %% Double check this count (esp districts)
+
+Data cleaning retained only
+data for districts wherein both candidates had Twitter
+content. Further data cleaning removed extraneous messages resulting
+from name homonyms, and excluded obviously irrelevant non-political
+data. Extraneous content was identified by modeling tweet content
+using a Latent Dirichlet Allocation topic model applied to
+``documents'' created by aggregating all tweets relevant to each
+district. Tweets were subsequently excluded based on terms discovered
+via those models.\footnote{Football- and baseball-related messages were
+  common sources of irrelevant data. Indicative terms included
+  \texttt{mlb}, \texttt{yankees}, and \texttt{stephen smith} (a name
+  homonym for both a sports journalist and a candidate for California
+  district 34).} Data cleaning reduced the overall message volume
+by approximately 25,000 in 2010; and by 200,000 in 2012.
+
+The cleaned data demonstrate the first significant result presented in
+this paper: Twitter volumes are strongly biased in favor of
+incumbents. As figure \ref{fig:cand-msg-volume} shows, incumbents
+received significantly greater attention on Twitter than challengers.
+The detailed breakdown in table \ref{tab:volume-by-party-inc} shows
+that a Democratic incumbent received approximately 33\% more messages
+than their Republican challenger in 2010; and nearly three times more
+in 2012. Similar results obtain for Republican incumbents. This
+imbalance suggests why volume-based forecasting algorithms (e.g.,
+\cite{digrazia2013,tumasjan2010election,bermingham2011using}) work:
+candidates' message volumes echo an ingrained bias towards incumbents
+that manifests itself across a variety of measures (fund raising,
+conventional media attention, name familiarity, etc), and which
+correlates well with high incumbent rates of success. 
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[width=\textwidth]{../figures/plot_daily_party_volume}
+%   \caption{This figure shows the daily aggregate message volume by 
+% party for each day of data gathering up to Election Day 2012.}
+%   \label{fig:daily-msg-volume}
+% \end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/plot_raw_cand_volumes}
+  \caption{Incumbents receive far more attention from Twitter users
+    than challengers. This figure shows the comparative message volume for
+    candidate pairs in each district. Colors indicate the party of the
+    district incumbent. The diagonal line illustrates where points would fall if both candidates in a district received equal message volume.}
+  \label{fig:cand-msg-volume}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/plot_msg_volume_vote_spread}
+  \caption{Competitive districts receive more attention on
+    Twitter. This figure shows how total district message volume
+    varies with district competitiveness. Elections decided around the
+  50\% cut point receive orders of magnitude more attention from
+  Twitter users than less competitive races.}
+  \label{fig:msg-volume-vote-spread}
+\end{figure}
+
+\input{../tables/tab_volume_by_party_incumbency}
+
+\subsection{Data transformation for prediction}
+\label{sec:data-transf-pred}
+
+For use in prediction, the data were transformed into a vector-space
+representation of text in the following steps:
+\begin{enumerate}
+\item URLs, punctuation, English stopwords, and non-ASCII characters were removed and
+  message case was standardized
+\item Candidate names were replaced with party-specific placeholders
+\item Officeholder names (the Speaker of the House, the Senate
+  Majority Leader, and the President) were replaced with
+  office-specific placeholders,
+\item A message-level term-frequency matrix,
+  was consolidated into a district-level matrix by summing term
+  frequencies for each row belonging to a distinct district. In 2010,
+  terms were restricted to those appearing in more than 1\%, and less
+  than 99\% of districts. The same vocabulary was then used to build
+  the 2012 prediction matrices. Message-level term frequencies were
+  weighted by creation date prior to summation. Win-loss data were
+   weighted linearly relative to election
+  day. Vote share 
+  predictors used the raw term-frequency data. These weights were
+  selected based on their relative performance in out-of-sample tests
+  on the 2010 data. The district-level term-frequency matrix was row-normalized.
+\end{enumerate}
+
+\subsection{Prediction algorithms}
+\label{sec:pred-algor}
+
+Prediction algorithms were developed based on 313 districts from the 2010 House of
+Representatives election. An ensemble machine learning
+algorithm \cite{van2007super} was trained on a random 90\% subset of
+these districts, using actual election outcomes.\footnote{For discrete
+  prediction, the ensemble
+included variants on: lasso, support vector machines with various
+kernel parameters, and random forests with various tuning
+parameters. For vote share prediction, this ensemble was expanded to
+include boosted regression, sparse partial least squares, step
+regression, ridge regression, and multivariate adaptive splines. Algorithms were selected for their capacity to deal with
+high-dimensional, very sparse data.} Accuracy was
+estimated against the held-out districts. Estimates showed that binary
+prediction did best when term frequencies received uniform time
+weights; and that vote share prediction did best when term frequencies
+received weights inverse linear in the number of days prior to
+election date. These algorithms and the dictionaries of their
+predictor terms were then used to generate forecasts for each day of
+the 2012 general election campaign.
+
+\subsection{Results}
+\label{sec:results}
+
+We discuss four results:
+\begin{enumerate}
+\item Election predictions were reasonably accurate given the relative
+  simplicity of the predictors. This accuracy persisted even for
+  estimates made far in advance of the election.
+\item Examination of algorithm performance shows that predictions are
+  made in reference to terms signaling the party of the incumbent; and
+  then adjusted from that basis. This presents the danger of
+  algorithms regressing to the incumbency baseline over time.
+\item User and message content displays significant partisan biases
+  that may render Twitter messages suspect as a means of measuring
+  social sentiment
+\item Partisan communities in Twitter display significant partisan
+  homophily, consistent with results obtained under very different
+  sampling and partisan ranking assumptions
+\end{enumerate}
+
+\subsubsection{Vote share predictions}
+\label{sec:predictions}
+
+Figure \ref{fig:prediction-corr-bydate} summarizes the predictive
+accuracy for both vote share and win/loss predictions. 2010 results
+back-casted election outcomes correctly at rates far exceeding the
+rate of incumbent success in this sample. For 2012, some regression to
+the incumbent win rate was observed: both the win-loss and vote share
+algorithms forecast the correct winner in 88\% of cases, approximating
+the 90\% rate of incumbent re-election for districts in our sample.
+
+Much of the mis-prediction error can be attributed to systemic
+predictor bias against Democratic candidates. As figure
+\ref{fig:corr-voteshare} shows, the vote share predictor
+under-predicted Democratic vote shares in a large number of districts
+that the Democrats ultimately won. In contrast, vote shares in districts
+won by Republicans were forecast much more accurately. Table
+\ref{tab:accuracy-by-incumbency} makes this clear for the overall
+point estimates: Republican districts were successfully forecast at
+rates equalling the incumbent success rate, while forecasts for
+Democratic districts ran well behind the incumbency baseline. This outcome
+confirms a concern about Republican bias in the training algorithm: to
+the extent that the algorithm learned an implicit bias from the 2010
+elections, in which the Republicans achieved a historic swing in party
+control of House seats, it would carry this bias forward. However, we
+note that such problems should be muted as data for additional
+elections is added to the training pool. 
+
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/plot_corr_final_prediction_actual}
+  \caption{Predicted vote shares correlate well with actual
+    outcomes. This figure shows the correlation between predicted and
+    actual vote shares for the 2010 and 2012 elections. District
+    labels are colored according to the party of the electoral winner.}
+  \label{fig:corr-voteshare}
+\end{figure}
+
+\begin{figure*}[ht]
+  \centering
+  \includegraphics[width=0.9\textwidth]{../figures/voteshare_winloss_correlation_bydate}
+  \caption{Predictive algorithms provide accuracy leading
+    forecasts. This figure shows the predictive accuracy of both the
+    vote share and win/loss algorithms for each day in the general election campaign. Predictions are back-cast for the 2010 election, using the trained algorithm; and forecast for the 2012 election. Vote shares were converted to win/loss predictions at the 50\% cut point. Horizontal lines indicate the incumbent win rate for the districts in the total population of forecasted districts.}
+  \label{fig:prediction-corr-bydate}
+\end{figure*}
+
+\input{../tables/predictive_accuracy_election_incumbent}
+
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[width=0.9\columnwidth]{../figures/plot_accuracy_by_quantile}
+%   \caption{Predictive accuracy is biased towards Republican
+%     candidates. This figure illustrates how predictor performance
+%     breaks down according to the party of the district incumbent, and
+%     the competitiveness of the race. Notice that predictions for
+%     Democratic districts where Republicans won far outperformed
+%     Republican districts where Democrats won. Competitiveness is defined according to the ultimate Democratic vote share in the district. }
+%   \label{fig:accuracy-by-competitiveness}
+% \end{figure}
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[height=0.3\textheight]{../figures/plot_ae_by_quantile}
+%   \caption{Vote share forecast errors are worse for close
+%     districts. This figure shows the absolute vote share prediction
+%     error broken down by
+%     district incumbent and election competitiveness. Forecast error is
+%     scaled by the margin of difference between the actual vote outcome
+%     and 50\%. Competitiveness
+%     is defined according to the ultimate Democratic vote share in
+%     the district.}
+%   \label{fig:mae-by-competitiveness}
+% \end{figure}
+
+
+\subsubsection{Algorithms rely on incumbent cues as a baseline}
+\label{sec:algor-behav-perf}
+
+Results from multi-cycle forecasting thus evidence regression to
+the incumbency baseline. Examination of the structure of the
+forecasting algorithms suggests why. The use of
+bigram algorithms permits partisan and officeholding cues to exist in
+the same features. As figure \ref{fig:rf-term-importance} shows, those
+features receive substantial weight in the random forest components of
+the ensemble predictor. Additional terms then adjust from this incumbency baseline. The
+importance of these linguistic cues in the predictor is confirmed by
+attempting to re-train a predictive algorithm on data pre-cleaned to
+eliminate these cues; predictive accuracy, even for back-casting,
+declines significantly.
+
+This is not, per se, a bad strategy: the high rate of incumbent
+re-election in the US system makes the incumbency baseline ideal. But
+the instability in salient political issues makes consistent
+adjustment from that baseline difficult. For instance, ``4 hcr'' was a
+top predictive term for the vote share predictor. It played a
+significant role in the 2010 elections, which followed closely on the
+passage of healthcare reforms. Two years later, however, jobs and
+fiscal policy played a much more salient role. Unstable issue salience
+complicates attempts at topic-driven forecasting such as was attempted
+here. 
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/plot_rf_algorithm_term_importance}
+  \caption{Prediction algorithms key in on incumbency
+    indicators. This figure shows the estimated term importance for the random forest algorithm component
+    of the vote share and win-loss ensembles. Term importance is
+    estimated as the normalized change in predictive error upon
+    random permutation of each term. Each panel shows the top
+    30 terms by importance for the highest-weighted random forest
+    member of the SuperLearner library.}
+  \label{fig:rf-term-importance}
+\end{figure}
+
+\subsubsection{Twitter users are highly partisan}
+\label{sec:part-cont-twitt}
+
+Mapping from Twitter conversations to election outcomes presumes not
+just linguistic stability, but also some stability in Twitter's
+convenience sample. To investigate the dynamics of the
+politically-engaged Twitter community further, we would like to know
+both (1) the pattern of partisan alignment of users in our sample and
+(2) patterns of communication among partisans. We estimate the
+partisan alignment of Twitter users via a two-step approach. First, we
+identify a set of Twitter hashtags with a known partisan alignment. In
+this case, we choose \texttt{\#tcot} for conservatives and
+\texttt{\#p2} for liberals. Following \cite{conover2011}, we then
+index all hashtag-containing messages by their hashtags. Using this
+index, we compute the Jaccard similarity for co-occurrence of each
+unique hashtag with the known partisan tag. We retain separate lists
+of conservative and liberal tags with a Jaccard index of greater than
+0.01. We make these lists exclusive by discarding any confusion terms
+appearing in both lists.
+
+Based on these hashtags, we construct a partisan score, $p_u$ for each
+user that employed hashtags in their messages. The scores is computed
+as the scaled difference between their use of conservative and liberal
+tags, on the interval $[-1, 1]$ from most liberal to most
+conservative. Formally:
+
+ \begin{equation}
+   \label{eq:pscore}
+   p_u = \frac{\left|tags_{u,cons}\right| - \left|tags_{u, lib}\right|}{\left|tags_u\right|}
+ \end{equation}
+
+To score those users that do not use hashtags, we use the scored users
+as an input to train a classifier based on the text of user
+messages. Formally, we convert the continuous partisan score to binary
+``liberal'' / ``conservative'' score around a cut point at zero. We
+then train a naive Bayesian classifier to predict a user's
+partisan class based on the language of their aggregated
+messages.\footnote{Formally, we aggregate each user's tweets and
+transform them into a term-frequency matrix with one row per
+user. Term frequencies are TfIdf-weighted. Hashtags,
+common English stopwords and terms used by fewer than 0.1\%, or more
+than 99.9\%, of users were discarded. URLs were standardized to a
+'URL' placeholder. All computation used the \texttt{sklearn} machine
+learning suite for Python \cite{scikit-learn}.} Cross-validated
+predictive accuracy averaged 92\% for the 2010 user population, and
+86\% for the 2012 population. We then use the trained classifier to
+predict the partisan alignment of all users, based on the text of
+their messages.
+
+These estimates raise two issues about the nature of the Twitter
+user population and its utility as a sample for real-world political
+forecasting. First, by this measure Republicans on Twitter are more
+strongly partisan-aligned than Democrats. Figure
+\ref{fig:user-pscore-distribution} shows that conservative-leaning
+users score as more extreme partisans than liberal-leaning users.
+
+Second, conservative-aligned users are better represented in the
+population than liberals. Conservatives outnumbered liberals 6.8:1 in
+2010, and 2.2:1 in 2012. This Republican dominance of
+politically-active Twitter users contrasts with the general electorate,
+in which the share of self-described Democrats has remained stable as
+the percentage of self-described Republicans has fallen since 2000
+\cite{pew2012}.
+
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/user_partisan_alignment_density}
+  \caption{Twitter users are highly partisan. This figure shows the distribution of partisan alignment
+    scores for users whose tweets contain hashtags. Scores were
+    calculated on the $[-1 , 1]$ interval, where 1 is most
+    conservative. Liberal scores are shows as absolute values to permit direct comparison.}
+  \label{fig:user-pscore-distribution}
+\end{figure}
+
+
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[width=\textwidth]{../figures/mt_graph_path_length_distribution}
+%   \caption{Path length distribution between co- and anti-partisans within the \textbf{mention} graph. Path lengths are computed as the Dijkstra shortest path between a 1,000 random liberal-liberal, conservative-conservative, or liberal-conservative node pairs. }
+%   \label{fig:rt-partisan-path-length}
+% \end{figure}
+
+\subsubsection{Twitter users display significant partisan homophily}
+\label{sec:twitt-users-displ}
+
+
+Third, Twitter communication networks display very high partisan
+homophily, even if the content of the communication spans partisan
+boundaries. We use two forms of communication to detect partisan
+homophily. First, one user may \textit{retweet} messages from
+another. Second, one user may \textit{mention} another in a
+message. Since retweets require a user to first have received the
+message being retweeted, they tend to signal communication
+links. Mentions, in contrast, may signal only attempts at
+communication or citation. To put this another way, retweets may
+signal conversation, while mentions signal references.
+
+Quantitative measures of graph connectedness suggest a high degree of
+partisan homophily: individuals talk to their co-partisans, but talk
+about their anti-partisans. We measure this in two ways. First, we
+exploit graph connectedness to determine how closely bound partisan
+types are to each other and to their anti-partisans. Three connection
+types are possible: two co-partisan (Liberal-Liberal and
+Conservative-Conservative) and one anti-partisan
+(Liberal-Conservative). For each type, we compute the Dijkstra
+shortest path for 1000 randomly chosen pairs of each type. The resulting
+mean path lengths, show in figure \ref{fig:path-lengths}, suggest a world in which
+individuals are far more likely to be connected to, and to converse
+with, their co-partisans, even if they may talk about both co- and
+anti-partisans.
+
+We confirm this impression by investigating the community structure of
+the relationship graphs. Community detection used the Louvain
+algorithm \cite{blondel2008fast}. For a community $C$ containing
+users $U$ with partisanship scores $p \in \{-1, 1\}$, community partisanship was computed
+as $p_C = \frac{1}{\left|U\right|}\sum_U p_u$. Figure
+\ref{fig:partisan-subcommunities} 
+illustrates the distribution of community partisan membership
+for both the mention and retweet graphs. Figures
+ illustrate the graph
+structure linking these communities to each other.\footnote{Graph
+  nodes correspond to single communities. Edges correspond to mentions
+or retweets between community members. Node color corresponds to the
+partisan mix of community members.} Again, we see that users tend
+to speak to one another, while talking about a more uniformly
+distributed set of partisans. The retweet graphs, signalling
+communication, cluster by partisan membership; while the mention
+graphs show dense connections between communities of different
+partisan content. These results are consistent with
+\cite{conover2011}, under completely different sampling procedures. 
+
+
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[angle=90, width=0.7\textheight]{../figures/user_rt_largest_cc_mst_2010.png}
+%   \caption{Network representation of \textbf{retweet} connections between
+%     users for \textbf{2010}. Colors represent a user's partisan alignment towards the
+%     Republicans (reds) or Democrats(blue). Labels illustrate users with
+%     very high degree centrality. This representation uses the maximum
+%     spanning tree of the largest connected component of the retweet graph.}
+%   \label{fig:rt-largest-cc-mst-2010}
+% \end{figure}
+
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[angle=90, width=0.7\textheight]{../figures/user_rt_largest_cc_mst_2012.png}
+%   \caption{Network representation of \textbf{retweet} connections between
+%     users for \textbf{2012}. Colors represent a user's partisan alignment towards the
+%     Republicans (reds) or Democrats(blue). Labels illustrate users with
+%     very high degree centrality. This representation uses the maximum
+%     spanning tree of the largest connected component of the retweet graph.}
+%   \label{fig:rt-largest-cc-mst-2012}
+% \end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/plot_rt_mt_pathlengths_2010_2012}
+  \caption{Conservatives are more tightly connected to each other via
+    conversation than liberals. This figure shows the 95\% confidence interval of the mean
+    Dijkstra path length between co- and anti-partisans in the
+    retweet and mention graphs. Path lengths were computed for 1000 randomly chosen pairs of each type.}
+  \label{fig:path-lengths}
+\end{figure}
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[width=0.9\columnwidth]{../figures/mt_rt_graph_path_length_distribution}
+%   \caption{Path length distribution between co- and anti-partisans. Path lengths are computed as the Dijkstra shortest path between a 1,000 random liberal-liberal, conservative-conservative, or liberal-conservative node pairs. }
+%   \label{fig:partisan-path-length}
+% \end{figure}
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[angle=90,
+%   width=0.7\textheight]{../figures/user_mt_largest_cc_mst_2010.png}
+%   \caption{Network representation of \textbf{mention} connections between
+%     users for \textbf{2010}. Colors represent a user's partisan alignment towards the
+%     Republicans (reds) or Democrats(blue). Labels illustrate users with
+%     very high degree centrality. This representation uses the maximum
+%     spanning tree of the largest connected component of the mention graph.}
+%   \label{fig:mt-largest-cc-mst-2010}
+% \end{figure}
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[angle=90,
+%   width=0.7\textheight]{../figures/user_mt_largest_cc_mst_2012.png}
+%   \caption{Network representation of \textbf{mention} connections between
+%     users for \textbf{2012}. Colors represent a user's partisan alignment towards the
+%     Republicans (reds) or Democrats(blue). Labels illustrate users with
+%     very high degree centrality. This representation uses the maximum
+%     spanning tree of the largest connected component of the mention graph.}
+%   \label{fig:mt-largest-cc-mst-2012}
+% \end{figure}
+
+
+%% NOTE: notice that for the communities, there's a baseline random
+%% prob of membership if the communities were just drawn from the
+%% existing distribution. So bootstrap that: draw 1000 samples of k
+%% pairs and figure out what the distribution of membership looks
+%% like. 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{../figures/rt_mt_community_partisanship}
+  \caption{Retweet communities display greater partisan homophily than
+    mention communities. Retweet communities tend to contain
+    communities with well-defined partisanship (either very liberal,
+    or very conservative). Mention communities display more uniformly
+    mixed partisan members.}
+  \label{fig:partisan-subcommunities}
+\end{figure}
+
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[width=\textwidth]{../figures/voteshare_prediction_corr_bydate}
+%   \caption{Predicted and actual vote shares by district for 2010 and 2012. For 2010, all numbers reflect back-casting using the trained algorithm. For 2012, predictions reflect the forecasted Democratic vote share on election day. }
+%   \label{fig:predicted-actual-voteshare-bydistrict}
+% \end{figure}
+
+\begin{figure*}[ht]
+  \centering
+  \begin{minipage}[h]{0.45\linewidth}
+    \begin{center}
+      \includegraphics[width=\textwidth, clip=true, trim=0 2cm 0 2cm]{../figures/mt2010_community_graph}
+      Mentions 2010
+    \end{center}
+
+  \end{minipage}
+  \begin{minipage}[h]{0.45\linewidth}
+    \begin{center}
+      \includegraphics[width=\textwidth, clip=true, trim=0 2cm 0 2cm]{../figures/mt2012_community_graph}
+      Mentions 2012
+    \end{center}
+  \end{minipage}\\
+  \begin{minipage}[h]{0.45\linewidth}
+    \begin{center}
+      \includegraphics[width=\textwidth, clip=true, trim=0 2cm 0 1cm]{../figures/rt2010_community_graph}
+      Retweets 2010
+    \end{center}
+  \end{minipage}
+  \begin{minipage}[h]{0.45\linewidth}
+    \begin{center}
+      \includegraphics[width=\textwidth, clip=true, trim=0 2cm 0 1cm]{../figures/rt2012_community_graph}
+      Retweets 2012
+    \end{center}
+  \end{minipage}
+\caption{Retweet and mention patterns among partisan communities on
+  Twitter. Nodes in each figure correspond to communities in the
+  retweet or mention graph as discovered by the Louvain
+  algorithm. Node color reflects the mean partisan makeup of the
+  community. Edges are weighted by the degree of interconnectedness
+  among users in each community.}
+\label{}
+\end{figure*}
+
+
+
+\subsection{Accounting for failure}
+\label{sec:accounting-failure-1}
+
+
+The results presented here point to the difficulty of forecasting
+beyond heuristics using 
+convenience samples in social media. Prediction algorithms that showed
+promise in the 2010 election saw significant regression by the 2012
+cycle. Patterns of Twitter message volume displayed significant
+ingrained biases towards incumbents. The partisan distribution of
+Twitter users is significantly skewed, in ways that run contrary to
+the evolving partisan structure of the American electorate. Patterns
+of communication between users suggest that Twitter partisans are
+fairly isolated: while they may speak of their partisan opponents,
+evidence of strong connections between anti-partisans is weak. To the
+extent that anti-partisans are connected in the communication graph,
+it is the large media organizations, rather than individuals, who
+bridge partisan communities. Each of these phenomena evolved between
+the 2010 and 2012 elections, weakening the effect of whatever learned
+compensation mechanisms had helped the 2010 predictions beat the
+incumbency baseline.
+
+These factors suggest future challenges for building valid forecasting
+models. The forecasting strategy here implicitly learned the
+incumbency baseline and then attempted to adjust off that baseline
+based on patterns of linguistic content about candidates. Similar
+strategies have proven useful in other contexts, such as forecasting
+macroeconomic aggregates like unemployment rates
+\cite{choi2012predicting}. But the results here suggest greater
+instability in the underlying map between online and offline behavior
+than exists in the macroeconomic context. This problem is not
+new. Google's historically accurate search-based influenza forecasts
+\cite{ginsberg2008detecting} broke down in both 2009 and 2012,
+consequence of changes to the epidemiological profile of the flu virus
+and its coverage in the media \cite{butler2013google}. Twitter has
+far lower penetration in the general populace than Google search, and
+greater volatility in its user base and usage patterns. Hence we
+should expect even more problematic deviations between elections than
+what we have seen heretofore. 
+
+%% Here
+% 1. Incumbency + 
+% 2. Changing volumes
+% 3. Changing patterns of partisan isolation (networks)
+% 4. Anti-patterns of partisan alignment vs. general population
+
+
+\section{Towards better political forecasts}
+\label{sec:towards-bett-polit}
+
+Given this pattern of failure, and the thorny root causes thereof,
+what might improve the odds of building successful social media-based
+forecasts of election outcomes? \cite{gayo2012wanted} attempts to
+define a baseline set of criteria for serious election forecasts from
+Twitter data. The recommend, at a minimum:
+
+\begin{enumerate}
+\item Forecasters should have a well-defined hypothesis for why their
+  method will work
+\item Forecasters should define ahead of time the right
+  baseline--usually the rate of incumbent re-election--against which
+  they should be judged
+\item Forecasters should have well-defined means of handling spam,
+  name homophily, humor, sarcasm, and other noise-generating processes
+\item Forecasters should disclose all data acquisition, cleaning, and
+  forecasting methods before the election they intend to predict
+\item Forecasters should make public their predictions ahead of the election in question
+\end{enumerate}
+
+
+\subsection{A deeper set of questions}
+\label{sec:deeper-set-questions}
+
+\subsubsection{Validating the map}
+\label{sec:deeper-set-questions-1}
+
+\subsubsection{Performativity}
+\label{sec:performativity}
+
+We close with one additional, albeit speculative, concern. We may sum
+up the central challenge of forecasting from social media as one of
+control over the data generating process. Traditional polling methods,
+when the usual sampling assumptions hold, enjoy a great deal of
+control over the means by which they measure public
+opinion. Conversely, forecasting from social media data depends on a
+series of modeling assumptions to account for the lack of control over
+this process. Those assumptions, as we've seen, may be dubious given
+the volatility of the underlying data generating process. But so far,
+there remains the theoretical possibility of overcoming these
+hurdles. 
+
+%% Why is performativity a problem:
+% 1. 
+
+But a
+
+The general performativity thesis can be articulated as a process by
+which a theory about how the world works becomes incorporated into the
+actual functioning of the world. \cite{mackenzie2006engine} describes
+such a process occurring in finance. There, innovations like the
+Black-Scholes pricing model quickly moved from being models of the
+state of the world to models used to price real options on real
+markets. Unsurprisingly, those markets then soon started to endogenize
+those models in their behavior. What had been models of the world were
+now the world itself. By extension, those models weren't disinterested
+observers--instead, their results comported with the world because
+they had made the world. 
+
+It seems likely that Twitter and its fellow-travelers may behave
+similarly.\footnote{Much of what follows owes initial inspiration to
+  heretofore unpublished work by Kieran Healy of Duke University.}
+Recall that Twitter's boosters took it to be a primarily expressive
+medium. Individuals broadcast their thoughts to a potentially
+infinite, though in practice perhaps quite paltry,
+audience. Regardless of the size of the audience, though, it's the
+thought that counts--the potentially unvarnished, if also somewhat
+unstructured, window onto the true desires and intents of voters
+
+In parallel, though, Twitter is a social network, through which users
+communicate primarily with their followers and only secondarily with
+the diffuse Twitter population as a whole. That communication takes
+the form of conversation and self-promotion as well as pure
+expression. Hence Twitter is no mere megaphone. Rather, its users may
+consciously or unconsciously shape what they say to reflect the
+incentives and underlying network structure in which they operate. 
+
+This poses several problems for online forecasting from offline data. 
+Does this matter to online forecasting? Yes, in several ways. First,
+it undercuts the thesis that Twitter, among other sources of online
+data, provides a window onto human expression. Rather, on Twitter we
+find individuals behaving as they are incentivized to
+behave online. 
+
+Those incentives may be set so early on that we have
+little chance to observe individuals' true offline selves. 
+Consider someone who might be classed a mild liberal, expressing their discontent
+with some far-right and perhaps marginal position. This attracts two
+forms of attention this individual might never have encountered
+previously: vitriol from far-removed right-wingers; and sympathy
+from people far to their left who they might, under other
+circumstances, have thought daft. The dynamics of Twitter, given its
+reach and openness, have now embedded an otherwise moderate person
+in a network of both enthusiastic support and vitriolic condemnation
+that might never have occurred otherwise. Observing the individual's
+Twitter network, their patterns of partisan interaction, and the
+partisanship of their followers, we might conclude that this
+individual had become more partisan over time. But of course we have
+no way of knowing that. This individual's perceived partisan shift is
+entirely a function of communication dynamics within Twitter's social
+graph. 
+
+% Need to be crisper here: one thing to say "we have real opinions,
+% just a weird sample". Another to say "we have skewed opinions in a
+% skewed sample, and the skewness is really hard to figure out". It's
+% still another thing to say that the skewness is a function of the
+% medium itself--that is, it's instable.
+This raises the possibility that even if 
+
+% Healy, "Until recently, no such data-generating substrate existed in
+% most other social settings, of for many other kinds of
+% interaction. This is now changing, as an increasing variety of
+% social exchanges leave digital records in their wake.'' p 10
+
+% One view of Twitter in particular takes it to be a fundamentally
+% expressive medium in which individuals broadcast their thoughts to a
+% potentially infinite, though likely almost nonexistent,
+% audience. Another views it as a social network, in which one
+% communicates primarily with one's followers, and only secondarily
+% with a broader--and again potentially infinite--audience. Of course,
+% it is really both. Twitter's dual-use status as a means of
+% communication and self-promotion complicates the problem of parsing what role any
+% given individual plays in any given tweet. But it also means that
+% Twitter is no mere megaphone. Instead, as Healy suggests, people may
+% consciously or unconsciously shape what they say to the incentives
+% structure created by Twitter's underlying dynamics. 
+
+% The tension comes from what Healy describes as the "retrospective
+% analysis and description" of networked online systems alongside the
+% construction of those same systems using those same ideas. Over
+% time, the models become endogenous to the systems they purport to
+% observe, as individuals take on the behavior of the model via the
+% incentives it embeds in the operation of the system itself. 
+
+% Does this matter to online forecasting? Yes, in several ways. First,
+% it undercuts the thesis that Twitter, among other sources of online
+% data, provides a window onto human expression. Rather, on Twitter we
+% find individuals behaving as they are incentivized to
+% behave--incentives that may be set very early on. Consider someone
+% who might be classed a mild liberal, expressing their discontent
+% with some far-right and perhaps marginal position. This attracts two
+% forms of attention this individual might never have encountered
+% previously: vitriol from far-removed right-wingers; and sympathy
+% from people far to their left who they might, under other
+% circumstances, have thought daft. The dynamics of Twitter, given its
+% reach and openness, have now embedded an otherwise moderate person
+% in a network of both enthusiastic support and vitriolic condemnation
+% that might never have occurred otherwise. Whether this results in
+% actual changes in offline behavior is hard to konw. But certainly
+% the online image of this individual bears relatively little
+% resemblance to the offline social context they live in, and possibly
+% the process by which they choose their vote. This is a long way away
+% from Twitter as an unadulterated window into the heretofore
+% disguised souls of the electorate. 
+
+
+% Gayo-Avello to start. Openness, spam, true out-of-sample (next
+% election, not future same election) forecasts, etc. 
+
+% But even doing that, at least two big problems remain:
+% 1. Construct a map from the weird online world to the offline
+% world. How do we test that such a map is still valid? How can we
+% know? 
+% 2. More troubling: what if the online world actually isn't much like
+% the offline one in more fundamental ways. Mackenzie, Healy. 
+
+\section{Conclusions}
+\label{sec:conclusions}
+
+% IF this is necessary. Might be nice to just terminate with "towards..."
+
+
+%% OLD FOLLOWS
+
+\section{Prior forecasting results}
+\label{sec:prior-forec-results}
+
+Twitter has become a popular medium for both studying online political
+behavior. As an information-push medium,
+tweets promise an unvarnished, if also unstructured, look into
+individuals' political attitudes. However, successful predictors have
+proven ephemeral. Claims by \cite{tumasjan2010election} to have
+successfully forecast the 2009 German elections using Twitter
+data, were shown by \cite{jungherr2012pirate} to be an artifact of
+researcher choices rather than research
+design. \cite{bermingham2011using} used a hybrid approach, mixing
+sentiment analysis and relative message volumes. But their results
+under-perform conventional polling in the 2011 Republic of Ireland
+general elections. \cite{sang2012predicting} performed somewhat better
+in the 2011 Dutch elections, but their best results relied on ad-hoc
+re-weighting using polling information. 
+
+These problems, \cite{metaxas2011not} have argued, indicate a much
+broader problem for election prediction via social media. Given the
+demographic differences between the Twitter user base and the voting
+population, the inherent dynamism of political language and activity,
+and incentives for strategic behavior on the part of motivated
+partisans, simple heuristics are unlikely to perform reliably as
+electoral predictors. At the very least, they argue, claims to valid
+prediction should clearly articulate \textit{ex ante} the underlying
+assumptions made by the forecasting method, the approach to dealing
+with spam and other forms of information noise, and the baseline
+against which the estimate should be judged. 
+
+This paper offers a slightly different version of the critique
+advanced in \cite{metaxas2011not}. They argue that, in the limit,
+Twitter-based election forecasts need to converge on the random
+sampling methods used in professional polling. They then point out why
+that will be extremely difficult, given privacy issues and proprietary
+data. Alternatively, we can treat the problem slightly differently:
+the algorithmic task is to develop a stable map from the behavior of
+the Twitter convenience sample to the behavior of real-world
+voters. That map should have sufficient resolution to beat simple
+heuristics--particularly incumbency--for election outcomes. We should
+also have some idea of where that map might break down. 
+
+
+%% Thought: elections aren't about sentiment. They are about
+%% behavior. I can vote for someone only as a result of thinking they
+%% are better than the other guy, but generally suck. Also problematic
+%% because we know that most voters aren't well-informed. So are we
+%% modeling individual choices (usually not, for incumbency) or trying
+%% to pick up on broader trends across districts or within regions. 
+
+%% Two possible ways to success:
+
+%% 1. Stable algorithmic map, based on specific assumptions about
+%% election behavior
+%% 2. Random sampling method equivalent to professional polling
+
+%% Note that (2) also embeds (1), due to likely voter models. That map
+%% has broken down in the past. So these aren't specifically unique,
+%% but (2) relies on a weaker version of this than (1). See also cell
+%% phones vs landlines, etc. 
+
+%% Models to show: (1) my own, (2) my own, plus prior vote share (just
+%% use OLS to average), (3) back-casting to the 2010 election given
+%% 2012 observations. 
+
+%% What do we know:
+%% 1. For 2010, Twitter predictions (post-hoc...) improve estimates
+%% compared w/ prior voteshare alone
+%% 2. For 2012, Twitter predictions do far worse than prior voteshare;
+%% together w/ prior voteshare, they do marginally better; but they
+%% still lose at winloss b/c the RMSEs are still too big relative to
+%% the place that matters--right at the cutpoint.
+
+%% Also: 2012 had high re-election rates for districts w/in 4pt margin
+%% in 2010; but 2010 did not (unsurprising, those districts were the
+%% subject of tea party challenges). So the estimator needed to be
+%% even better than normal at the cutpoint, which is the really hard
+%% thing to get right even if overall RMSE is low or accuracy high.
+
+%% And back-predicting 2010 given a model of this form:
+%% vote_2008 ~ vote_2010 + twitter_2010
+%% Out-performs vote alone when applied to 2012
+%% Placebo test strongly suggests that there's something weird going
+%% on here. 
+
+
+
+% \section{Discussion}
+% \label{sec:discussion}
+
+
+
+% \section{Conclusion}
+% \label{sec:conclusion}
+
+% Social media-based election forecasts have proliferated in the last
+% several years. We provide what we believe to be the first multi-cycle
+% test of election forecasting with Twitter. Our results point to the
+% difficulty of building persistently accurate content-based forecasting
+% algorithms. Underlying changes in election dynamics, issue salience,
+% the Twitter user base, and patterns of Twitter use degrade the
+% performance of prediction algorithms across election cycles. Moreover,
+% the convenience sample of the Twitter user space is clearly unlike the
+% broader electorate in both partisan alignment and polarization. While
+% we might imagine learning a valid mapping from the Twitter user base
+% to the preferences of the broader electorate, the underlying
+% instability of that user base and its patterns of use will weaken the
+% mapping over time. While commercial uses of Twitter-based forecasting
+% face similar problems, they benefit from far more regular
+% opportunities to update than the two- or four-year American election
+% cycle. Likewise, while poll-of-polls based forecasts also must update
+% over time, they benefit from a far larger set of opportunities to
+% learn the relationship between polling aggregates and house effects on
+% the one hand, and election outcomes on the other, than
+% the history of Twitter or other social media permit.
+
+% Hence building effective and informative social media-based election
+% forecasting approaches will require a sustained commitment on par with
+% that required to build effective forecasting and turnout models from
+% polling. Obvious needs include better models of how Twitter behavior
+% relates to real-world phenoma like partisan identification and
+% turnout; better monitoring of how the underlying Twitter population
+% evolves between elections; and better measurement of the gap between
+% the politically-active Twitter population and the broader
+% electorate. 
+
+
+% % Here, something about how Twitter partisans are probably very likely
+% % to vote, etc, and so unlike the rest of the electorate. 
+
+
+\bibliography{/home/markhuberty/bibs/twitter}
+\bibliographystyle{plain}
+\end{document}
