@@ -368,17 +368,20 @@ Flu, see \cite{butler2013google,41763}) have later encountered
 difficulties. But the potential for predicting the future from 
 traces of the past left behind on servers around the world remains.
 
-Political forecasting gained currency in parallel with, and perhaps
-prompted by, these successes. Apart from sheer novelty, several forces
-conspired to make this an attractive target. The importance of online
-media grew after 2008: President Barack Obama's digital effort was
-widely hailed in both 2008 and 2012; and the Tea Party insurgency that
-brought the Republican party back into control of the U.S. House of
-Representatives relied initially on online social media to circumvent
-traditional party channels \citep{williamson2011tea}. In parallel,
-rising non-response rates and increased cell phone usage had prompted
-a search for new means of measuring and forecasting political
-attitudes and intent
+Political forecasting from social and online data gained currency in
+parallel with, and perhaps prompted by, these successes. Apart from
+sheer novelty, several forces conspired to push scholars and political
+professionals to do so. The importance of online media grew after
+2008: President Barack Obama's digital effort was widely hailed in
+both 2008 and 2012
+\citep{smith2009internet,wallsten2010yes,levenshus2010online}; and the
+Tea Party insurgency that brought the Republican party back into
+control of the U.S. House of Representatives relied initially on
+online social media to circumvent traditional party channels
+\citep{williamson2011tea}. In parallel, traditional public opinion
+surveys began to struggle with rising non-response rates and increased
+cell phone usage, prompting a search for new means of measuring and
+forecasting political attitudes and intent
 \citep{keeter2006gauging,kohut2012assessing,christian2010assessing,boyle2013sampling,viera2013mail}.
 
 Social media services were among the most tempting
@@ -427,9 +430,10 @@ out-of-sample data performed poorly on future elections. Others have
 failed because their initial success relied on undisclosed data
 manipulation on the part of researchers.
 
-Here we present a selection of those attempts and failures. We discuss
-in detail our own experience in what we believe to be the first
-attempt at multi-cycle forecasting of U.S. House of Representatives
+Here we present a selection of attempts and failures to forecast
+elections using the Twitter social media service. We discuss in detail
+our own experience in what we believe to be the first attempt at
+multi-cycle forecasting of U.S. House of Representatives
 elections. There, as in other attempts, promising forecasting methods
 failed to beat simple heuristics like incumbency in predicting
 election outcomes. Close examination of the underlying data suggests
@@ -438,8 +442,15 @@ users changed significantly across the election cycle, in ways the
 models could not account for. The following section reflects on the
 broader implications of this problem in forecasting elections: the
 need to build models that can dynamically check their own assumptions
-about the real world. 
-%% TODO: make this sharper.
+about the real world.  %% TODO: make this sharper.
+
+\subsection{Twitter as political phenomenon}
+\label{sec:twitter-as-political}
+
+% Want a brief thing here on what we might measure. (1) sentiment of
+% individual messages, (2) sentiment of individual users, (3) partisan
+% alignment of individual users, (4) changes in partisan alignment of
+% individual users. These are all screwy
 
 \subsection{The universal failure of election forecasts}
 \label{sec:univ-fail-elect}
@@ -449,20 +460,48 @@ provide a long catalog of failed attempts at election forecasting with
 Twitter. Here we recount a few notable examples. 
 
 \cite{o2010tweets} led the pack in political forecasting with an
-analysis of Twitter and the 2008 presidential polls. They showed that
-mention counts--the rate at which McCain or Obama were mentioned in a
-sample of tweets--could provide leading correlations to presidential
-election polling. But the correlations were somewhat weak, and they
-cautioned against interpreting their results as evidence that Twitter
-could predict election outcomes.
+analysis of Twitter and the 2008 presidential polls. They proposed a
+simple model wherein the share of mentions for John McCain or Barack
+Obama, and the sentiment attached to those mentions, could provide a
+leading indicator of performance in presidential
+polling. Specifically, they propose a sentiment measure $x_w$ that for
+a set of topic words $w \in W$:
+
+\begin{equation}
+  \label{eq:2}
+  x_{t,w} = \frac{\textrm{count}_t(\textrm{pos. word} \wedge w)}{\textrm{count}_t(\textrm{neg. word} \wedge w)}
+\end{equation}
+
+For topic words like [\textit{jobs}, \textit{economy}, \textit{job}]
+(economic conditions) and [\textit{obama}] (presidential approval),
+they show that these sentiment indices could provide leading
+correlations for consumer sentiment or presidential approval
+surveys. But both the correlations and their performance as predictor
+variables was unstable over time. Likewise, simple message volume
+measures--what \citep{digrazia2013} later termed the ``all news is
+good news'' model--was a good predictor of Barack Obama's poll
+performance in 2008, but not John McCain's. Indeed, more mentions of
+McCain were correlated with better performance for Obama. Given these
+outcomes, the authors caution against relying on social media for
+forward-looking performance.
 
 Other forecasts were less circumspect. \cite{tumasjan2010election}
 claimed to have successfully forecast the 2009 German elections using
-Twitter data. Those claims were tested and shown to be invalid by
-\cite{jungherr2012pirate}. The paper's success was an artifact
-researcher choices rather than research design. Recent attempts to
-apply their methods to the 2013 German election likewise forecast a
-win for the wrong party.
+Twitter data. They conclude that ``the mere number of tweets
+mentioning a political party can be considered a plausible reflection
+of the vote share and its predictive power even comes close to
+traditional election polls.'' This is surprising, given their
+admission elsewhere in the paper that a handful of heavy users tend to
+dominate the production of Twitter content. 
+
+These claims did not hold up to scrutiny.
+\cite{jungherr2012pirate} show that the apparent success was an
+artifact of researcher choices rather than research design. Rectifying
+those errors generated predictions that the Pirate Party--a niche
+party with a technologically-attuned constituency--would win. Recent
+attempts to apply their methods to the 2013 German election likewise
+forecast a win for the Pirate Party, in an election won decisively by
+the Christian Democrats.
 
 \cite{bermingham2011using} built forecasts from a sentiment analysis
 of tweets and a comparison of candidate's relative message
@@ -470,8 +509,9 @@ volumes. Their results under-performed compared to conventional
 polling in the 2011 Republic of Ireland general
 elections. \cite{sang2012predicting} performed somewhat better in the
 2011 Dutch elections. However, both results relied on ad-hoc
-re-weighting using polling information, which casts doubt on whether
-it was their algorithms or the poll that did the heavy lifting.
+re-weighting of Twitter forecasts using polling information. This
+reliance on traditional polls casts doubt on whether it was the
+Twitter data and algorithms or the poll that did the heavy lifting.
 
 Finally, volume-based forecasts have also proven popular. The ``one
 tweet one vote'' heuristic simply assumes that greater attention to a
@@ -481,19 +521,27 @@ volume alone could contribute value to forward-looking election
 predictions in U.S. House races. However, \cite{huberty2013twitter}
 shows that such volume metrics do not contribute predictive value above
 and beyond a candidate's prior vote share when employed in true
-forward-looking electoral forecasts.
+forward-looking electoral forecasts. The complexity of political
+speech--particularly on Twitter, where the 140 character limit leads
+to very unique grammar--should throw doubt on the ability of such
+simple metrics to tease out real voter sentiment or
+intent.\footnote{\cite{owoputi2013improved} illustrate the need for
+  highly customized natural language tools to properly understand the
+  grammatical structure of Twitter speech. The use of abbreviation and
+  emoticons, and the blurring of traditional sentence structure,
+  complicate traditional part-of-speech tagging.}
 
-Apart from the empirical and methodological shortcomings of such
-forecasts, the data source itself may threaten the validity of most of
-these estimates. Forecasts based on data scraped from Twitter's
-Streaming API mostly rely on the freely available 1\% sample
-stream. Access to the Gardenhose (10\%) and Firehose (100\%)
-samples is expensive and harder to arrange. But as
-\cite{morstatter2013sample} show, the 1\% sample is not a valid random
-sample of the Twitter message population. As such, even if the Twitter
-message stream were a representative flow of information about the
-electorate (a big if), the most common form of access to that stream
-is not. 
+Apart from the empirical and methodological shortcomings of past
+electoral forecasts, the data source itself may threaten the validity
+of most of these estimates. Forecasts based on data scraped from
+Twitter's Streaming API mostly rely on the freely available 1\% sample
+stream. Access to the Gardenhose (10\%) and Firehose (100\%) samples
+is expensive, harder to arrange, and computationally more intensive to
+handle. But as \cite{morstatter2013sample} show, the 1\% sample is not
+a valid random sample of the Twitter message population. As such, even
+if the Twitter message stream were a representative flow of
+information about the electorate (a big if), the most common form of
+access to that stream is not.
 
 \cite{metaxas2011not} note that most of these attempts all suffer from
 an additional problem: they all claim to predict, but in reality
@@ -513,17 +561,18 @@ lack of true forward-looking forecasts is a serious deficiency.
 
 %% Here, the Twitter stuff
 
-The author can add his own experience to the catalog of failed attempts at
-election prediction. Over the 2010-2012 election cycle, we performed
-what we believe to be the first multi-cycle experiment forecasting
-elections in the U.S. House of Representatives. We built forecasting
-algorithms from data collected in the 2010 election. Initial results
-proved promising, and so the same algorithms were deployed to forecast
-the 2012 election in real time. All data acquisition, cleaning, and
-forecasting methods were made available ahead of time. Unfortunately,
-despite evidence from 2010 that the algorithm could beat incumbency as a
-predictor of electoral success, our methods did no better than
-incumbency in 2012.
+The author can add his own experience to the catalog of failed
+attempts at election prediction. Over the 2010-2012 election cycle, we
+performed what we believe to be the first multi-cycle experiment
+forecasting elections in the U.S. House of Representatives. The
+sampling strategy was designed to circumvent some of the problems
+inherent in using the Streatming API. We made and disclosed forecasts
+for the 2012 House elections in real time during the campaign, based
+on algorithms and data handling methods disclosed ahead of time. Hence
+our approach constituted a true out-of-sample, forward-looking attempt
+at election forecasting from social media. However, despite evidence
+from 2010 that our approach could beat incumbency as a predictor of
+electoral success, our methods did no better than incumbency in 2012.
 
 Here we present a post-mortem of the project. Post-hoc examination of
 the 2010 and 2012 data show how the Twitter userspace and terms of
@@ -573,15 +622,14 @@ Where the vote share received by a candidate $c$ in an election held
 at time $t$ would be forecast by the vote that they received in the
 prior election at $t-1$, and some set of additional predictors $X$ (in
 this case derived from social media data). In the case of US
-elections, $V$ may be abstracted to the \textit{party} vote for an
-electoral district, consistent with observed \textit{party incumbency}
-effects that obtain even when a given incumbent retires. Put another
-way, successful predictors should separately model (1) structural
-advantages that accrue to incumbents across elections, and (2) the
-election-specific effects that may or may not displace the
-incumbent. Estimators are only of serious interest if the adjustments
-$X$ off the incumbency baseline $V$ improve the overall predictive
-rate of the estimator. 
+elections, $V$ may be abstracted to the party vote for an electoral
+district, consistent with observed party incumbency effects that
+obtain even when a given incumbent retires. Plausible predictors
+should thus model (1) structural advantages that accrue to incumbents
+across elections, and (2) the election-specific effects that may or
+may not displace the incumbent. Estimators are only of serious
+interest if the adjustments $X$ off the incumbency baseline $V$
+improve the overall predictive rate of the estimator.
 
 The estimator presented here implicitly separates these two
 effects. We employ statistical machine learning methods to model the
@@ -620,8 +668,8 @@ that number of mentions on a daily basis.} to return messages
 mentioning the full name of Democratic or Congressional candidates
 running in contested races.\footnote{Data acquisition began on September 12
 2010; and on September 1, 2012. Dates were timed to fall after as many
-primary elections as possible.} Queries were run nightly for each day
-in the general election campaign. Table
+primary elections as possible.} We queried the API nightly during the
+general election campaigns in 2010 and 2012. Table
 \ref{tab:volume-by-party-inc} provides summary statistics on total
 message volumes per candidate. As is immediately apparent, the observed
 Twitter volume per candidate exploded between 2010 and 2012. The query
@@ -629,20 +677,23 @@ procedure generated approximately 260,000 messages for 313 districts
 in 2010, the same procedure collected 1.3 million messages for 369
 districts in 2012.  %% Double check this count (esp districts)
 
-Data cleaning retained only
-data for districts wherein both candidates had Twitter
-content. Further data cleaning removed extraneous messages resulting
-from name homonyms, and excluded obviously irrelevant non-political
-data. Extraneous content was identified by modeling tweet content
-using a Latent Dirichlet Allocation topic model applied to
-``documents'' created by aggregating all tweets relevant to each
-district. Tweets were subsequently excluded based on terms discovered
-via those models.\footnote{Football- and baseball-related messages were
-  common sources of irrelevant data. Indicative terms included
-  \texttt{mlb}, \texttt{yankees}, and \texttt{stephen smith} (a name
-  homonym for both a sports journalist and a candidate for California
-  district 34).} Data cleaning reduced the overall message volume
-by approximately 25,000 in 2010; and by 200,000 in 2012.
+Data cleaning retained only data for districts wherein both candidates
+had Twitter content. Further data cleaning removed extraneous messages
+resulting from name homonyms, and excluded obviously irrelevant
+non-political data. Extraneous content was identified by modeling
+tweet content using a Latent Dirichlet Allocation topic model
+\citep{blei2003latent} applied to ``documents'' created by aggregating
+all tweets relevant to each district. Tweets were subsequently
+excluded based on terms discovered via those
+models.\footnote{Football- and baseball-related messages were common
+sources of irrelevant data. In 2010, one candidate shared a name with
+the kicker for the New Orleans Saints. In 2012, a candidate for
+California District 34 shared a name with a prominent sports
+journalist. Terms used for message filtering were thus dominated by
+sports-related works like \texttt{mlb},
+\texttt{yankees}, and \texttt{saints}.} Data
+cleaning reduced the overall message volume by approximately 10\% in
+2010 and 15\% in 2012.
 
 The cleaned data demonstrate the first significant result presented in
 this paper: Twitter volumes are strongly biased in favor of
@@ -699,19 +750,20 @@ representation of text in the following steps:
 \item URLs, punctuation, English stopwords, and non-ASCII characters were removed and
   message case was standardized
 \item Candidate names were replaced with party-specific placeholders
-\item Officeholder names (the Speaker of the House, the Senate
+\item Prominent officeholder names (the Speaker of the House, the Senate
   Majority Leader, and the President) were replaced with
-  office-specific placeholders,
-\item A message-level term-frequency matrix,
+  office-specific placeholders. 
+\item A message-level term-frequency matrix
   was consolidated into a district-level matrix by summing term
   frequencies for each row belonging to a distinct district. In 2010,
   terms were restricted to those appearing in more than 1\%, and less
-  than 99\% of districts. The same vocabulary was then used to build
+  than 99\% of districts. The resulting vocabulary was then used to build
   the 2012 prediction matrices. Message-level term frequencies were
-  weighted by creation date prior to summation. Win-loss data were
+  weighted by creation date prior to summation such that messages
+  occurring closer to election day received higher weights. Win-loss data were
    weighted linearly relative to election
   day. Vote share 
-  predictors used the raw term-frequency data. These weights were
+  predictors used a uniform weight. These weights were
   selected based on their relative performance in out-of-sample tests
   on the 2010 data. The district-level term-frequency matrix was row-normalized.
 \end{enumerate}
@@ -745,17 +797,20 @@ We discuss four results:
 \begin{enumerate}
 \item Election predictions were reasonably accurate given the relative
   simplicity of the predictors. This accuracy persisted even for
-  estimates made far in advance of the election.
+  estimates made far in advance of the election. But no
+  forward-looking forecasts could beat incumbency as a simple
+  heuristic for electoral success.
 \item Examination of algorithm performance shows that predictions are
   made in reference to terms signaling the party of the incumbent; and
   then adjusted from that basis. This presents the danger of
-  algorithms regressing to the incumbency baseline over time.
+  algorithms regressing to the incumbency baseline over time, as was observed.
 \item User and message content displays significant partisan biases
-  that may render Twitter messages suspect as a means of measuring
+  that do not align with the general electorate and are unstable over time.
+  This may render Twitter messages suspect as a means of measuring
   social sentiment
 \item Partisan communities in Twitter display significant partisan
   homophily, consistent with results obtained under very different
-  sampling and partisan ranking assumptions
+  sampling and partisan ranking assumptions. 
 \end{enumerate}
 
 \subsubsection{Vote share predictions}
@@ -763,7 +818,7 @@ We discuss four results:
 
 Figure \ref{fig:prediction-corr-bydate} summarizes the predictive
 accuracy for both vote share and win/loss predictions. 2010 results
-back-casted election outcomes correctly at rates far exceeding the
+back-casted election outcomes correctly at rates exceeding the
 rate of incumbent success in this sample. For 2012, some regression to
 the incumbent win rate was observed: both the win-loss and vote share
 algorithms forecast the correct winner in 88\% of cases, approximating
@@ -782,9 +837,8 @@ Democratic districts ran well behind the incumbency baseline. This outcome
 confirms a concern about Republican bias in the training algorithm: to
 the extent that the algorithm learned an implicit bias from the 2010
 elections, in which the Republicans achieved a historic swing in party
-control of House seats, it would carry this bias forward. However, we
-note that such problems should be muted as data for additional
-elections is added to the training pool. 
+control of House seats, it would carry this bias forward. This problem
+may diminish as future elections contribute to the pool of training data.
 
 
 
@@ -861,7 +915,10 @@ significant role in the 2010 elections, which followed closely on the
 passage of the Patient Protection and Affordable Care Act, otherwise
 called Obamacare. Two years later, however, jobs and fiscal policy
 played a much more salient role. Unstable issue salience complicates
-attempts at topic-driven forecasting such as was attempted here.
+attempts at topic-driven forecasting such as was attempted
+here. Moreover, what counts as issue salience for the
+politically-active Twitter population may not prove salient for the
+broader electorate. 
 
 \begin{figure}[ht]
   \centering
@@ -881,7 +938,7 @@ attempts at topic-driven forecasting such as was attempted here.
 
 Mapping from Twitter conversations to election outcomes presumes not
 just linguistic stability, but also some stability in Twitter's
-convenience sample. To investigate the dynamics of the
+convenience sample of the electorate. To investigate the dynamics of the
 politically-engaged Twitter community further, we would like to know
 both (1) the pattern of partisan alignment of users in our sample and
 (2) patterns of communication among partisans. We estimate the
@@ -1496,5 +1553,5 @@ also have some idea of where that map might break down.
 
 
 \bibliography{/home/markhuberty/bibs/twitter}
-\bibliographystyle{plain}
+\bibliographystyle{apalike}
 \end{document}
