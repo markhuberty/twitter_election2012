@@ -28,7 +28,7 @@
 
 
 \begin{document}
-\title{Do we vote with our tweet? On the perennial difficulty of election
+\title{Can we vote with our tweet?\\ On the perennial difficulty of election
 forecasting with social media}
 \author{
 Mark Huberty\thanks{Enormous credit and thanks are due to Len DeGroot of the
@@ -88,22 +88,22 @@ professionals and scholars struggling with the increasing cost and
 difficulty of traditional survey research and electoral polling.
 
 Yet experience to date in forecasting important events, political or
-otherwise, has not borne out the promise of new predictive
+otherwise, has not always borne out the promise of new predictive
 powers. Success in predicting what people want to buy, or what ads
-they might click on, has not translated into success
-elsewhere. High-profile difficulties in public health and finance have
-cast doubt on the capacity to reliably forecast critical real-world
-phenomena using online and social media data. Further research into
-other means of online opinion discovery, such as consumer rating
-systems, has shown them vulnerable to systematic bias.
+they might click on, has not translated into reliable success in
+sectors such as public health or finance. Research into other means of
+online opinion discovery, such as consumer rating systems, has shown
+them vulnerable to systematic bias. These difficulties have cast doubt
+on the potential for social media data to provide a new means of
+forecasting high-profile real-world events.
 
 This paper discusses the history of electoral forecasting from social
-media and other online data. As in other domains, I note that all
+media and other online data. I note that all
 known examples of apparently successful forecasts have very quickly
 encountered problems that have undermined their predictive
-power. Apparent successes at beating simple heuristics for electoral
-success, such as incumbency, have faded quickly when applied to
-forward-looking elections. These difficulties have led to a short
+power. Initial success at beating simple heuristics for electoral
+success, such as incumbency, has faded quickly when faced with the
+challenge of forward-looking election prediction. These difficulties have led to a short
 shelf life for  high-profile claims that social media data
 will soon supplant polling. Hence while
 social media and other online data may be useful for studying how
@@ -112,7 +112,7 @@ forecasting what those same citizens--and, more importantly, their
 offline fellows--will do back in the real world.
 
 I conclude by discussing whether these problems can be overcome. I
-agree with earlier critiques of the forecasting literature, which
+agree with earlier critiques of the election forecasting literature, which
 recommended fundamental changes in transparency, disclosure, method, and
 publication of electoral forecasts that rely on social media. But I
 raise the question of whether we should ever expect reliable election
@@ -365,7 +365,7 @@ social (Facebook) contacts, early detection of and marketing to people
 with specific medical conditions like pregnancy \citep{hill2012},
 and real-time measurement of geographically-specific rates of influenza
 \citep{ginsberg2008detecting}. Some of these early successes (notably Google
-Flu, see \cite{butler2013google,41763}) have later encountered
+Flu, see \cite{butler2013google} and \cite{41763}) have later encountered
 difficulties. But the potential for predicting the future from 
 traces of the past left behind on servers around the world remains.
 
@@ -375,7 +375,7 @@ sheer novelty, several forces conspired to push scholars and political
 professionals to pursue this problem. The importance of online media grew after
 2008: President Barack Obama's digital effort was widely hailed in
 both 2008 and 2012
-\citep{smith2009internet,wallsten2010yes,levenshus2010online,scherer2012}; and the
+\citep{smith2009internet,levenshus2010online,wallsten2010yes,scherer2012}; and the
 Tea Party insurgency that brought the Republican party back into
 control of the U.S. House of Representatives relied initially on
 online social media to circumvent traditional party channels
@@ -383,13 +383,13 @@ online social media to circumvent traditional party channels
 surveys began to struggle with rising non-response rates and increased
 cell phone usage, prompting a search for new means of measuring and
 forecasting political attitudes and intent
-\citep{keeter2006gauging,kohut2012assessing,christian2010assessing,boyle2013sampling,viera2013mail}.
+\citep{keeter2006gauging,christian2010assessing,kohut2012assessing,boyle2013sampling,viera2013mail}.
 
 Social media services were among the most tempting
-targets. Starting in 2010, a wave of papers of the form ``using
-<social media source X> to predict Y'' began to
+targets. 2010 say a way of papers of the form ``using
+<social media source X> to predict political contest Y'' began to
 arrive, scattered across computer science, machine learning, and
-social science journals.\footnote{Twitter dominates these papers, with a few notable
+social science journals.\footnote{X = Twitter in most of these papers, with a few notable
   exceptions \citep{bond201261,broockman2013online}. Unlike the other major online data companies, Twitter has made
   its data relatively freely available (albeit with heavy restrictions
   on subsequent distribution). Among other options, Facebook appears open to
@@ -441,8 +441,7 @@ why: both changes to the political landscape and to the demographics
 and behavior of the Twitter user community altered the data-generating
 process in ways the models could not account for. By implication,
 successful forecasting models must have the capability to dynamically
-check and update their assumptions about the real world. How to do so
-remains unclear. 
+check and update their assumptions about the real world. 
 
 % \subsection{Twitter as political phenomenon}
 % \label{sec:twitter-as-political}
@@ -482,7 +481,7 @@ measures--what \citep{digrazia2013} later termed the ``all news is
 good news'' model--were good predictors of Barack Obama's poll
 performance in 2008, but not John McCain's. Indeed, more mentions of
 McCain were correlated with better performance for Obama, suggesting
-that perhaps mentions were proxying for something entirely unrelated
+that mentions were proxying for something entirely unrelated
 to political sentiment. Given these
 outcomes, the authors caution against relying on social media for
 forward-looking performance.
@@ -509,8 +508,8 @@ the Christian Democrats.
 of tweets and a comparison of candidate's relative message
 volumes. Their results under-performed compared to conventional
 polling in the 2011 Republic of Ireland general
-elections. \cite{sang2012predicting} performed somewhat better in the
-2011 Dutch elections. However, both results relied on ad-hoc
+elections. \cite{sang2012predicting} faired somewhat better in the
+2011 Dutch elections using similar methods. However, both results relied on ad-hoc
 re-weighting of Twitter forecasts using polling information. This
 reliance on traditional polls casts doubt on whether it was the
 Twitter data and algorithms or the poll that did the heavy lifting.
@@ -540,22 +539,25 @@ Twitter's Streaming API mostly rely on the freely available 1\% sample
 stream. Access to the Gardenhose (10\%) and Firehose (100\%) samples
 is expensive, harder to arrange, and computationally more intensive to
 handle. But as \cite{morstatter2013sample} show, the 1\% sample is not
-a valid random sample of the Twitter message population. As such, even
-if the Twitter message stream were a representative flow of
-information about the electorate (a big if), the most common form of
-access to that stream is not.
+a valid random sample of the Twitter message feed. As such, even if
+the Twitter message stream were a representative flow of information
+about the electorate, the most common form of access to that stream is
+not. Instead, it further skews an already skewed signal of political
+sentiment.
 
 \cite{metaxas2011not} note that most of these attempts all suffer from
 an additional problem: they all claim to predict, but in reality
-back-cast. These papers all claim success on the basis of
-out-of-sample forecast rates. But those forecasts are really backcasts
-of the same election. The test samples derive from splitting the set
-of available outcomes for a single election, rather than from a
-different election altogether. But this is emphatically not the same
-thing as forecasting a future election. Particularly for political
-elections, where the terms of contestation can change significantly
-and incentives for strategic behavior and innovation are high, the
-lack of true forward-looking forecasts is a serious deficiency.
+back-cast. Each of these papers adopt a similar approach to model
+building and evaluation: for a given election, split the set of
+outcomes into training and testing datasets, holding back the testing
+set to evaluate model performance. This is emphatically not the same
+thing as forecasting a future election. The terms of contestation, the
+issues at stake, and the language environment all change significantly
+from election to election. Political actors encounter powerful
+incentives for both electoral innovation and strategic behavior. In
+this environment, evaluating models within the framework of a single
+election does not provide a sufficient test of model performance. Only
+true forward-looking forecasts of future elections suffice.
 
 
 \section{A multi-cycle example of failure}
@@ -571,7 +573,7 @@ sampling strategy was designed to circumvent some of the problems
 inherent in using the Streaming API. We made and disclosed forecasts
 for the 2012 House elections in real time during the campaign, based
 on algorithms and data handling methods disclosed ahead of time. Hence
-our approach constituted a true out-of-sample, forward-looking attempt
+our approach constituted a true out-of-sample, transparent, forward-looking attempt
 at election forecasting from social media. However, despite evidence
 from 2010 that our approach could beat incumbency as a predictor of
 electoral success, our methods did no better than incumbency in 2012.
@@ -775,8 +777,10 @@ representation of text in the following steps:
 
 Prediction algorithms were developed based on 313 districts from the 2010 House of
 Representatives election. An ensemble machine learning
-algorithm \cite{van2007super} was trained on a random 90\% subset of
-these districts, using actual election outcomes.\footnote{For discrete
+algorithm \citep{van2007super} was trained on a random 90\% subset of
+these districts, using actual election outcomes. Separate prediction
+algorithms were designed to forecast binary win/loss and Democratic
+vote share outcomes.\footnote{For binary win/loss
   prediction, the ensemble
 included variants on: lasso, support vector machines with various
 kernel parameters, and random forests with various tuning
@@ -911,8 +915,9 @@ declines significantly.
 This is not, per se, a bad strategy: the high rate of incumbent
 re-election in the US system makes the incumbency baseline ideal. But
 the instability in salient political issues makes consistent
-adjustment from that baseline difficult. For instance, ``4 hcr'' was a
-top predictive term for the vote share predictor. It played a
+adjustment from that baseline difficult. For instance, ``4 hcr''
+(``for health care reform'') was a
+top predictive term for the vote share predictor. The health care debate played a
 significant role in the 2010 elections, which followed closely on the
 passage of the Patient Protection and Affordable Care Act, otherwise
 called Obamacare. Two years later, however, jobs and fiscal policy
@@ -1026,8 +1031,8 @@ the percentage of self-described Republicans has fallen since 2000
 Third, Twitter communication networks display very high partisan
 homophily, even if the content of the communication spans partisan
 boundaries. We use two forms of communication to detect partisan
-homophily. First, one user may \textit{retweet} messages from
-another. Second, one user may \textit{mention} another in a
+homophily. First, one user may \textit{retweet}, or forward, messages
+from another. Second, one user may \textit{mention} another in a
 message. Since retweets require a user to first have received the
 message being retweeted, they tend to signal communication
 links. Mentions, in contrast, may signal only attempts at
@@ -1267,7 +1272,7 @@ Twitter data. The recommend, at a minimum:
   baseline--usually the rate of incumbent re-election--against which
   they should be judged
 \item Forecasters should have well-defined means of handling spam,
-  name homophily, humor, sarcasm, and other noise-generating processes
+  name ambiguity, humor, sarcasm, and other noise-generating processes
 \item Forecasters should disclose all data acquisition, cleaning, and
   forecasting methods before the election they intend to predict
 \item Forecasters should make public their predictions ahead of the election in question
@@ -1275,17 +1280,19 @@ Twitter data. The recommend, at a minimum:
 
 This is a very good baseline. It strongly suggests that future claims
 of successful prediction with simple metrics like na\"ive sentiment
-scoring or message volume should be treated with extreme
-skepticism. It also informs against the hope that Twitter would
-provide a more direct way to measure voter sentiment than
-polling. Instead, all experience to date shows that Twitter (and
-likely other social media services) will require significantly more work to
-account for the difficulties of sampling, language, and behavior. Each
-of these difficulties occurred in the past for polling as well: the
-entire edifice of modern sampling methods reflects a long process of
-learning to account for them. Forecasting complex events from social
-media will require no less.
-
+scoring or message volume should be treated with extreme skepticism,
+given their thin justification for a plausible relationship between
+Twitter behavior and population-wide political outcomes. It also
+informs against the hope that Twitter would provide a more direct way
+to measure voter sentiment than polling. Instead, all experience to
+date shows that Twitter (and likely other social media services) will
+require significantly more work to account for the difficulties of
+sampling, language, and behavior. Each of these difficulties occurred
+in the past for polling as well: the entire edifice of modern sampling
+methods reflects a long process of learning to account for
+them. Forecasting complex events from social media will require no
+less.
+ 
 Even with this baseline, however, data remains a problem. Sampling
 from the Streaming API appears both inadequate in practice and
 potentially non-reproducible between similar analyses. Twitter's terms
@@ -1337,10 +1344,12 @@ are very limited: individual purchasing decisions for standardized
 goods; individual flu infections; or individual responses to highly
 formalized advertising. Each of these situations enjoyed very large
 amounts of data about high-frequency and atomistic human actions and
-responses. Finally, the consequences of getting any individual
-prediction wrong were low, so long as the aggregate accuracy was
-high. These qualities made real-time updating of forecasting
-models straightforward.
+responses. Consequently, the cycle of model building and checking was
+short, and the opportunities for experimentation across large numbers
+of plausibly similar events abundant. Finally, the consequences of
+getting any individual prediction wrong were low, so long as the
+aggregate accuracy was high. These qualities made real-time updating
+of forecasting models straightforward.
 
 Elections are clearly not like this. The volatility of issue salience,
 party competition, the rules that govern electoral systems, and other
@@ -1351,14 +1360,27 @@ influence online sentiment. Finally, elections of a given type are
 relatively rare, and each event is highly consequential. Together,
 these changes in the dynamics of offline behavior combine to make it
 difficult to generate, check, and update valid models of election
-outcomes.
+outcomes. They further suggest the need for plausible forecasting
+models to dynamically check assumptions about these variables in real
+time. 
+
+It's important to note that polling does not face nearly so severe a
+problem. Polling, by controlling both sampling and question framing,
+retains control over much of the data-generating process. The general
+framework of random sampling remains valid independent of the evolving
+political context. But algorithmic forecasting from social media only
+knows what it has learned from the data--data that by definition
+originated from past elections in different political contexts. Hence
+algorithmic forecasting will encounter greater difficulties when faced
+with the same underlying political instability.
+
 
 \subsubsection{Accounting for evolving changes online}
 \label{sec:acco-evolv-chang-1}
 
 If there is little reason to expect consistency in the offline world,
-there's even less reason to do so online. Four major problems present
-themselves. First, the user base for social media services is highly
+there's even less reason to do so online. We identify four major
+problems. First, the user base for social media services is highly
 unstable. Rapid growth and customer churn will very quickly alter the
 profile of its users. Given that a valid forecasting algorithm
 implicitly weights online expressions of opinion to account for
@@ -1430,6 +1452,15 @@ models of voting by Twitter users. Starting from a baseline model,
 TweetCast presented users with their predicted vote and asked them to
 confirm the prediction. In doing so, it built a real-time training set
 specific to the 2012 election, again without resorting to polling. 
+
+\cite{beauchamp2013} takes an entirely different approach. Rather than
+attempt to forecast elections, he uses higher-frequency polling to
+build a Twitter-based model of presidential candidate
+sentiment. Forward-looking predictions then confirm the ability to
+make accurate leading forecasts of state-level opinion surveys. This
+approach does not, of course, eliminate the need for polling. But it
+suggest what might be possible given more regular means of updating
+than election outcomes permit.
 
 Other possibilities surely exist. But we note that both these examples
 still restricted their purview to the community of politically-active
