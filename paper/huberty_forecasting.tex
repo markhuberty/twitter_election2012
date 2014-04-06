@@ -79,7 +79,7 @@ thinking about the forecasting problem more broadly. The usual disclaimers apply
 %% thing. 
 
 Virtualization of human behavior has thrown off enormous quantities of
-data about what people do or say, when whom, and when. The presence of
+data about what people do or say, to whom, and when. The presence of
 such data has naturally given rise to the desire to study past behavior and,
 ultimately, forecast the future. High-profile commercial successes in
 advertising, sales, logistics, and other fields hint that this desire
@@ -90,12 +90,12 @@ difficulty of traditional survey research and electoral polling.
 Yet experience to date in forecasting important events, political or
 otherwise, has not always borne out the promise of new predictive
 powers. Success in predicting what people want to buy, or what ads
-they might click on, has not translated into reliable success in
+they might click on, has not translated into reliable predictions in
 sectors such as public health or finance. Research into other means of
 online opinion discovery, such as consumer rating systems, has shown
 them vulnerable to systematic bias. These difficulties have cast doubt
 on the potential for social media data to provide a new means of
-forecasting high-profile real-world events.
+forecasting high-profile real-world events. 
 
 This paper discusses the history of electoral forecasting from social
 media and other online data. I note that all
@@ -116,14 +116,14 @@ agree with earlier critiques of the election forecasting literature, which
 recommended fundamental changes in transparency, disclosure, method, and
 publication of electoral forecasts that rely on social media. But I
 raise the question of whether we should ever expect reliable election
-forecasts even given these changes. Social media forecasting, because
+forecasts even after such changes. Social media forecasting, because
 it lacks the control over the data-generating process enjoyed by
 polling, faces enormous instability in the origin, sample, structure,
-and content of the data on which it relies. That instability appears
-severe enough to undermine forecasting algorithms even in systems
-short election cycles. Absent much more sophisticated methods for
-discovering and correcting for this instability, it's not clear why we
-should expect forecasting from social media to work at all. 
+and content of the data on which it relies. This instability should
+undermine easy claims that social media-based forecasts will replace
+polls anytime soon. Instead, social media may only prove one more
+channel for the application of traditional polling methods, rather
+than a revolution in social prediction. 
 
 
 
@@ -386,9 +386,8 @@ forecasting political attitudes and intent
 \citep{keeter2006gauging,christian2010assessing,kohut2012assessing,boyle2013sampling,viera2013mail}.
 
 Social media services were among the most tempting
-targets. 2010 say a way of papers of the form ``using
-<social media source X> to predict political contest Y'' began to
-arrive, scattered across computer science, machine learning, and
+targets. 2010 saw a wave of papers of the form ``using
+<social media source X> to predict political contest Y'' scattered across computer science, machine learning, and
 social science journals.\footnote{X = Twitter in most of these papers, with a few notable
   exceptions \citep{bond201261,broockman2013online}. Unlike the other major online data companies, Twitter has made
   its data relatively freely available (albeit with heavy restrictions
@@ -420,7 +419,11 @@ same.\footnote{\cite{stephens2013cost} exploits this hypothesis to
   estimate that racial animus cost Barack Obama 3-5\% of the national
   vote. Hard verification of this estimate remains difficult for the
   very reason that this estimate is valuable: the inability to
-  benchmark it to survey data of actual human subjects.}
+  benchmark it to survey data of actual human subjects. The paper's
+  credibility rests, to some degree, on the magnitude of its
+  estimate--neither 0 nor 50\%} Whether that openness reflects the
+medium, or is an artifact of a selection process whereby political
+content on Twitter is dominated by more opinionated users, is unclear.
 
 Unfortunately, political forecasting has far less success predicting
 the offline world from online behavior than its commercial
@@ -539,11 +542,19 @@ Twitter's Streaming API mostly rely on the freely available 1\% sample
 stream. Access to the Gardenhose (10\%) and Firehose (100\%) samples
 is expensive, harder to arrange, and computationally more intensive to
 handle. But as \cite{morstatter2013sample} show, the 1\% sample is not
-a valid random sample of the Twitter message feed. As such, even if
-the Twitter message stream were a representative flow of information
-about the electorate, the most common form of access to that stream is
-not. Instead, it further skews an already skewed signal of political
-sentiment.
+a valid random sample of the Twitter message feed. They point out two
+problems in particular. First, the 1\% sample has poor tail coverage
+for sparse topics. Hence major events--or, in this case, political
+elections--might be well-covered, but minor events or races are
+not. Second, the 1\% sample mis-represents trending hashtags, to the
+point where the top hashtags from the 1\% are negatively correlated
+with the true value. Thus, for instance, a political analysis of top
+hashtags for conservative versus liberal Twitter users is prone to
+unknown bias when based on the Streaming API. These biases mean that,
+even if the Twitter message stream were a representative flow of
+information about the electorate, the most common form of access to
+that stream is not. Instead, it further skews an already skewed signal
+of political sentiment.
 
 \cite{metaxas2011not} note that most of these attempts all suffer from
 an additional problem: they all claim to predict, but in reality
@@ -637,9 +648,10 @@ improve the overall predictive rate of the estimator.
 
 The estimator presented here implicitly separates these two
 effects. We employ statistical machine learning methods to model the
-relationship of word \textit{n-grams} in the Twitter feed for
-individual candidates to their election outcomes. Observation of the
-components of the resulting algorithm shows that influential terms
+relationship of word \textit{n-grams} (consecutive \textit{n}-word
+chains) in Twitter messages about
+individual candidates to those candidates' election outcomes. Observation of the
+components of the resulting algorithm shows that influential \textit{n-grams}
 fall into 2 classes:
 
 \begin{enumerate}
@@ -672,7 +684,9 @@ that number of mentions on a daily basis.} to return messages
 mentioning the full name of Democratic or Congressional candidates
 running in contested races.\footnote{Data acquisition began on September 12
 2010; and on September 1, 2012. Dates were timed to fall after as many
-primary elections as possible.} We queried the API nightly during the
+primary elections as possible.} Full names were necessary to minimize
+name ambiguity--for instance, there are at least 5 representatives
+with the last name ``Smith'' in the current Congress. We queried the API nightly during the
 general election campaigns in 2010 and 2012. Table
 \ref{tab:volume-by-party-inc} provides summary statistics on total
 message volumes per candidate. As is immediately apparent, the observed
@@ -685,11 +699,17 @@ Data cleaning retained only data for districts wherein both candidates
 had Twitter content. Further data cleaning removed extraneous messages
 resulting from name homonyms, and excluded obviously irrelevant
 non-political data. Extraneous content was identified by modeling
-tweet content using a Latent Dirichlet Allocation topic model
+tweet content using a Latent Dirichlet Allocation (LDA) topic model
 \citep{blei2003latent} applied to ``documents'' created by aggregating
-all tweets relevant to each district. Tweets were subsequently
-excluded based on terms discovered via those
-models.\footnote{Football- and baseball-related messages were common
+all tweets relevant to each district. LDA assumes that a corpus of
+documents represents a distinct set of topics, defined as different
+distributions over the vocabulary of the entire corpus. For instance, a ``political'' topic
+might feature ``vote,election,poll,scandal'' more heavily, while a
+``sports'' topic features ``poll,scandal,ball,victory,player''. See
+\cite{grimmer2013text} for a full discussion of the use of LDA and related
+methods in political research. Tweets containing terms associated
+to obviously non-political topics discovered in the corpus were
+subsequently excluded.\footnote{Football- and baseball-related messages were common
 sources of irrelevant data. In 2010, one candidate shared a name with
 the kicker for the New Orleans Saints. In 2012, a candidate for
 California District 34 shared a name with a prominent sports
@@ -775,9 +795,28 @@ representation of text in the following steps:
 \subsection{Prediction algorithms}
 \label{sec:pred-algor}
 
-Prediction algorithms were developed based on 313 districts from the 2010 House of
-Representatives election. An ensemble machine learning
-algorithm \citep{van2007super} was trained on a random 90\% subset of
+Prediction algorithms were developed based on 313 districts from the
+2010 House of Representatives election. Building the predictor
+presents a dimensionality challenge: using as features all possible
+2-consecutive-word combinations that appear in the corpus would generate tens of
+thousands of variables for the model. This makes traditional
+statistical approaches, such as linear regression,
+unsuitable. Instead, we choose algorithms that attempt to learn the
+best features from this very large, very sparse feature space, and
+employ those preferentially in the prediction process. We make use of
+an algorithm which takes an ensemble of possible
+estimators. That ensemble can include both different estimators
+suitable for sparse cases, such as lasso or random forests; and
+different specifications for a given form of estimator (e.g., the
+regularization parameters for lasso, or the tree depth of the random forest). Training the model generates a
+prediction algorithm as the weighted combination of predictions of the
+ensemble of possible forecasts. The ensemble has the useful property
+that its forecasts are at least as accurate as the most-accurate
+member of the ensemble; and that forecast error for the ensemble is
+typically superior to the error for any individual ensemble
+member. See \citep{van2007super} for full details.
+
+We train the algorithm on a random 90\% subset of
 these districts, using actual election outcomes. Separate prediction
 algorithms were designed to forecast binary win/loss and Democratic
 vote share outcomes.\footnote{For binary win/loss
@@ -823,12 +862,31 @@ We discuss four results:
 \label{sec:predictions}
 
 Figure \ref{fig:prediction-corr-bydate} summarizes the predictive
-accuracy for both vote share and win/loss predictions. 2010 results
-back-casted election outcomes correctly at rates exceeding the
-rate of incumbent success in this sample. For 2012, some regression to
-the incumbent win rate was observed: both the win-loss and vote share
-algorithms forecast the correct winner in 88\% of cases, approximating
-the 90\% rate of incumbent re-election for districts in our sample.
+accuracy for both vote share and win/loss predictions. For the vote
+share predictions, the confusion table uses the 50\% two-party vote
+cutpoint. 2010 results back-casted election outcomes correctly at
+rates exceeding the rate of incumbent success in this sample. For
+2012, some regression to the incumbent win rate was observed: both the
+win-loss and vote share algorithms forecast the correct winner in 88\%
+of cases, approximating the 90\% rate of incumbent re-election for
+districts in our sample.
+
+The choice of incumbent win rates as the appropriate baseline sets a
+high bar for success, and so merits a formal defense. I argue that the
+ability to beat simple, well-known heuristics captures much of the
+practical utility of a forecasting method. The incumbent bias of the
+American electoral system is so well-known that it has merited its own
+field of study (see \cite{caughey2011elections} for an extensive
+discussion). If social media forecasts don't reliably add more
+information to our understanding of Congressional elections than the
+incumbency baseline, that undermines their utility in the same way
+that it would polls that regularly predicted anti-incumbent trends in
+the electorate. Choosing a lesser baseline risks shifting the focus
+away from predictors that add value. As \cite{metaxas2011not} discuss,
+prediction attempts outside political science have in the past treated
+two-party elections as contests of chance. The 50\% baseline that
+resulted led to claims of success that in fact added little value to
+our ability to forecast political races.
 
 Much of the mis-prediction error can be attributed to systemic
 predictor bias against Democratic candidates. As figure
@@ -840,11 +898,25 @@ won by Republicans were forecast much more accurately. Table
 point estimates: Republican districts were successfully forecast at
 rates equalling the incumbent success rate, while forecasts for
 Democratic districts ran well behind the incumbency baseline. This outcome
-confirms a concern about Republican bias in the training algorithm: to
-the extent that the algorithm learned an implicit bias from the 2010
-elections, in which the Republicans achieved a historic swing in party
-control of House seats, it would carry this bias forward. This problem
+confirms a concern about Republican bias in the training
+algorithm. The 2010 elections saw a historic swing in party control of
+House seats. The prediction algorithm appears to have learned
+associations of terms and outcomes that were skewed by the skew in the
+election itself. That bias is then carried forward into future
+election predictions. This problem
 may diminish as future elections contribute to the pool of training data.
+
+Finally, we note that the 2012 predictions correctly predicted the winning
+candidate in open seats--those where the prior incumbent did not run
+again--67\% of the time. This may suggest \textit{some} value. But we
+should weight that against the \textit{party} incumbency
+advantage that is a known feature of American politics. As
+\cite{caughey2011elections} have shown, that advantage may be an
+inescapable fact of American politics. Here again, it appears that
+this Twitter-based forecast has simply discovered the latent party
+bias in a district, a bias that may have been trivially knowable in
+advance. 
+
 
 
 
@@ -1077,7 +1149,13 @@ graphs show dense connections between communities of different
 partisan content. These results are consistent with
 \cite{conover2011}, under completely different sampling procedures. 
 
-
+Homophily is problematic for prediction because it further suggests
+that the sample of voters largely reflects partisans well-embedded in
+their own partisan communities. These individuals are both very likely
+to vote, and highly unlikely to change their minds. Thus the sample
+fails to reflect two major drivers of electoral shift at the
+margins--weak partisans, and electoral turnout. Instead, homophily
+reinforces the point that the Twitter sample reflects strong partisans alone.
 
 % \begin{figure}[ht]
 %   \centering
@@ -1255,6 +1333,45 @@ heretofore.
 % 3. Changing patterns of partisan isolation (networks)
 % 4. Anti-patterns of partisan alignment vs. general population
 
+\subsection{Is this a Twitter problem alone?}
+\label{sec:this-twitter-problem}
+
+The discussion above focused on Twitter data as an example of the
+pitfalls of social media forecasting. Twitter is but one of a slew of
+possible data sources. Many of those, such as Google or Facebook,
+claim higher market penetration and therefore better coverage. Would
+the choice of different data sources ameliorate the problems that have
+so far plagued Twitter-based forecasts? Likewise, social media is
+relatively new--will more data, covering more elections, improve the
+stability and accuracy of forecasts?
+
+We argue not. The problems identified above are not solely problems of
+Twitter or youth. Instead, they are problems of knowledge. Whether
+using Facebook, Twitter, or Google data, these forecasts use what
+\cite{mckinsey2011} termed ``digital exhaust'' as the basis for their
+forecasts. Making forecasts from such exhaust relies on a series of
+largely untestable assumptions about the makeup, bias, behavior, and
+stability of the underlying user base. Facebook, for instance, may
+offer more coverage than Twitter. But researchers have no way of
+knowing whether that coverage is stable over time, whether bias at one
+election is mirrored by the bias at the next, or whether the
+underlying user behavior that generates Facebook's exhaust has evolved
+over time. These are problems that go well beyond the choice of data
+or sampling strategies. Instead, they stem from the attempt to use
+highly unstable convenience samples for timeseries forecasting. We
+discuss this in greater detail in section
+\ref{sec:acco-evolv-chang-1}.
+
+These services may ultimately prove far more useful as new
+mediums for traditional polling than as data sources. For
+instance, \cite{wanga2013forecasting} demonstrate accurate forecasts
+of Presidential elections using the Xbox gaming platform. By combining
+traditional polling with post-stratification to account for the
+demographic bias of Xbox users, they are able to generate reasonable
+results. Note the difference between this approach and the social
+media approaches discussed above: they do not make use of the data
+thrown off by the Xbox platform. Instead, that platform is just
+another channel for polling. 
 
 \section{Towards better political forecasts}
 \label{sec:towards-bett-polit}
@@ -1460,7 +1577,7 @@ sentiment. Forward-looking predictions then confirm the ability to
 make accurate leading forecasts of state-level opinion surveys. This
 approach does not, of course, eliminate the need for polling. But it
 suggest what might be possible given more regular means of updating
-than election outcomes permit.
+than election outcomes permit. 
 
 Other possibilities surely exist. But we note that both these examples
 still restricted their purview to the community of politically-active
@@ -1789,6 +1906,6 @@ and parse the complexity of human speech and political sentiment.
 % % to vote, etc, and so unlike the rest of the electorate. 
 
 
-\bibliography{/home/markhuberty/bibs/twitter}
+\bibliography{/home/markhuberty/bibs/twitter,/home/markhuberty/bibs/bigdata}
 \bibliographystyle{apalike}
 \end{document}
